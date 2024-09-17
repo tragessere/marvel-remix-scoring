@@ -1,0 +1,87 @@
+:root {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	margin: 0;
+	min-width: 320px;
+}
+
+#root {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+h1 {
+	font-size: 3.2em;
+	line-height: 1.1;
+}
+
+button {
+	border-radius: 8px;
+	border: 1px solid transparent;
+	padding: 0.6em 1.2em;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
+	background-color: white;
+	cursor: pointer;
+	transition: border-color 0.25s;
+}
+button:hover {
+	border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+	outline: 4px auto -webkit-focus-ring-color;
+}
+
+.content {
+	display: flex;
+	flex-grow: 1;
+	max-width: 60rem;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.column-select {
+	width: 8rem;
+	padding-right: 1px;
+	border-right: 1px solid #ccc;
+}
+
+main {
+	flex-grow: 1;
+	padding: 1rem;
+}
+
+
+.bg-color-ally {
+	background-color: var(--color-ally);
+}
+.bg-color-condition {
+	background-color: var(--color-condition);
+}
+.bg-color-equipment {
+	background-color: var(--color-equipment);
+}
+.bg-color-hero {
+	background-color: var(--color-hero);
+}
+.bg-color-location {
+	background-color: var(--color-location);
+}
+.bg-color-maneuver {
+	background-color: var(--color-maneuver);
+}
+.bg-color-villain {
+	background-color: var(--color-villain);
+}

@@ -25,7 +25,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 4,
 		tags: [TAG.ASGARD, TAG.INTEL],
 		score(hand) {
-			const containsBifrost = hand.some(card => card.name === 'Bifrost')
+			const containsBifrost = hand.some(card => card.id === 42)
 			return this.power + (containsBifrost ? 6 : 0)
 		}
 	},
@@ -36,7 +36,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 5,
 		tags: [TAG.FLIGHT, TAG.RANGE],
 		score(hand) {
-			const containsShadowcat = hand.some(card => card.name === 'Shadowcat')
+			const containsShadowcat = hand.some(card => card.id === 21)
 			return this.power + (containsShadowcat ? 7 : 0)
 		}
 	},

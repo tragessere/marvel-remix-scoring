@@ -1,0 +1,31 @@
+.simple-card {
+	margin: 0.5rem 0;
+	border-radius: 5px;
+	border: 1px solid #222;
+	cursor: pointer;
+
+	&:focus {
+		outline: 2px solid #222222;
+	}
+
+	> .card-top-border {
+		display: flex;
+		align-items: baseline;
+		padding: 0.5rem 0.75rem;
+
+		> .base-power {
+			font-size: 0.75rem;
+			border-radius: 0.25rem;
+			padding: 0.1rem 0.3rem;
+			background-color: white;
+		}
+
+		> .name {
+			margin-left: 0.5rem;
+			font-size: 1.1rem;
+			color: white;
+			font-weight: 900;
+			-webkit-text-stroke: 1px black;
+		}
+	}
+}

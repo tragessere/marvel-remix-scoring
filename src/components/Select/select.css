@@ -1,0 +1,64 @@
+.select-card-category {
+	border: none;
+	background-color: white;
+	width: 100%;
+	text-align: left;
+	border-right: 4px solid;
+	border-bottom: 1px solid black;
+
+	&.ally {
+		border-right-color: var(--color-ally);
+	}
+	&.condition {
+		border-right-color: var(--color-condition);
+	}
+	&.equipment {
+		border-right-color: var(--color-equipment);
+	}
+	&.hero {
+		border-right-color: var(--color-hero);
+	}
+	&.location {
+		border-right-color: var(--color-location);
+	}
+	&.maneuver {
+		border-right-color: var(--color-maneuver);
+	}
+	&.villain {
+		border-right-color: var(--color-villain);
+	}
+}
+
+.select-card {
+	width: calc(100% - 0.5rem);
+	margin-left: 0.5rem;
+	color: white;
+	-webkit-text-stroke: 1px black;
+	font-weight: 800;
+
+	&.selected {
+		opacity: 50%;
+	}
+
+	&.ally {
+		background-color: var(--color-ally);
+	}
+	&.condition {
+		background-color: var(--color-condition);
+	}
+	&.equipment {
+		background-color: var(--color-equipment);
+	}
+	&.hero {
+		background-color: var(--color-hero);
+	}
+	&.location {
+		background-color: var(--color-location);
+	}
+	&.maneuver {
+		background-color: var(--color-maneuver);
+	}
+	&.villain {
+		background-color: var(--color-villain);
+	}
+}

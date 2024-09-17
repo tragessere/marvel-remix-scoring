@@ -1,4 +1,4 @@
-export interface QueryParams {
-	selectedCards: string[]
-	score?: boolean
+export enum QueryParams {
+	SELECTED_CARDS = 'selectedCards',
+	IS_SCORING = 'isScoring'
 }
