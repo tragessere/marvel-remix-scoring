@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep'
 import sumBy from 'lodash/sumBy'
-import { Card, ModifiedCard } from '../types/card.ts'
+import { Card, CARD_TYPE, ModifiedCard } from '../types/card.ts'
 import { sortEffectCardsFirst } from './card.ts'
 import { generatePermutations } from './randomization.ts'
 
@@ -10,23 +10,24 @@ export interface ScoreResult {
 	finalHand: ModifiedCard[]
 }
 
-const toModifiedCard = (card: Card): ModifiedCard => {
-	return {
-		...card,
-		isBlanked: false,
-		modifiedName: card.name,
-		modifiedPower: card.power,
-		modifiedTags: card.tags
-	}
-}
+// const toModifiedCard = (card: Card): ModifiedCard => {
+// 	return {
+// 		...card,
+// 		isBlanked: false,
+// 		modifiedName: card.name,
+// 		modifiedPower: card.power,
+// 		modifiedTags: card.tags
+// 	}
+// }
 
 /**
  * Calculate the score of the hand of cards. Attempts all combinations of card effects to find the max score and the
  * optimal hand that gives the score.
  *
  * @param hand Array of cards in the player's hand
+ * @param lokiPenalty Power of the card drawn at the end from Loki's effect
  */
-export const scoreHand = (hand: Card[]): ScoreResult => {
+export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 	const initialHand = hand.map(card => {
 		return {
 			...card,
@@ -37,13 +38,18 @@ export const scoreHand = (hand: Card[]): ScoreResult => {
 		}
 	})
 
-	// if (!(hand.some(card => card.name === 'Loki') && hand.length === 8 || hand.length === 7)) {
-	// 	return {
-	// 		score: 0,
-	// 		message: 'Invalid hand',
-	// 		finalHand: initialHand
-	// 	}
-	// }
+	const { containsVillain, containsHeroOrAlly } = hand.reduce((acc, card) => {
+		if (card.type === CARD_TYPE.VILLAIN) acc.containsVillain = true
+		else if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) acc.containsHeroOrAlly = true
+		return acc
+	}, { containsVillain: false, containsHeroOrAlly: false })
+	if (hand.length !== 7 || !containsVillain || !containsHeroOrAlly) {
+		return {
+			score: 0,
+			message: 'Invalid hand',
+			finalHand: initialHand
+		}
+	}
 
 	initialHand.sort(sortEffectCardsFirst)
 	const modifyCardCount = initialHand.filter(card => !!card.effect).length
@@ -64,7 +70,7 @@ export const scoreHand = (hand: Card[]): ScoreResult => {
 	}
 
 	return {
-		score: maxScore,
+		score: maxScore - (lokiPenalty || 0),
 		message: 'Success',
 		finalHand: optimalHand
 	}
@@ -77,13 +83,17 @@ interface Result {
 
 const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	if (index === hand.length) {
-		const filteredHand = hand.filter(card => !card.isBlanked)
+		if (!containsRequiredCards(hand)) {
+			return {
+				score: 0, hand
+			}
+		}
 		for (const card of hand) {
 			if (card.isBlanked) {
 				card.modifiedPower = 0
 				card.modifiedTags = []
 			} else {
-				card.modifiedPower = card.score(filteredHand)
+				card.modifiedPower = card.score(hand)
 			}
 		}
 		return { score: sumBy(hand, card => card.modifiedPower), hand }
@@ -100,6 +110,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			const modifiedHand = cloneDeep(hand)
 			currentCard.effect(modifiedHand, i)
 			modifiedHand.filter(card => !card.isBlanked)
+			modifiedHand.forEach(card => card.transform?.(modifiedHand))
 			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, index + 1)
 			if (score > optimalScore) {
 				optimalScore = score
@@ -110,4 +121,13 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	} else {
 		return applyEffectsRecursive(hand, index + 1)
 	}
+}
+
+const containsRequiredCards = (hand: Card[]): boolean => {
+	const { containsVillain, containsHeroOrAlly } = hand.reduce((acc, card) => {
+		if (card.type === CARD_TYPE.VILLAIN) acc.containsVillain = true
+		else if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) acc.containsHeroOrAlly = true
+		return acc
+	}, { containsVillain: false, containsHeroOrAlly: false })
+	return containsVillain && containsHeroOrAlly
 }

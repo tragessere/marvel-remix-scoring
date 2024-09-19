@@ -13,4 +13,24 @@ describe('scoreHand', () => {
 		const result = scoreHand(hand)
 		expect(result.score).toBe(8)
 	})
+	it('returns a test score2', () => {
+		const hand: Card[] = [
+			// Runaway Train
+			cardList[46],
+			// Avoid Crossfire
+			cardList[60],
+			// Hulk Operations
+			cardList[7],
+			// Bruce Banner
+			cardList[29],
+			// Shuri
+			cardList[28],
+			// Tony Stark
+			cardList[31],
+			// Sauron
+			cardList[64]
+		]
+		const result = scoreHand(hand)
+		expect(result.score).toBe(103)
+	})
 })
