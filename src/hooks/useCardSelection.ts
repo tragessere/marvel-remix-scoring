@@ -3,8 +3,7 @@ import { QueryParams } from '../types/route.ts'
 
 export const useCardSelection = () => {
 	const [ searchParams, setSearchParams ] = useSearchParams({ selectedCards: '' })
-	// Assert as string since we gave it a default value above
-	const selectedCards = searchParams.get(QueryParams.SELECTED_CARDS) as string
+	const selectedCards = searchParams.get(QueryParams.SELECTED_CARDS)
 	const selectedCardIds = selectedCards ? selectedCards.split(',').map(Number) : []
 
 	const addCard = (cardId: number) => {

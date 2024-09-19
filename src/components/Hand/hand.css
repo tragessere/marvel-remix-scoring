@@ -1,3 +1,7 @@
+h2 {
+	margin-top: 0;
+}
+
 .simple-card {
 	margin: 0.5rem 0;
 	border-radius: 5px;
@@ -28,4 +32,8 @@
 			-webkit-text-stroke: 1px black;
 		}
 	}
+}
+
+.score {
+	background-color: revert;
 }

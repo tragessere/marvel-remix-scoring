@@ -1,9 +1,9 @@
 :root {
-	--color-ally: purple;
+	--color-ally: #77286c;
 	--color-condition: green;
 	--color-equipment: grey;
-	--color-hero: blue;
-	--color-location: yellow;
-	--color-maneuver: pink;
-	--color-villain: red;
+	--color-hero: #1992cc;
+	--color-location: #E08D27;
+	--color-maneuver: #eb899a;
+	--color-villain: #b7180e;
 }
