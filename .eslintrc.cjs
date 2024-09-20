@@ -9,7 +9,7 @@ module.exports = {
 	],
 	ignorePatterns: ['dist', '.eslintrc.cjs', 'postcss.config.cjs'],
 	parser: '@typescript-eslint/parser',
-	plugins: ['react-refresh'],
+	plugins: ['react-refresh', 'eslint-plugin-react-compiler'],
 	rules: {
 		'react-refresh/only-export-components': [
 			'warn',
@@ -17,5 +17,6 @@ module.exports = {
 		],
 		'no-unused-vars': 'off',
 		'@typescript-eslint/no-unused-vars': 'off',
+		'react-compiler/react-compiler': "error"
 	},
 }
