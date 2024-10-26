@@ -456,7 +456,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			const targetCardSelectionIndex = Math.floor(index / 3)
 			let indexCount = targetCardSelectionIndex
 			const targetCard = hand.find(card => {
-				if (!card.isBlanked && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)) {
+				if (card.id !== this.id && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)) {
 					if (indexCount < 3) {
 						return true
 					}
@@ -471,7 +471,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		modificationOptions(hand) {
 			const targetCardCount = count(
 				hand,
-				card => !card.isBlanked && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
+				card => card.id !== this.id && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			)
 			// Affects self plus one other card
 			return (targetCardCount + 1) * 3
@@ -824,7 +824,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			const wakandaTagCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.WAKANDA) : 0
 			)
-			return wakandaTagCount * 6
+			return wakandaTagCount * 7
 		}
 	},
 	50: {
