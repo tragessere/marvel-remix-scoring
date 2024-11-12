@@ -1,6 +1,7 @@
 import './App.css'
 import { HandCardList } from './Hand/CardList.tsx'
 import { Header } from './Header/Header.tsx'
+import { ScoreProvider } from './ScoreContext.tsx'
 import { SelectCategories } from './Select/Categories.tsx'
 
 function App() {
@@ -13,7 +14,9 @@ function App() {
 					<SelectCategories />
 				</section>
 				<main>
-					<HandCardList />
+					<ScoreProvider>
+						<HandCardList />
+					</ScoreProvider>
 				</main>
 			</div>
 		</>
