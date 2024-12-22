@@ -15,19 +15,19 @@ export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({
 	return (
 		<>
 			<button
-				className={`select-card-category ${categoryName}${isExpanded ? ' expanded' : ''}`}
+				className={`select-card-category-button ${categoryName}`}
 				data-category={categoryName}
 				onClick={() => onClick(category)}
 				aria-expanded={isExpanded}>
 				{categoryName}
 			</button>
-			{isExpanded && (
-				<div className="select-card-category-container">
+			<div className={`select-card-category-wrapper-outer${isExpanded ? ' expanded' : ''}`}>
+				<div className="select-card-category-wrapper-inner">
 					{cards.map(c => (
 						<SelectCard key={c.id} card={c} />
 					))}
 				</div>
-			)}
+			</div>
 		</>
 	)
 }

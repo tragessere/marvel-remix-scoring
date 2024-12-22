@@ -1,4 +1,18 @@
-.select-card-category {
+.select-card-category-wrapper-outer {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 250ms ease-in-out;
+
+	&.expanded {
+		grid-template-rows: 1fr;
+	}
+
+	& .select-card-category-wrapper-inner {
+		overflow-y: hidden;
+	}
+}
+
+.select-card-category-button {
 	border: none;
 	background-color: white;
 	width: 100%;
