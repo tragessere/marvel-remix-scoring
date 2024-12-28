@@ -1,6 +1,6 @@
 import { FunctionComponent, useContext } from 'react'
+import { ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
-import { ScoreContext } from '../ScoreContext.tsx'
 import { SimpleCard } from './SimpleCard.tsx'
 import './hand.css'
 

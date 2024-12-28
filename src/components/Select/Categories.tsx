@@ -1,6 +1,7 @@
 import { groupBy, map, sortBy } from 'lodash'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 import { cardList } from '../../constants/cardList.ts'
+import { ActiveCardSelectionContext } from '../../contexts/ContextList.tsx'
 import { CARD_TYPE } from '../../types/card.ts'
 import { SelectCardCategory } from './CardCategory.tsx'
 
@@ -11,6 +12,7 @@ export const SelectCategories: FunctionComponent = () => {
 	// Create list of categories using the keys of the CARD_TYPE enum
 	const categories = sortBy(map(Object.keys(cardGroups), (k) => CARD_TYPE[Number(k)] as keyof typeof CARD_TYPE))
 
+	const { activeCardId } = useContext(ActiveCardSelectionContext)
 	const [expandedCategory, setExpandedCategory] = useState<CARD_TYPE | undefined>()
 
 	const onCategoryClick = (category: CARD_TYPE) => {
@@ -21,12 +23,16 @@ export const SelectCategories: FunctionComponent = () => {
 		}
 	}
 
-	return categories.map(c => (
-		<SelectCardCategory
-			key={c}
-			cards={cardGroups[CARD_TYPE[c]]}
-			onClick={onCategoryClick}
-			isExpanded={expandedCategory === CARD_TYPE[c]}
-		/>
-	))
+	return (
+		<div className={activeCardId ? 'active-card-selection' : ''}>
+			{categories.map(c => (
+				<SelectCardCategory
+					key={c}
+					cards={cardGroups[CARD_TYPE[c]]}
+					onClick={onCategoryClick}
+					isExpanded={expandedCategory === CARD_TYPE[c]}
+				/>
+			))}
+		</div>
+	)
 }
