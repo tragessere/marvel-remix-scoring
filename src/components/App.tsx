@@ -1,4 +1,4 @@
-import { ActiveCardSelectionProvider } from '../contexts/ActiveCardSelectionProvider.tsx'
+import { CardSelectionModeProvider } from '../contexts/CardSelectionModeProvider.tsx'
 import { HandCardList } from './Hand/CardList.tsx'
 import { Header } from './Header/Header.tsx'
 import { ScoreProvider } from '../contexts/ScoreProvider.tsx'
@@ -8,22 +8,20 @@ import './App.css'
 
 function App() {
 	return (
-		<>
+		<CardSelectionModeProvider>
 			<Header />
 			<div className="content">
-				<ActiveCardSelectionProvider>
-					<section className="column-select">
-						<h2 className="sr-only">Select Cards</h2>
-						<SelectCategories />
-					</section>
-					<main>
-						<ScoreProvider>
-							<HandCardList />
-						</ScoreProvider>
-					</main>
-				</ActiveCardSelectionProvider>
+				<section className="column-select">
+					<h2 className="sr-only">Select Cards</h2>
+					<SelectCategories />
+				</section>
+				<main>
+					<ScoreProvider>
+						<HandCardList />
+					</ScoreProvider>
+				</main>
 			</div>
-		</>
+		</CardSelectionModeProvider>
 	)
 }
 

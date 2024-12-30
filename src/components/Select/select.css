@@ -1,3 +1,7 @@
+.alternate-selection-mode {
+	outline: 2px solid grey;
+}
+
 .select-card-category-wrapper-outer {
 	display: grid;
 	grid-template-rows: 0fr;

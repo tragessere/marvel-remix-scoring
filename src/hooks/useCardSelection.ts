@@ -1,8 +1,11 @@
+import { useContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { CARD_SELECT_MODE, CardSelectionModeContext } from '../contexts/ContextList.tsx'
 import { QueryParams } from '../types/route.ts'
 
 export const useCardSelection = () => {
 	const [ searchParams, setSearchParams ] = useSearchParams({ selectedCards: '' })
+	const { setCardSelectMode } = useContext(CardSelectionModeContext)
 	const selectedCards = searchParams.get(QueryParams.SELECTED_CARDS)
 	const selectedCardIds = selectedCards ? selectedCards.split(',').map(Number) : []
 	const lokiCard = searchParams.get(QueryParams.LOKI_CARD)
@@ -24,7 +27,11 @@ export const useCardSelection = () => {
 		if (!selectedCardIds.includes(73)) return
 
 		setSearchParams(searchParams => {
-			searchParams.set(QueryParams.LOKI_CARD, cardId ? cardId.toString() : '')
+			if (cardId) {
+				searchParams.set(QueryParams.LOKI_CARD, cardId ? cardId.toString() : '')
+			} else {
+				searchParams.delete(QueryParams.LOKI_CARD)
+			}
 			return searchParams
 		})
 	}
@@ -32,11 +39,15 @@ export const useCardSelection = () => {
 	const removeCard = (cardId: number) => {
 		if (!selectedCardIds.includes(cardId)) return
 
+		if (cardId === 73) {
+			setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
+		}
+
 		setSearchParams(searchParams => {
 			searchParams.set(QueryParams.SELECTED_CARDS, selectedCardIds.filter(id => id !== cardId).toString())
 
 			// Remove extra drawn card if Loki is removed
-			if (cardId === 73 && lokiCardId) {
+			if (cardId === 73) {
 				searchParams.delete(QueryParams.LOKI_CARD)
 			}
 
