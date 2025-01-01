@@ -30,7 +30,7 @@ const RAW_RUNTIME_STATE =
           ["@types/lodash", "npm:4.17.13"],\
           ["@types/react", "npm:19.0.2"],\
           ["@types/react-dom", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:19.0.2"],\
-          ["@types/react-transition-group", "npm:4.4.11"],\
+          ["@types/react-transition-group", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.4.12"],\
           ["@typescript-eslint/eslint-plugin", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:7.18.0"],\
           ["@typescript-eslint/parser", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:7.18.0"],\
           ["@vitejs/plugin-react", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.3.1"],\
@@ -2376,25 +2376,7 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@types/prop-types", [\
-      ["npm:15.7.12", {\
-        "packageLocation": "../../../../AppData/Local/Yarn/Berry/cache/@types-prop-types-npm-15.7.12-b093f43531-10c0.zip/node_modules/@types/prop-types/",\
-        "packageDependencies": [\
-          ["@types/prop-types", "npm:15.7.12"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@types/react", [\
-      ["npm:18.3.3", {\
-        "packageLocation": "../../../../AppData/Local/Yarn/Berry/cache/@types-react-npm-18.3.3-07e68e178e-10c0.zip/node_modules/@types/react/",\
-        "packageDependencies": [\
-          ["@types/react", "npm:18.3.3"],\
-          ["@types/prop-types", "npm:15.7.12"],\
-          ["csstype", "npm:3.1.3"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:19.0.2", {\
         "packageLocation": "../../../../AppData/Local/Yarn/Berry/cache/@types-react-npm-19.0.2-2d1199f963-10c0.zip/node_modules/@types/react/",\
         "packageDependencies": [\
@@ -2425,11 +2407,21 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/react-transition-group", [\
-      ["npm:4.4.11", {\
-        "packageLocation": "../../../../AppData/Local/Yarn/Berry/cache/@types-react-transition-group-npm-4.4.11-dda183055d-10c0.zip/node_modules/@types/react-transition-group/",\
+      ["npm:4.4.12", {\
+        "packageLocation": "../../../../AppData/Local/Yarn/Berry/cache/@types-react-transition-group-npm-4.4.12-d5d75252ec-10c0.zip/node_modules/@types/react-transition-group/",\
         "packageDependencies": [\
-          ["@types/react-transition-group", "npm:4.4.11"],\
-          ["@types/react", "npm:18.3.3"]\
+          ["@types/react-transition-group", "npm:4.4.12"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.4.12", {\
+        "packageLocation": "./.yarn/__virtual__/@types-react-transition-group-virtual-7d7820bcac/5/AppData/Local/Yarn/Berry/cache/@types-react-transition-group-npm-4.4.12-d5d75252ec-10c0.zip/node_modules/@types/react-transition-group/",\
+        "packageDependencies": [\
+          ["@types/react-transition-group", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.4.12"],\
+          ["@types/react", "npm:19.0.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/react"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4487,7 +4479,7 @@ const RAW_RUNTIME_STATE =
           ["@types/lodash", "npm:4.17.13"],\
           ["@types/react", "npm:19.0.2"],\
           ["@types/react-dom", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:19.0.2"],\
-          ["@types/react-transition-group", "npm:4.4.11"],\
+          ["@types/react-transition-group", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.4.12"],\
           ["@typescript-eslint/eslint-plugin", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:7.18.0"],\
           ["@typescript-eslint/parser", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:7.18.0"],\
           ["@vitejs/plugin-react", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.3.1"],\

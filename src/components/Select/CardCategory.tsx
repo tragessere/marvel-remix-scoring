@@ -1,4 +1,5 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useRef } from 'react'
+import { CSSTransition } from 'react-transition-group'
 import { Card, CARD_TYPE } from '../../types/card.ts'
 import { SelectCard } from './Card.tsx'
 
@@ -11,6 +12,7 @@ interface SelectCardCategoryProps {
 export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({ cards, isExpanded, onClick }) => {
 	const category = cards[0].type
 	const categoryName = CARD_TYPE[category].toLowerCase()
+	const nodeRef = useRef(null)
 
 	return (
 		<>
@@ -21,13 +23,20 @@ export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({
 				aria-expanded={isExpanded}>
 				{categoryName}
 			</button>
-			<div className={`select-card-category-wrapper-outer${isExpanded ? ' expanded' : ''}`}>
-				<div className="select-card-category-wrapper-inner">
-					{cards.map(c => (
-						<SelectCard key={c.id} card={c} />
-					))}
+			<CSSTransition
+				nodeRef={nodeRef}
+				in={isExpanded}
+				timeout={250}
+				classNames="category-animated"
+				unmountOnExit>
+				<div ref={nodeRef} className="select-card-category-wrapper-outer">
+					<div className="select-card-category-wrapper-inner">
+						{cards.map(c => (
+							<SelectCard key={c.id} card={c} />
+						))}
+					</div>
 				</div>
-			</div>
+			</CSSTransition>
 		</>
 	)
 }

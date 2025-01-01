@@ -4,16 +4,25 @@
 
 .select-card-category-wrapper-outer {
 	display: grid;
-	grid-template-rows: 0fr;
-	transition: grid-template-rows 250ms ease-in-out;
-
-	&.expanded {
-		grid-template-rows: 1fr;
-	}
 
 	& .select-card-category-wrapper-inner {
 		overflow-y: hidden;
 	}
+}
+
+.category-animated-enter {
+	grid-template-rows: 0fr;
+}
+.category-animated-enter-active {
+	transition: grid-template-rows 250ms ease-in-out;
+	grid-template-rows: 1fr;
+}
+.category-animated-exit {
+	grid-template-rows: 1fr;
+}
+.category-animated-exit-active {
+	transition: grid-template-rows 250ms ease-in-out;
+	grid-template-rows: 0fr;
 }
 
 .select-card-category-button {
