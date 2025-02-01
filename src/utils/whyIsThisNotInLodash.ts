@@ -1,7 +1,7 @@
-export const count = <T>(arr: T[], predicate: (val: T) => boolean) => {
+export const count = <T>(arr: T[], predicate: (val: T, index: number) => boolean) => {
 	let count = 0
 	for(let i = 0; i < arr.length; i++) {
-		if (predicate(arr[i])) {
+		if (predicate(arr[i], i)) {
 			count++
 		}
 	}

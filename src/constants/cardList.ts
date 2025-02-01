@@ -106,7 +106,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 0,
 		tags: [],
 		score(hand) {
-			const heroCount = hand.filter(card => card.type === CARD_TYPE.HERO).length
+			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
 			return heroCount * 4
 		}
 	},
@@ -116,15 +116,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 16,
 		tags: [TAG.AGILITY],
-		effect(hand) {
-			const heroCount = hand.filter(card => card.type === CARD_TYPE.HERO).length
-			if (heroCount > 1) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
-			}
-		},
-		modificationOptions() {
-			return 1
+		transform(hand) {
+			const self = findCard(hand, this.id)
+			self.isBlanked = count(hand, card => card.type === CARD_TYPE.HERO) > 1
 		},
 		score() {
 			return this.power
@@ -136,18 +130,13 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 8,
 		tags: [TAG.INTEL],
-		effect(hand) {
+		transform(hand) {
+			const self = findCard(hand, this.id)
 			const hasHero = hand.some(card => card.type === CARD_TYPE.HERO)
 			const hasUrbanLocation = hand.some(
 				card => card.type === CARD_TYPE.LOCATION && card.modifiedTags.includes(TAG.URBAN)
 			)
-			if (!hasHero || !hasUrbanLocation) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
-			}
-		},
-		modificationOptions() {
-			return 1
+			self.isBlanked = !(hasHero && hasUrbanLocation)
 		},
 		score() {
 			return this.power
@@ -159,15 +148,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 11,
 		tags: [TAG.WORTHY],
-		effect(hand) {
-			const hasMatchingVillain = hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedPower > 12)
-			if (!hasMatchingVillain) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
-			}
-		},
-		modificationOptions() {
-			return 1
+		transform(hand) {
+			const self = findCard(hand, this.id)
+			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedPower > 12)
 		},
 		score() {
 			return this.power
@@ -252,17 +235,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: 9,
 		tags: [TAG.RANGE, TAG.STRENGTH],
-		effect(hand) {
-			const hasValidHero = hand.some(
-				c => c.type === CARD_TYPE.HERO && !c.isBlanked && c.modifiedTags.includes(TAG.AGILITY)
-			)
-			if (!hasValidHero) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
-			}
-		},
-		modificationOptions() {
-			return 1
+		transform(hand) {
+			const self = findCard(hand, this.id)
+			self.isBlanked = !hand.some(c => c.type === CARD_TYPE.HERO && c.modifiedTags.includes(TAG.AGILITY))
 		},
 		score() {
 			return this.power
@@ -274,19 +249,15 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: 10,
 		tags: [TAG.ASGARD, TAG.FLIGHT, TAG.RANGE],
-		effect(hand) {
-			const hasWorthyOrWorthyTag = hand.some(
+		transform(hand) {
+			const self = findCard(hand, this.id)
+			self.isBlanked = !hand.some(
 				c =>
+					// 'Worthy' card
 					(!c.isBlanked && c.id === 11) ||
+					// Any 'Hero' or 'Ally' with the 'Worthy' tag
 					((c.type === CARD_TYPE.HERO || c.type === CARD_TYPE.ALLY) && c.tags.includes(TAG.WORTHY))
 			)
-			if (!hasWorthyOrWorthyTag) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
-			}
-		},
-		modificationOptions() {
-			return 1
 		},
 		score() {
 			return this.power
@@ -858,7 +829,8 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 16,
 		tags: [],
 		effect(hand, index) {
-			const villains = hand.filter(card => card.type === CARD_TYPE.VILLAIN)
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			const villains = hand.filter((card, index) => index > selfIndex && card.type === CARD_TYPE.VILLAIN)
 			villains[index].isBlanked = true
 		},
 		modificationOptions(hand) {
@@ -866,7 +838,15 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			if (intelCount > 1) {
 				return 0
 			}
-			return count(hand, card => card.type === CARD_TYPE.VILLAIN)
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			const usedCards = hand.slice(0, selfIndex)
+			const usedOptions = count(usedCards, card => card.type === CARD_TYPE.VILLAIN)
+			const unusedCards = hand.slice(selfIndex + 1)
+			const unusedOptions = count(unusedCards, card => card.type === CARD_TYPE.VILLAIN)
+			if (usedOptions && !unusedOptions) {
+				throw new Error('All card options already used')
+			}
+			return unusedOptions
 		},
 		score() {
 			return this.power
@@ -878,17 +858,11 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.LOCATION,
 		power: 15,
 		tags: [],
-		effect(hand) {
-			const hasBossVillain = hand.filter(
-				card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS) && !card.isBlanked
+		transform(hand) {
+			const self = findCard(hand, this.id)
+			self.isBlanked = !hand.some(
+				card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS)
 			)
-			if (!hasBossVillain) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
-			}
-		},
-		modificationOptions() {
-			return 1
 		},
 		score() {
 			return this.power
@@ -1262,7 +1236,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 15,
 		tags: [TAG.ASGARD],
 		score() {
-			// TODO: handle card draw here?
 			return this.power
 		}
 	},
@@ -1280,7 +1253,11 @@ export const cardList: Readonly<Dictionary<Card>> = {
 				card.modifiedTags = card.modifiedTags.filter(tag => tag !== TAG.TECH)
 			}
 		},
-		modificationOptions() {
+		modificationOptions(hand) {
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			if (hand.some((card, index) => card.type === CARD_TYPE.EQUIPMENT && index < selfIndex)) {
+				throw new Error('Trying to blank a used card')
+			}
 			return 1
 		},
 		score() {
@@ -1300,7 +1277,11 @@ export const cardList: Readonly<Dictionary<Card>> = {
 				}
 			}
 		},
-		modificationOptions() {
+		modificationOptions(hand) {
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			if (hand.some((card, index) => card.type === CARD_TYPE.MANEUVER && index < selfIndex)) {
+				throw new Error('Trying to blank a used card')
+			}
 			return 1
 		},
 		score() {
@@ -1314,7 +1295,10 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 25,
 		tags: [TAG.MUTANT],
 		effect(hand, index) {
-			const heroesAndAllies = hand.filter(card => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			const heroesAndAllies = hand.filter(
+				(card, index) => index > selfIndex && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
+			)
 			const selectedCard = heroesAndAllies[index]
 			selectedCard.isBlanked = true
 			const self = findCard(hand, this.id)
@@ -1322,7 +1306,24 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			self.modifiedPower = this.power - selectedCard.power
 		},
 		modificationOptions(hand) {
-			return count(hand, card => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			const { availableOptions, pastOptions } = hand.reduce(
+				(acc, card, i) => {
+					if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) {
+						if (i < selfIndex) {
+							acc.pastOptions++
+						} else {
+							acc.availableOptions++
+						}
+					}
+					return acc
+				},
+				{ availableOptions: 0, pastOptions: 0 }
+			)
+			if (pastOptions && !availableOptions) {
+				throw new Error('All card options already used')
+			}
+			return availableOptions
 		},
 		score(hand) {
 			const self = findCard(hand, this.id)
@@ -1336,11 +1337,30 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 16,
 		tags: [TAG.MUTANT],
 		effect(hand, index) {
-			const locations = hand.filter(card => card.type === CARD_TYPE.LOCATION)
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			const locations = hand.filter((card, index) => card.type === CARD_TYPE.LOCATION && index > selfIndex)
 			locations[index].isBlanked = true
 		},
 		modificationOptions(hand) {
-			return count(hand, card => card.type === CARD_TYPE.LOCATION)
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			const { availableOptions, pastOptions } = hand.reduce(
+				(acc, card, i) => {
+					if (card.type === CARD_TYPE.LOCATION) {
+						if (i < selfIndex) {
+							acc.pastOptions++
+						} else {
+							acc.availableOptions++
+						}
+					}
+					return acc
+				},
+				{ availableOptions: 0, pastOptions: 0 }
+			)
+
+			if (pastOptions && !availableOptions) {
+				throw new Error('All card options already used')
+			}
+			return availableOptions
 		},
 		score() {
 			return this.power
@@ -1352,14 +1372,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
 		tags: [TAG.BOSS],
-		effect(hand) {
-			const hasMatchingLocation = hand.some(
-				card => card.type === CARD_TYPE.LOCATION && card.modifiedTags.includes(TAG.URBAN)
-			)
-			if (!hasMatchingLocation) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
-			}
+		transform(hand) {
+			const self = findCard(hand, this.id)
+			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.LOCATION && card.modifiedTags.includes(TAG.URBAN))
 		},
 		modificationOptions() {
 			return 1
@@ -1374,19 +1389,41 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.MUTANT],
+		transform(hand) {
+			const self = findCard(hand, this.id)
+			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS) && card.id !== this.id)
+		},
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Villain
+	//#region Promo
+	80: {
+		id: 80,
+		name: 'Squirrel Girl',
+		type: CARD_TYPE.HERO,
+		power: 1,
+		tags: [],
 		effect(hand) {
-			const hasMatchingVillain = hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS))
-			if (!hasMatchingVillain) {
-				const self = findCard(hand, this.id)
-				self.isBlanked = true
+			for (const card of hand) {
+				if (card.type === CARD_TYPE.VILLAIN) {
+					card.isTextBlanked = true
+					card.modifiedPower = Math.abs(card.power)
+				}
 			}
 		},
-		modificationOptions() {
+		modificationOptions(hand) {
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			const usedVillainCount = count(hand, (card, index) => card.type === CARD_TYPE.VILLAIN && index < selfIndex)
+			if (usedVillainCount) {
+				throw new Error('Trying to blank the text of a used card')
+			}
 			return 1
 		},
 		score() {
 			return this.power
 		}
 	}
-	//#endregion Villain
+	//#endregion Promo
 }

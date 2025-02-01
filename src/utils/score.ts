@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep'
 import sumBy from 'lodash/sumBy'
 import { Card, CARD_TYPE, ModifiedCard } from '../types/card.ts'
-import { sortEffectCardsFirst } from './card.ts'
+import { findCard, sortEffectCardsFirst } from './card.ts'
 import { generatePermutations } from './randomization.ts'
 
 export interface ScoreResult {
@@ -9,16 +9,6 @@ export interface ScoreResult {
 	message: string
 	finalHand: ModifiedCard[]
 }
-
-// const toModifiedCard = (card: Card): ModifiedCard => {
-// 	return {
-// 		...card,
-// 		isBlanked: false,
-// 		modifiedName: card.name,
-// 		modifiedPower: card.power,
-// 		modifiedTags: card.tags
-// 	}
-// }
 
 /**
  * Calculate the score of the hand of cards. Attempts all combinations of card effects to find the max score and the
@@ -32,6 +22,7 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 		return {
 			...card,
 			isBlanked: false,
+			isTextBlanked: false,
 			modifiedName: card.name,
 			modifiedPower: card.power,
 			modifiedTags: card.tags.slice()
@@ -62,11 +53,13 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 	for (const order of orderCombinations) {
 		const orderedHand = order.map(index => modifyCards[index]).concat(countCards)
 		const modifiedHand = cloneDeep(orderedHand)
-		const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, 0)
-		if (!!score && score > maxScore) {
-			maxScore = score
-			optimalHand = resultHand
-		}
+		try {
+			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, 0)
+			if (!!score && score > maxScore) {
+				maxScore = score
+				optimalHand = resultHand
+			}
+		} catch (e) { /* invalid order of operation, skip hand */ }
 	}
 
 	return {
@@ -92,14 +85,14 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			if (card.isBlanked) {
 				card.modifiedPower = 0
 				card.modifiedTags = []
-			} else {
+			} else if (!card.isTextBlanked) {
 				card.modifiedPower = card.score(hand)
 			}
 		}
 		return { score: sumBy(hand, card => card.modifiedPower), hand }
 	}
 	const currentCard = hand[index]
-	if (!currentCard.isBlanked && currentCard.modificationOptions && currentCard.effect) {
+	if (!currentCard.isBlanked && !currentCard.isTextBlanked && currentCard.modificationOptions && currentCard.effect) {
 		const optionCount = currentCard.modificationOptions(hand)
 		if (!optionCount) {
 			return applyEffectsRecursive(hand, index + 1)
@@ -108,9 +101,12 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 		let optimalScore = 0
 		for (let i = 0; i < optionCount; i++) {
 			const modifiedHand = cloneDeep(hand)
-			currentCard.effect(modifiedHand, i)
-			modifiedHand.filter(card => !card.isBlanked)
-			modifiedHand.forEach(card => card.transform?.(modifiedHand))
+			const clonedCurrentCard = findCard(modifiedHand, currentCard.id)
+			const unblankedHand = modifiedHand.filter(card => !card.isBlanked)
+			// Use null-safe access to make Typescript happy. `effect` function will always exist here because it
+			// was checked on the card before cloning.
+			clonedCurrentCard.effect?.(unblankedHand, i)
+			modifiedHand.forEach(card => card.transform?.(unblankedHand))
 			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, index + 1)
 			if (score > optimalScore) {
 				optimalScore = score
@@ -123,10 +119,10 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	}
 }
 
-const containsRequiredCards = (hand: Card[]): boolean => {
+const containsRequiredCards = (hand: ModifiedCard[]): boolean => {
 	const { containsVillain, containsHeroOrAlly } = hand.reduce((acc, card) => {
-		if (card.type === CARD_TYPE.VILLAIN) acc.containsVillain = true
-		else if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) acc.containsHeroOrAlly = true
+		if (card.type === CARD_TYPE.VILLAIN && !card.isBlanked) acc.containsVillain = true
+		else if ((card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) && !card.isBlanked) acc.containsHeroOrAlly = true
 		return acc
 	}, { containsVillain: false, containsHeroOrAlly: false })
 	return containsVillain && containsHeroOrAlly

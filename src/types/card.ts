@@ -9,11 +9,6 @@ export enum CARD_TYPE {
 	'MANEUVER',
 }
 
-export enum EFFECT_TYPE {
-	MODIFY,
-	COUNT
-}
-
 export enum TAG {
 	AGILITY,
 	ASGARD,
@@ -44,6 +39,7 @@ export interface Card {
 
 export interface ModifiedCard extends Card {
 	isBlanked: boolean
+	isTextBlanked: boolean
 	modifiedName: string
 	modifiedPower: number
 	modifiedTags: TAG[]
