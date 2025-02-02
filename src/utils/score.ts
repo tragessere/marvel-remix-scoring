@@ -91,6 +91,11 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 		}
 		return { score: sumBy(hand, card => card.modifiedPower), hand }
 	}
+
+	if (index === 0) {
+		hand.forEach(card => card.transform?.(hand))
+	}
+
 	const currentCard = hand[index]
 	if (!currentCard.isBlanked && !currentCard.isTextBlanked && currentCard.modificationOptions && currentCard.effect) {
 		const optionCount = currentCard.modificationOptions(hand)

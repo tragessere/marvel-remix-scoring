@@ -163,9 +163,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 18,
 		tags: [TAG.GAMMA, TAG.STRENGTH],
 		score(hand) {
-			let heroOrAllyCount = hand.filter(
-				card => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY
-			).length
+			let heroOrAllyCount = count(hand, card => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			const urbanCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.URBAN))
 			if (heroOrAllyCount > 0) {
 				heroOrAllyCount--
@@ -221,9 +219,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			}
 		},
 		modificationOptions(hand) {
-			return hand.filter(
+			return count(hand,
 				card => !card.isBlanked && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
-			).length
+			)
 		},
 		score() {
 			return this.power
@@ -283,7 +281,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 4,
 		tags: [TAG.AGILITY, TAG.WORTHY],
 		score(hand) {
-			const heroCount = hand.filter(card => card.type === CARD_TYPE.HERO && card.id !== 19).length
+			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO && card.id !== 19)
 			const hasShield = hand.some(card => card.id === 16)
 			return this.power + heroCount * 2 + (hasShield ? 4 : 0)
 		}
@@ -345,7 +343,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		tags: [TAG.GAMMA, TAG.STRENGTH],
 		score(hand) {
 			const gammaCount = sumBy(hand, card =>
-				card.id !== 23 ? count(card.modifiedTags, t => t === TAG.GAMMA) : 0
+				card.id !== this.id ? count(card.modifiedTags, t => t === TAG.GAMMA) : 0
 			)
 			return this.power + gammaCount * 5
 		}
@@ -358,7 +356,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		tags: [TAG.AGILITY, TAG.WAKANDA],
 		score(hand) {
 			const wakandaCount = sumBy(hand, card =>
-				card.id !== 24 ? count(card.modifiedTags, t => t === TAG.WAKANDA) : 0
+				card.id !== this.id ? count(card.modifiedTags, t => t === TAG.WAKANDA) : 0
 			)
 			return this.power + wakandaCount * 5
 		}
@@ -779,10 +777,10 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 0,
 		tags: [],
 		score(hand) {
-			const techTagCount = sumBy(hand, card =>
+			const techAgilityTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.AGILITY || tag === TAG.TECH)
 			)
-			return techTagCount * 5
+			return techAgilityTagCount * 5
 		}
 	},
 	49: {
@@ -806,7 +804,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		tags: [TAG.URBAN],
 		score(hand) {
 			const intelTagCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL))
-			return intelTagCount * 6
+			return intelTagCount * 8
 		}
 	},
 	51: {
@@ -819,7 +817,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			const asgardTagCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.ASGARD) : 0
 			)
-			return asgardTagCount * 6
+			return asgardTagCount * 9
 		}
 	},
 	52: {
