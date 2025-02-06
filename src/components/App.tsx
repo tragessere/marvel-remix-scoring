@@ -9,18 +9,18 @@ import './App.css'
 function App() {
 	return (
 		<CardSelectionModeProvider>
-			<Header />
-			<div className="content">
-				<section className="column-select">
-					<h2 className="sr-only">Select Cards</h2>
-					<SelectCategories />
-				</section>
-				<main>
-					<ScoreProvider>
+			<ScoreProvider>
+				<Header />
+				<div className="content">
+					<section className="column-select">
+						<h2 className="sr-only">Select Cards</h2>
+						<SelectCategories />
+					</section>
+					<main>
 						<HandCardList />
-					</ScoreProvider>
-				</main>
-			</div>
+					</main>
+				</div>
+			</ScoreProvider>
 		</CardSelectionModeProvider>
 	)
 }

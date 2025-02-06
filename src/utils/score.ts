@@ -5,7 +5,7 @@ import { findCard, sortEffectCardsFirst } from './card.ts'
 import { generatePermutations } from './randomization.ts'
 
 export interface ScoreResult {
-	score: number
+	score: number | undefined
 	message: string
 	finalHand: ModifiedCard[]
 }
@@ -36,7 +36,7 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 	}, { containsVillain: false, containsHeroOrAlly: false })
 	if (hand.length !== 7 || !containsVillain || !containsHeroOrAlly) {
 		return {
-			score: 0,
+			score: undefined,
 			message: 'Invalid hand',
 			finalHand: initialHand
 		}
@@ -48,14 +48,14 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 	const countCards = initialHand.slice(modifyCardCount)
 	const orderCombinations = generatePermutations(modifyCardCount)
 
-	let maxScore = 0
+	let maxScore = undefined
 	let optimalHand: ModifiedCard[] = []
 	for (const order of orderCombinations) {
 		const orderedHand = order.map(index => modifyCards[index]).concat(countCards)
 		const modifiedHand = cloneDeep(orderedHand)
 		try {
 			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, 0)
-			if (!!score && score > maxScore) {
+			if (score !== undefined && (maxScore === undefined || score > maxScore)) {
 				maxScore = score
 				optimalHand = resultHand
 			}
@@ -63,14 +63,14 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 	}
 
 	return {
-		score: maxScore - (lokiPenalty || 0),
+		score: maxScore === undefined ? undefined : maxScore - (lokiPenalty || 0),
 		message: 'Success',
 		finalHand: optimalHand
 	}
 }
 
 interface Result {
-	score: number
+	score: number | undefined
 	hand: ModifiedCard[]
 }
 
@@ -78,7 +78,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	if (index === hand.length) {
 		if (!containsRequiredCards(hand)) {
 			return {
-				score: 0, hand
+				score: undefined, hand
 			}
 		}
 		for (const card of hand) {
@@ -93,7 +93,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	}
 
 	if (index === 0) {
-		hand.forEach(card => card.transform?.(hand))
+		hand.forEach(card => card.transform?.(hand, card))
 	}
 
 	const currentCard = hand[index]
@@ -103,7 +103,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			return applyEffectsRecursive(hand, index + 1)
 		}
 		let optimalHand: ModifiedCard[] = []
-		let optimalScore = 0
+		let optimalScore = undefined
 		for (let i = 0; i < optionCount; i++) {
 			const modifiedHand = cloneDeep(hand)
 			const clonedCurrentCard = findCard(modifiedHand, currentCard.id)
@@ -111,9 +111,9 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			// Use null-safe access to make Typescript happy. `effect` function will always exist here because it
 			// was checked on the card before cloning.
 			clonedCurrentCard.effect?.(unblankedHand, i)
-			modifiedHand.forEach(card => card.transform?.(unblankedHand))
+			modifiedHand.forEach(card => card.transform?.(unblankedHand, card))
 			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, index + 1)
-			if (score > optimalScore) {
+			if (optimalScore === undefined || (typeof score === 'number' && score > optimalScore)) {
 				optimalScore = score
 				optimalHand = resultHand
 			}

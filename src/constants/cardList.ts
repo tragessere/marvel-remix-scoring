@@ -116,8 +116,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 16,
 		tags: [TAG.AGILITY],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			self.isBlanked = count(hand, card => card.type === CARD_TYPE.HERO) > 1
 		},
 		score() {
@@ -130,8 +129,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 8,
 		tags: [TAG.INTEL],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			const hasHero = hand.some(card => card.type === CARD_TYPE.HERO)
 			const hasUrbanLocation = hand.some(
 				card => card.type === CARD_TYPE.LOCATION && card.modifiedTags.includes(TAG.URBAN)
@@ -148,8 +146,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 11,
 		tags: [TAG.WORTHY],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedPower > 12)
 		},
 		score() {
@@ -233,8 +230,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: 9,
 		tags: [TAG.RANGE, TAG.STRENGTH],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			self.isBlanked = !hand.some(c => c.type === CARD_TYPE.HERO && c.modifiedTags.includes(TAG.AGILITY))
 		},
 		score() {
@@ -247,8 +243,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: 10,
 		tags: [TAG.ASGARD, TAG.FLIGHT, TAG.RANGE],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			self.isBlanked = !hand.some(
 				c =>
 					// 'Worthy' card
@@ -455,8 +450,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 1,
 		tags: [TAG.GAMMA, TAG.TECH],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(
 				card => card !== self && !card.isBlanked && card.modifiedTags.includes(TAG.GAMMA)
@@ -490,8 +484,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.ASGARD, TAG.STRENGTH, TAG.WORTHY],
-		transform(hand) {
-			const self = findCard(hand, 30)
+		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const hasMjolnir = hand.some(card => card.id === 17 && !card.isBlanked)
 			const allyCount = count(hand, card => card.type === CARD_TYPE.ALLY && !card.isBlanked)
@@ -524,8 +517,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.TECH, TAG.RANGE],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = sumBy(hand, card => count(card.modifiedTags, t => t === TAG.INTEL)) > 1
 
@@ -556,8 +548,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.INTEL, TAG.MUTANT, TAG.RANGE],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform =
 				sumBy(hand, card =>
@@ -856,8 +847,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.LOCATION,
 		power: 15,
 		tags: [],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			self.isBlanked = !hand.some(
 				card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS)
 			)
@@ -1370,8 +1360,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
 		tags: [TAG.BOSS],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.LOCATION && card.modifiedTags.includes(TAG.URBAN))
 		},
 		modificationOptions() {
@@ -1387,8 +1376,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.MUTANT],
-		transform(hand) {
-			const self = findCard(hand, this.id)
+		transform(hand, self) {
 			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS) && card.id !== this.id)
 		},
 		score() {

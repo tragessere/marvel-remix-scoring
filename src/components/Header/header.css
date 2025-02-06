@@ -1,9 +1,15 @@
 .header {
+	margin: 0 auto;
 	display: flex;
-	padding: 0.75rem 1rem;
+	padding: 0.5rem 1rem;
 	border-bottom: 1px solid #ccc;
+	background-color: #3953A4;
+	align-items: center;
+	width: 100%;
+	max-width: 60rem;
 
 	> h1 {
+		color: white;
 		font-size: 2rem;
 		margin: 0 0 0 0;
 		flex-grow: 1;
@@ -11,11 +17,28 @@
 	}
 
 	> .right-side {
+		display: flex;
+		align-items: center;
 		flex-shrink: 0;
-	}
 
-	& .card-count {
-		font-size: 1.5rem;
-		margin-right: 0.5rem;
+		& .card-count {
+			color: #ffffffaa;
+			font-size: 2rem;
+			font-weight: bold;
+			margin-right: 0.6rem;
+		}
+
+		& .score {
+			color: #ffffff;
+			font-size: 2rem;
+			font-weight: bold;
+			margin-right: 0.75rem;
+		}
+
+		& .reset {
+			height: 100%;
+			padding: 0.4rem 0.8rem;
+			margin-top: 0.2rem;
+		}
 	}
 }

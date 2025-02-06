@@ -9,14 +9,14 @@ interface HandTest {
 }
 
 describe('scoreHand', () => {
-	it('returns 0 without 7 cards', () => {
+	it('returns undefined without 7 cards', () => {
 		const hand: Card[] = [
 			cardList[1],
 		]
 		const result = scoreHand(hand)
-		expect(result.score).toBe(0)
+		expect(result.score).toBeUndefined()
 	})
-	it('returns 0 without villain', () => {
+	it('returns undefined without villain', () => {
 		const hand: Card[] = [
 			cardList[1],
 			cardList[2],
@@ -27,9 +27,9 @@ describe('scoreHand', () => {
 			cardList[7]
 		]
 		const result = scoreHand(hand)
-		expect(result.score).toBe(0)
+		expect(result.score).toBeUndefined()
 	})
-	it('returns 0 without hero or ally', () => {
+	it('returns undefined without hero or ally', () => {
 		const hand: Card[] = [
 			cardList[8],
 			cardList[9],
@@ -41,7 +41,7 @@ describe('scoreHand', () => {
 			cardList[62]
 		]
 		const result = scoreHand(hand)
-		expect(result.score).toBe(0)
+		expect(result.score).toBeUndefined()
 	})
 	it('subtracts points for Loki draw', () => {
 		const hand: Card[] = [
@@ -168,6 +168,26 @@ describe('scoreHand', () => {
 					cardList[66]
 				],
 				score: 109
+			},
+			{
+				id: 6,
+				hand: [
+					// Black Cat
+					cardList[63],
+					// Mystique
+					cardList[66],
+					// Arc Reactor
+					cardList[14],
+					// X-Jet
+					cardList[15],
+					// Secret ID
+					cardList[10],
+					// Assembled
+					cardList[8],
+					// Heimdall
+					cardList[2]
+				],
+				score: 33
 			}
 		]
 		//#endregion example hands

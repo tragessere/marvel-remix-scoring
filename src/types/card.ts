@@ -34,7 +34,7 @@ export interface Card {
 	effect?: ((hand: ModifiedCard[], index: number) => void)
 	modificationOptions?: ((hand: ModifiedCard[]) => number)
 	score: (hand: ModifiedCard[]) => number
-	transform?: ((hand: ModifiedCard[]) => void)
+	transform?: ((hand: ModifiedCard[], currentCard: ModifiedCard) => void)
 }
 
 export interface ModifiedCard extends Card {

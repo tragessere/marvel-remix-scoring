@@ -29,6 +29,7 @@
 	border: none;
 	background-color: white;
 	width: 100%;
+	flex-shrink: 0;
 	text-align: left;
 	border-right: 4px solid;
 	border-bottom: 1px solid black;
