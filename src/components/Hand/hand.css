@@ -52,6 +52,7 @@ h2 {
 	}
 
 	& .card-content {
+		background-color: white;
 		padding: 0.25rem;
 	}
 

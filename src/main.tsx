@@ -4,7 +4,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './components/App.tsx'
 
 import './css/index.css'
+import './css/font.css'
 import './css/variables.css'
+
+import './assets/Marvel-Remix-Icons.woff'
 
 const router = createBrowserRouter([
     {

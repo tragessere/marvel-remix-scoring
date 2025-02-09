@@ -1,3 +1,39 @@
-.card {
-  padding: 2em;
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 61rem;
+  margin: 0 auto;
+  background-image: url("../assets/background.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  box-shadow: 0 0 19px 2px black;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-y: scroll;
+  background-color: #E5E5E5;
+}
+
+main {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.content {
+  display: flex;
+  flex-grow: 1;
+  max-width: 60rem;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fffffffa;
+}
+
+.column-select {
+  width: 8rem;
+  padding-right: 1px;
+  border-right: 1px solid #ccc;
 }

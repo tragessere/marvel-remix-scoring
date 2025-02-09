@@ -1,0 +1,76 @@
+@font-face {
+	font-family: Marvel-Remix-Icons;
+	src: url('../assets/Marvel-Remix-Icons.woff');
+}
+
+i.tag {
+	/*noinspection CssNoGenericFontName*/
+	font-family: Marvel-Remix-Icons;
+	font-size: 24px;
+}
+
+i.mr-tech:before {
+	content: '\E001';
+	color: #CC0952;
+}
+
+i.mr-intel:before {
+	content: '\E002';
+	color: #565C6D;
+}
+
+i.mr-strength:before {
+	content: '\E003';
+	color: #009344;
+}
+
+i.mr-agility:before {
+	content: '\E004';
+	color: #F68B1F;
+}
+
+i.mr-flight:before {
+	content: '\E005';
+	color: #00A7EA;
+}
+
+i.mr-range:before {
+	content: '\E006';
+	color: #92278F
+}
+
+i.mr-wakanda:before {
+	content: '\E007';
+	color: #38002D;
+}
+
+i.mr-asgard:before {
+	content: '\E008';
+	color: #C58F68;
+}
+
+i.mr-mutant:before {
+	content: '\E009';
+	color: #00487A;
+}
+
+i.mr-gamma:before {
+	content: '\E00A';
+	color: #88AC2E;
+}
+
+i.mr-worthy:before {
+	content: '\E00B';
+	color: #968359;
+}
+
+i.mr-urban:before {
+	content: '\E00C';
+	color: #EC0B8C;
+}
+
+i.mr-boss:before {
+	content: '\E00D';
+	color: #ED1D24;
+}
+

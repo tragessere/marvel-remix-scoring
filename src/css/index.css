@@ -9,17 +9,6 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-body {
-	margin: 0;
-	min-width: 320px;
-}
-
-#root {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-}
-
 h1 {
 	font-size: 3.2em;
 	line-height: 1.1;
@@ -42,25 +31,6 @@ button:hover {
 button:focus,
 button:focus-visible {
 	outline: 4px auto -webkit-focus-ring-color;
-}
-
-.content {
-	display: flex;
-	flex-grow: 1;
-	max-width: 60rem;
-	width: 100%;
-	margin: 0 auto;
-}
-
-.column-select {
-	width: 8rem;
-	padding-right: 1px;
-	border-right: 1px solid #ccc;
-}
-
-main {
-	flex-grow: 1;
-	padding: 1rem;
 }
 
 
