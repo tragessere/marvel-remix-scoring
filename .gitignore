@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
+# outputs
 tsconfig.app.tsbuildinfo
+coverage
