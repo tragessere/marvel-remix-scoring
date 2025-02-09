@@ -1,4 +1,5 @@
 import { FunctionComponent, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CSSTransition } from 'react-transition-group'
 import { Card, CARD_TYPE } from '../../types/card.ts'
 import { SelectCard } from './Card.tsx'
@@ -10,6 +11,7 @@ interface SelectCardCategoryProps {
 }
 
 export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({ cards, isExpanded, onClick }) => {
+	const { t } = useTranslation('common', { keyPrefix: 'select-cards' })
 	const category = cards[0].type
 	const categoryName = CARD_TYPE[category].toLowerCase()
 	const nodeRef = useRef(null)
@@ -21,7 +23,7 @@ export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({
 				data-category={categoryName}
 				onClick={() => onClick(category)}
 				aria-expanded={isExpanded}>
-				{categoryName}
+				{t(categoryName)}
 			</button>
 			<CSSTransition
 				nodeRef={nodeRef}

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './components/App.tsx'
 
+import './i18n.ts'
+
 import './css/index.css'
 import './css/font.css'
 import './css/variables.css'
@@ -18,6 +20,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+      <React.Suspense>
+          <div className="background">
+              <RouterProvider router={router} />
+          </div>
+      </React.Suspense>
   </React.StrictMode>
 )

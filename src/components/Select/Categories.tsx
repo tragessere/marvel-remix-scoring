@@ -1,5 +1,6 @@
 import { groupBy, map, sortBy } from 'lodash'
 import { FunctionComponent, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
 import { CARD_SELECT_MODE, CardSelectionModeContext } from '../../contexts/ContextList.tsx'
 import { CARD_TYPE } from '../../types/card.ts'
@@ -8,9 +9,13 @@ import { SelectCardCategory } from './CardCategory.tsx'
 import './select.css'
 
 export const SelectCategories: FunctionComponent = () => {
+	const { t } = useTranslation('common', { keyPrefix: 'select-cards' })
 	const cardGroups = groupBy(cardList, 'type')
 	// Create list of categories using the keys of the CARD_TYPE enum
-	const categories = sortBy(map(Object.keys(cardGroups), k => CARD_TYPE[Number(k)] as keyof typeof CARD_TYPE))
+	const categories = sortBy(
+		map(Object.keys(cardGroups), k => CARD_TYPE[Number(k)] as keyof typeof CARD_TYPE),
+		c => t(c.toLowerCase())
+	)
 
 	const { cardSelectMode } = useContext(CardSelectionModeContext)
 	const [expandedCategory, setExpandedCategory] = useState<CARD_TYPE | undefined>()

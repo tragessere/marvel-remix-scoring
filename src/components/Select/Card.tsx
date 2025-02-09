@@ -27,7 +27,10 @@ export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
 	}
 
 	return (
-		<button className={`select-card bg-color-${category}${includesCard ? ' selected' : ''}`} onClick={onClick}>
+		<button
+			className={`select-card bg-color-${category}${includesCard ? ' selected' : ''}`}
+			onClick={onClick}
+			aria-selected={includesCard}>
 			{card.name}
 		</button>
 	)

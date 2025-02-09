@@ -1,0 +1,19 @@
+{
+	"header": {
+		"reset": "reset"
+	},
+	"select-cards": {
+		"header": "Select Cards",
+		"ally": "Ally",
+		"condition":  "Condition",
+		"equipment": "Equipment",
+		"hero": "Hero",
+		"location": "Location",
+		"maneuver": "Maneuver",
+		"villain": "Villain"
+	},
+	"selected-cards": {
+		"header": "Selected Cards",
+		"empty-prompt": "Use the sidebar to select the cards in your hand"
+	}
+}
