@@ -50,7 +50,7 @@ button:focus-visible {
 	background-color: var(--color-location);
 }
 .bg-color-maneuver {
-	background-color: var(--color-maneuver);
+	background-color: var(--color-maneuver-bg);
 }
 .bg-color-villain {
 	background-color: var(--color-villain);

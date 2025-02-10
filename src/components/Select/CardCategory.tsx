@@ -11,7 +11,7 @@ interface SelectCardCategoryProps {
 }
 
 export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({ cards, isExpanded, onClick }) => {
-	const { t } = useTranslation('common', { keyPrefix: 'select-cards' })
+	const { t } = useTranslation('card-info', { keyPrefix: 'category' })
 	const category = cards[0].type
 	const categoryName = CARD_TYPE[category].toLowerCase()
 	const nodeRef = useRef(null)

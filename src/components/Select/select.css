@@ -50,7 +50,7 @@
 		border-right-color: var(--color-location);
 	}
 	&.maneuver {
-		border-right-color: var(--color-maneuver);
+		border-right-color: var(--color-maneuver-bg);
 	}
 	&.villain {
 		border-right-color: var(--color-villain);
@@ -84,7 +84,7 @@
 		background-color: var(--color-location);
 	}
 	&.maneuver {
-		background-color: var(--color-maneuver);
+		background-color: var(--color-maneuver-bg);
 	}
 	&.villain {
 		background-color: var(--color-villain);

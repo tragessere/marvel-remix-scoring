@@ -1,0 +1,340 @@
+{
+	"category": {
+		"ally": "Ally",
+		"condition":  "Condition",
+		"equipment": "Equipment",
+		"hero": "Hero",
+		"location": "Location",
+		"maneuver": "Maneuver",
+		"villain": "Villain"
+	},
+	"tag": {
+		"tech": "Tech",
+		"intel": "Intel",
+		"strength": "Strength",
+		"agility": "Agility",
+		"flight": "Flight",
+		"range": "Range",
+		"wakanda": "Wakanda",
+		"asgard": "Asgard",
+		"mutant": "Mutant",
+		"gamma": "Gamma",
+		"worthy": "Worthy",
+		"urban": "Urban",
+		"boss": "Boss"
+	},
+	"1": {
+		"name": "Forge",
+		"text": "<score>+4</score> for each <equipment />."
+	},
+	"2": {
+		"name": "Heimdall",
+		"text": "<score>+6</score> with <name>Bifrost</name>."
+	},
+	"3": {
+		"name": "Lockheed",
+		"text": "<score>+7</score> with <name>Shadowcat</name>."
+	},
+	"4": {
+		"name": "Jane Foster",
+		"text": "<score>+8</score> with <name>Thor Odinson</name> or <name>God of Thunder</name>."
+	},
+	"5": {
+		"name": "Moira Mactaggert",
+		"text": "One <hero /> with <mutant /> may count one tag twice."
+	},
+	"6": {
+		"name": "Dora Milaje"
+	},
+	"7": {
+		"name": "Hulk Operations"
+	},
+	"8": {
+		"name": "Assembled",
+		"text": "<score>+4</score> for each <hero />."
+	},
+	"9": {
+		"name": "Fearless",
+		"text": "Blanked if there is more than one <hero /> in your hand."
+	},
+	"10": {
+		"name": "Secret ID",
+		"text": "Blanked unless with a <hero /> AND a <location /> with <urban />."
+	},
+	"11": {
+		"name": "Worthy",
+		"text": "Blanked unless with a <villain /> with Power greater than 12."
+	},
+	"12": {
+		"name": "Berserk",
+		"text": "Choose a <hero /> or <ally />. <score-negative>-3</score-negative> for each OTHER <hero /> or <ally /> and each <urban />."
+	},
+	"13": {
+		"name": "Spear of Bashenga",
+		"text": "<score>+7</score> for each other <equipment /> and each other <wakanda />."
+	},
+	"14": {
+		"name": "Arc Reactor",
+		"text": "<score>+9</score> for each <tech />."
+	},
+	"15": {
+		"name": "X-Jet",
+		"text": "Add <flight /> to each <hero /> and <ally /> with no <flight />. Add <range /> to one <hero /> or <ally />."
+	},
+	"16": {
+		"name": "Vibranium Shield",
+		"text": "Blanked unless with a <hero /> with <agility />."
+	},
+	"17": {
+		"name": "Mjolnir",
+		"text": "Blanked unless with <name>Worthy</name>, or unless with a <hero /> or <ally /> with <worthy />."
+	},
+	"18": {
+		"name": "Cerebro",
+		"text": "If you take <name>Cerebro</name from the discard area, you may swap a card in your hand with a card in the discard area if either has <mutant />."
+	},
+	"19": {
+		"name": "Captain America",
+		"text": "<score>+2</score> for each other <hero />. <score>+4</score> with <name>Vibranium Shield</name>."
+	},
+	"20": {
+		"name": "Cyclops",
+		"text": "<score>+3</score> for each other <mutant />."
+	},
+	"21": {
+		"name": "Shadowcat",
+		"text": "<score>+4</score> with any <location />."
+	},
+	"22": {
+		"name": "Spider-Man",
+		"text": "<score>+5</score> and <flight /> with a <location /> with <urban />."
+	},
+	"23": {
+		"name": "She-Hulk",
+		"text": "<score>+5</score> for each other <gamma />."
+	},
+	"24": {
+		"name": "Black Panther",
+		"text": "<score>+5</score> for each other <wakanda />."
+	},
+	"25": {
+		"name": "Professor X",
+		"text": "<score>+6</score> for each <name>Cerebro</name> and <name>Xavier Mansion</name>."
+	},
+	"26": {
+		"name": "Wolverine",
+		"text": "<score>+6</score> with any <villain /> with <boss />."
+	},
+	"27": {
+		"name": "Rogue",
+		"text": "<name>Rogue</name> may copy the base power and one tag of another <hero /> in your hand."
+	},
+	"28": {
+		"name": "Shuri",
+		"text": "<name>Shuri</name> and one other <hero /> or <ally /> may each add one of <strength />, <range />, or <agility />."
+	},
+	"29": {
+		"name": "Bruce Banner",
+		"modified-name": "Hulk",
+		"text": "Transform with any other <gamma />."
+	},
+	"30": {
+		"name": "Thor Odinson",
+		"modified-name": "God of Thunder",
+		"text": "Transform with <name>Mjolnir</name> or two or more <ally>Allies</ally>."
+	},
+	"31": {
+		"name": "Tony Stark",
+		"modified-name": "Iron Man",
+		"text": "Transform with two or more <intel />."
+	},
+	"32": {
+		"name": "Jean Grey",
+		"modified-name": "Phoenix",
+		"text": "Transform with two or more <mutant />."
+	},
+	"33": {
+		"name": "Vision",
+		"text": "<name>Vision</name> has your choice of two different tags, either <strength />, <flight />, <tech />, or <range />."
+	},
+	"34": {
+		"name": "Angel"
+	},
+	"35": {
+		"name": "Beast"
+	},
+	"36": {
+		"name": "Black Widow"
+	},
+	"37": {
+		"name": "Colossus"
+	},
+	"38": {
+		"name": "Falcon"
+	},
+	"39": {
+		"name": "Hawkeye"
+	},
+	"40": {
+		"name": "Storm"
+	},
+	"41": {
+		"name": "Valkyrie"
+	},
+	"42": {
+		"name": "Bifrost",
+		"text": "<score>+11</score> with a second <location />."
+	},
+	"43": {
+		"name": "High Speed Chase",
+		"text": "<score>+3</score> for each <agility />, for each <flight />, and for each <range />."
+	},
+	"44": {
+		"name": "Skyscraper",
+		"text": "<score>+4</score> for each <agility /> and for each <flight />."
+	},
+	"45": {
+		"name": "Falling Debris",
+		"text": "<score>+4</score> for each <strength /> and for each <flight />."
+	},
+	"46": {
+		"name": "Runaway Train",
+		"text": "<score>+4</score> for each <strength /> and for each <tech />."
+	},
+	"47": {
+		"name": "Krakoa, The Living Island",
+		"text": "<score>+5</score> for each <mutant />."
+	},
+	"48": {
+		"name": "Factory",
+		"text": "<score>+5</score> for each <tech /> and for each <agility />."
+	},
+	"49": {
+		"name": "Birnin Zana",
+		"text": "<score>+7</score> for each other <wakanda />."
+	},
+	"50": {
+		"name": "Madripoor",
+		"text": "<score>+8</score> for each <intel />."
+	},
+	"51": {
+		"name": "Halls of Asgard",
+		"text": "<score>+9</score> for each other <asgard />."
+	},
+	"52": {
+		"name": "Hidden Lair",
+		"text": "Blank a <villain /> unless with two or more <intel />."
+	},
+	"53": {
+		"name": "Remote Fortress",
+		"text": "Blanked unless with a <villain /> with <boss />."
+	},
+	"54": {
+		"name": "Xavier Mansion",
+		"text": "Up to three <hero>Heroes</hero> with <mutant /> may each count one tag twice."
+	},
+	"55": {
+		"name": "Find Higher Ground",
+		"text": "<score>+10</score> for each pair of <flight /> and <range />."
+	},
+	"56": {
+		"name": "Discover Weakness",
+		"text": "<score>+11</score> for each pair of <intel /> and <agility />."
+	},
+	"57": {
+		"name": "Precise Shot",
+		"text": "<score>+12</score> for each pair of <intel /> and <range />."
+	},
+	"58": {
+		"name": "Build Gadgets",
+		"text": "<score>+13</score> for each pair of <tech /> and <intel />."
+	},
+	"59": {
+		"name": "Throw Car",
+		"text": "<score>+14</score> with both <strength /> and <location /> with <urban />."
+	},
+	"60": {
+		"name": "Avoid Crossfire",
+		"text": "<score>+5|7|9</score> for each <range /> if with one|two|three or more cards with <range />."
+	},
+	"61": {
+		"name": "Hack In",
+		"text": "<score>+6</score> for each <tech />. Each <tech /> also counts as <intel />."
+	},
+	"62": {
+		"name": "Kang",
+		"text": "<score>+5</score> for each different tag in your hand."
+	},
+	"63": {
+		"name": "Black Cat",
+		"text": "<score>+5</score> with a <location /> with <urban />. <score-negative>-5</score-negative> for each <maneuver />."
+	},
+	"64": {
+		"name": "Sauron",
+		"text": "<score>+7</score> for each <flight /> and for each <range />."
+	},
+	"65": {
+		"name": "Killmonger",
+		"text": "<score>+9</score> for each other <wakanda />."
+	},
+	"66": {
+		"name": "Mystique",
+		"text": "<score-negative>-20</score-negative> unless with two or more <intel /> OR any three cards sharing the same tag."
+	},
+	"67": {
+		"name": "Sentinels",
+		"text": "<score-negative>-20</score-negative> unless with two or more <mutant />."
+	},
+	"68": {
+		"name": "Abomination",
+		"text": "<score-negative>-20</score-negative> unless with two or more <gamma />."
+	},
+	"69": {
+		"name": "Ultron",
+		"text": "<score-negative>-20</score-negative> unless with two or more <tech />."
+	},
+	"70": {
+		"name": "Hela",
+		"text": "<score-negative>-20</score-negative> unless with two or more other <asgard />."
+	},
+	"71": {
+		"name": "The Leader",
+		"text": "<score-negative>-3</score-negative> for each <strength /> and other <gamma />."
+	},
+	"72": {
+		"name": "Baron Zemo",
+		"text": "<score-negative>-3</score-negative> for each <hero />."
+	},
+	"73": {
+		"name": "Loki",
+		"text": "At the end of the game, draw a card from the Remix deck and subtract its base power."
+	},
+	"74": {
+		"name": "Magneto",
+		"text": "Blank all <equipment /> and ignore all <tech />. (cards with <tech /> keep their other details)"
+	},
+	"75": {
+		"name": "Taskmaster",
+		"text": "Blank all <maneuver>maneuvers</maneuver>."
+	},
+	"76": {
+		"name": "Selene",
+		"text": "Blank any <hero /> or <ally /> in you hand. Subtract its base power from your total score."
+	},
+	"77": {
+		"name": "Juggernaut",
+		"text": "Blank one <location />."
+	},
+	"78": {
+		"name": "Kingpin",
+		"text": "Blanked unless with a <location /> with <urban />."
+	},
+	"79": {
+		"name": "Toad",
+		"text": "Blanked unless with another <villain /> with <boss />."
+	},
+	"80": {
+		"name": "Squirrel Girl",
+		"text": "Ignore the text box for all <villain>Villains</villain>. All negative <villain /> base powers become positive."
+	}
+}

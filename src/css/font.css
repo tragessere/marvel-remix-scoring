@@ -7,6 +7,8 @@ i.tag {
 	/*noinspection CssNoGenericFontName*/
 	font-family: Marvel-Remix-Icons;
 	font-size: 24px;
+	position: relative;
+	top: 3px;
 }
 
 i.mr-tech:before {

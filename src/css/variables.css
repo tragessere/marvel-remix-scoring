@@ -1,9 +1,10 @@
 :root {
-	--color-ally: #77286c;
-	--color-condition: green;
-	--color-equipment: grey;
-	--color-hero: #1992cc;
-	--color-location: #E08D27;
-	--color-maneuver: #eb899a;
-	--color-villain: #b7180e;
+	--color-ally: #92278F;
+	--color-condition: #00853E;
+	--color-equipment: #565C6D;
+	--color-hero: #007CAD;
+	--color-location: #E17509;
+	--color-maneuver-bg: #D06A92;
+	--color-maneuver: #E00B84;
+	--color-villain: #98080C;
 }

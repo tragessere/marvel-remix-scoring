@@ -1,9 +1,11 @@
 import { FunctionComponent, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
 import { ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
 import { CARD_TYPE } from '../../types/card.ts'
 import { findCard } from '../../utils/card.ts'
+import { CardText } from './CardText.tsx'
 import { LokiDrawnCard } from './LokiDrawnCard.tsx'
 import { TagIcon } from './TagIcon.tsx'
 
@@ -12,6 +14,7 @@ export interface SimpleCardProps {
 }
 
 export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
+	const { t, i18n } = useTranslation('card-info')
 	const { removeCard } = useCardSelection()
 	const card = cardList[cardId]
 	const category = CARD_TYPE[card.type].toLowerCase()
@@ -23,13 +26,13 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 		<div className={`simple-card${scoredCard.isBlanked ? ' blanked' : ''} ${category}`} role="button" tabIndex={0} onClick={() => removeCard(cardId)}>
 			<div className={`card-top-border bg-color-${category}`}>
 				<span className="base-power">{card.power}</span>
-				<span className="name">{card.name}</span>
+				<span className="name">{t(`${card.id}.name`)}</span>
 				{result.score !== 0 && <span className="final-score">{scoredCard.score(result.finalHand)}</span>}
 			</div>
 			<div className="card-content">
 				<div>
 					<div className="tag-list">{scoredCard.modifiedTags.sort(t => t).map(((t, index) => <TagIcon key={index} tag={t} />))}</div>
-					<span>Placeholder</span>
+					{i18n.exists(`card-info:${card.id}.text`) && <CardText i18nKey={`card-info:${card.id}.text`} />}
 				</div>
 				{card.id === 73 && <div className="loki-draw">
 					<span>Drawn Card:</span>

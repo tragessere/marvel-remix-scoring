@@ -70,11 +70,62 @@ h2 {
 		margin-left: 0.5rem;
 		border: 1px solid #222;
 	}
+
+	.score {
+		background-color: revert;
+	}
+
+	& .card-text {
+		& .score {
+			font-size: 1.35rem;
+			font-weight: 800;
+			font-style: italic;
+		}
+
+		& .score-negative {
+			font-size: 1.35rem;
+			font-weight: 800;
+			font-style: italic;
+			color: #E52315;
+		}
+
+		& .name {
+			font-size: 1.15rem;
+			font-weight: 500;
+			font-style: italic;
+		}
+
+		& .category {
+			font-size: 1.2rem;
+			font-weight: 600;
+			font-style: italic;
+			text-transform: uppercase;
+
+			&.hero {
+				color: var(--color-hero);
+			}
+			&.ally {
+				color: var(--color-ally);
+			}
+			&.condition {
+				color: var(--color-condition);
+			}
+			&.equipment {
+				color: var(--color-equipment);
+			}
+			&.location {
+				color: var(--color-location);
+			}
+			&.maneuver {
+				color: var(--color-maneuver);
+			}
+			&.villain {
+				color: var(--color-villain);
+			}
+		}
+	}
 }
 
-.score {
-	background-color: revert;
-}
 
 .loki-card {
 
