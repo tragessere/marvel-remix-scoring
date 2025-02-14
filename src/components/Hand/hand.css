@@ -71,8 +71,15 @@ h2 {
 		border: 1px solid #222;
 	}
 
-	.score {
+	& .score {
 		background-color: revert;
+	}
+
+	& .tag-list {
+		& .tag {
+			margin-left: 0.15rem;
+			margin-right: 0.15rem;
+		}
 	}
 
 	& .card-text {

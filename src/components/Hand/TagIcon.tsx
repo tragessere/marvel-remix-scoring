@@ -1,4 +1,5 @@
 import { FunctionComponent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TAG } from '../../types/card.ts'
 
 interface TagIconProps {
@@ -6,5 +7,12 @@ interface TagIconProps {
 }
 
 export const TagIcon: FunctionComponent<TagIconProps> = ({ tag }) => {
-	return <span className="tag">[{TAG[tag].toLowerCase()}]</span>
+	const { t } = useTranslation('card-info')
+	const tagKey = TAG[tag].toLowerCase()
+
+	return (
+		<i className={`tag mr-${tagKey}`}>
+			<span className="sr-only">{t(`tag.${tagKey}`)}</span>
+		</i>
+	)
 }
