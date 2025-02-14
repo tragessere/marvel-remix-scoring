@@ -28,7 +28,6 @@ export enum TAG {
 export interface Card {
 	id: number
 	type: CARD_TYPE,
-	name: string,
 	power: number,
 	tags: TAG[]
 	effect?: ((hand: ModifiedCard[], index: number) => void)
@@ -40,7 +39,7 @@ export interface Card {
 export interface ModifiedCard extends Card {
 	isBlanked: boolean
 	isTextBlanked: boolean
-	modifiedName: string
+	modifiedName?: string
 	modifiedPower: number
 	modifiedTags: TAG[]
 	isTransformed?: boolean

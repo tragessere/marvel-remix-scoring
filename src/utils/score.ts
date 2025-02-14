@@ -19,11 +19,10 @@ export interface ScoreResult {
  */
 export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 	const initialHand = hand.map(card => {
-		return {
+		return <ModifiedCard>{
 			...card,
 			isBlanked: false,
 			isTextBlanked: false,
-			modifiedName: card.name,
 			modifiedPower: card.power,
 			modifiedTags: card.tags.slice()
 		}

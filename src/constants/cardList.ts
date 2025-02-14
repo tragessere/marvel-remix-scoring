@@ -1,3 +1,4 @@
+import i18n from 'i18next'
 import type { Dictionary } from 'lodash'
 import sumBy from 'lodash/sumBy'
 import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
@@ -9,7 +10,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Ally
 	1: {
 		id: 1,
-		name: 'Forge',
 		type: CARD_TYPE.ALLY,
 		power: 4,
 		tags: [TAG.TECH, TAG.MUTANT],
@@ -20,7 +20,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	2: {
 		id: 2,
-		name: 'Heimdall',
 		type: CARD_TYPE.ALLY,
 		power: 4,
 		tags: [TAG.ASGARD, TAG.INTEL],
@@ -31,7 +30,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	3: {
 		id: 3,
-		name: 'Lockheed',
 		type: CARD_TYPE.ALLY,
 		power: 5,
 		tags: [TAG.FLIGHT, TAG.RANGE],
@@ -42,7 +40,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	4: {
 		id: 4,
-		name: 'Jane Foster',
 		type: CARD_TYPE.ALLY,
 		power: 5,
 		tags: [TAG.TECH, TAG.WORTHY],
@@ -53,7 +50,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	5: {
 		id: 5,
-		name: 'Moira Mactaggert',
 		type: CARD_TYPE.ALLY,
 		power: 3,
 		tags: [TAG.TECH, TAG.INTEL],
@@ -79,7 +75,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	6: {
 		id: 6,
-		name: 'Dora Milaje',
 		type: CARD_TYPE.ALLY,
 		power: 6,
 		tags: [TAG.AGILITY, TAG.INTEL, TAG.WAKANDA],
@@ -89,7 +84,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	7: {
 		id: 7,
-		name: 'Hulk Operations',
 		type: CARD_TYPE.ALLY,
 		power: 4,
 		tags: [TAG.GAMMA, TAG.RANGE, TAG.TECH],
@@ -101,7 +95,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Condition
 	8: {
 		id: 8,
-		name: 'Assembled',
 		type: CARD_TYPE.CONDITION,
 		power: 0,
 		tags: [],
@@ -112,7 +105,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	9: {
 		id: 9,
-		name: 'Fearless',
 		type: CARD_TYPE.CONDITION,
 		power: 16,
 		tags: [TAG.AGILITY],
@@ -125,7 +117,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	10: {
 		id: 10,
-		name: 'Secret ID',
 		type: CARD_TYPE.CONDITION,
 		power: 8,
 		tags: [TAG.INTEL],
@@ -142,7 +133,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	11: {
 		id: 11,
-		name: 'Worthy',
 		type: CARD_TYPE.CONDITION,
 		power: 11,
 		tags: [TAG.WORTHY],
@@ -155,7 +145,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	12: {
 		id: 12,
-		name: 'Berserk',
 		type: CARD_TYPE.CONDITION,
 		power: 18,
 		tags: [TAG.GAMMA, TAG.STRENGTH],
@@ -172,7 +161,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Equipment
 	13: {
 		id: 13,
-		name: 'Spear of Bashenga',
 		type: CARD_TYPE.EQUIPMENT,
 		power: 0,
 		tags: [TAG.WAKANDA],
@@ -186,7 +174,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	14: {
 		id: 14,
-		name: 'Arc Reactor',
 		type: CARD_TYPE.EQUIPMENT,
 		power: 0,
 		tags: [],
@@ -197,7 +184,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	15: {
 		id: 15,
-		name: 'X-Jet',
 		type: CARD_TYPE.EQUIPMENT,
 		power: 7,
 		tags: [],
@@ -226,7 +212,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	16: {
 		id: 16,
-		name: 'Vibranium Shield',
 		type: CARD_TYPE.EQUIPMENT,
 		power: 9,
 		tags: [TAG.RANGE, TAG.STRENGTH],
@@ -239,7 +224,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	17: {
 		id: 17,
-		name: 'Mjolnir',
 		type: CARD_TYPE.EQUIPMENT,
 		power: 10,
 		tags: [TAG.ASGARD, TAG.FLIGHT, TAG.RANGE],
@@ -258,7 +242,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	18: {
 		id: 18,
-		name: 'Cerebro',
 		type: CARD_TYPE.EQUIPMENT,
 		power: 8,
 		tags: [TAG.INTEL],
@@ -271,7 +254,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Hero
 	19: {
 		id: 19,
-		name: 'Captain America',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.WORTHY],
@@ -283,7 +265,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	20: {
 		id: 20,
-		name: 'Cyclops',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.RANGE, TAG.MUTANT],
@@ -296,7 +277,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	21: {
 		id: 21,
-		name: 'Shadowcat',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.MUTANT, TAG.TECH],
@@ -307,7 +287,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	22: {
 		id: 22,
-		name: 'Spider-Man',
 		type: CARD_TYPE.HERO,
 		power: 5,
 		tags: [TAG.AGILITY, TAG.STRENGTH],
@@ -332,7 +311,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	23: {
 		id: 23,
-		name: 'She-Hulk',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.GAMMA, TAG.STRENGTH],
@@ -345,7 +323,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	24: {
 		id: 24,
-		name: 'Black Panther',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.WAKANDA],
@@ -358,7 +335,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	25: {
 		id: 25,
-		name: 'Professor X',
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.INTEL, TAG.MUTANT],
@@ -370,7 +346,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	26: {
 		id: 26,
-		name: 'Wolverine',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.MUTANT],
@@ -381,7 +356,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	27: {
 		id: 27,
-		name: 'Rogue',
 		type: CARD_TYPE.HERO,
 		power: 0,
 		tags: [TAG.MUTANT],
@@ -409,7 +383,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	28: {
 		id: 28,
-		name: 'Shuri',
 		type: CARD_TYPE.HERO,
 		power: 2,
 		tags: [TAG.TECH, TAG.WAKANDA],
@@ -446,7 +419,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	29: {
 		id: 29,
-		name: 'Bruce Banner',
 		type: CARD_TYPE.HERO,
 		power: 1,
 		tags: [TAG.GAMMA, TAG.TECH],
@@ -462,13 +434,13 @@ export const cardList: Readonly<Dictionary<Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = 'Hulk'
+				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 13
 				removeTag(self, TAG.TECH)
 				self.modifiedTags.push(TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = 'Bruce Banner'
+				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 1
 				removeTag(self, TAG.STRENGTH, 3)
 				self.modifiedTags.push(TAG.TECH)
@@ -480,7 +452,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	30: {
 		id: 30,
-		name: 'Thor Odinson',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.ASGARD, TAG.STRENGTH, TAG.WORTHY],
@@ -496,12 +467,12 @@ export const cardList: Readonly<Dictionary<Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = 'God Of Thunder'
+				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 12
 				self.modifiedTags.push(TAG.FLIGHT, TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = 'Thor Odinson'
+				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 4
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
@@ -513,7 +484,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	31: {
 		id: 31,
-		name: 'Tony Stark',
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.TECH, TAG.RANGE],
@@ -527,12 +497,12 @@ export const cardList: Readonly<Dictionary<Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = 'Iron Man'
+				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 8
 				self.modifiedTags.push(TAG.FLIGHT, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = 'Tony Stark'
+				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.STRENGTH)
@@ -544,7 +514,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	32: {
 		id: 32,
-		name: 'Jean Grey',
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.INTEL, TAG.MUTANT, TAG.RANGE],
@@ -561,13 +530,13 @@ export const cardList: Readonly<Dictionary<Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = 'Phoenix'
+				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 9
 				self.modifiedTags.push(TAG.FLIGHT)
 				self.modifiedTags.push(TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = 'Jean Grey'
+				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
@@ -579,7 +548,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	33: {
 		id: 33,
-		name: 'Vision',
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.WORTHY],
@@ -607,7 +575,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	34: {
 		id: 34,
-		name: 'Angel',
 		type: CARD_TYPE.HERO,
 		power: 6,
 		tags: [TAG.AGILITY, TAG.FLIGHT, TAG.WORTHY],
@@ -617,7 +584,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	35: {
 		id: 35,
-		name: 'Beast',
 		type: CARD_TYPE.HERO,
 		power: 6,
 		tags: [TAG.AGILITY, TAG.MUTANT, TAG.TECH],
@@ -627,7 +593,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	36: {
 		id: 36,
-		name: 'Black Widow',
 		type: CARD_TYPE.HERO,
 		power: 6,
 		tags: [TAG.AGILITY, TAG.AGILITY, TAG.INTEL],
@@ -637,7 +602,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	37: {
 		id: 37,
-		name: 'Colossus',
 		type: CARD_TYPE.HERO,
 		power: 6,
 		tags: [TAG.MUTANT, TAG.STRENGTH, TAG.STRENGTH],
@@ -647,7 +611,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	38: {
 		id: 38,
-		name: 'Falcon',
 		type: CARD_TYPE.HERO,
 		power: 6,
 		tags: [TAG.FLIGHT, TAG.RANGE, TAG.TECH],
@@ -657,7 +620,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	39: {
 		id: 39,
-		name: 'Hawkeye',
 		type: CARD_TYPE.HERO,
 		power: 5,
 		tags: [TAG.RANGE, TAG.RANGE, TAG.TECH],
@@ -667,7 +629,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	40: {
 		id: 40,
-		name: 'Storm',
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.FLIGHT, TAG.MUTANT, TAG.RANGE],
@@ -677,7 +638,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	41: {
 		id: 41,
-		name: 'Valkyrie',
 		type: CARD_TYPE.HERO,
 		power: 7,
 		tags: [TAG.ASGARD, TAG.FLIGHT, TAG.STRENGTH],
@@ -689,7 +649,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Location
 	42: {
 		id: 42,
-		name: 'Bifrost',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.ASGARD],
@@ -700,7 +659,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	43: {
 		id: 43,
-		name: 'High Speed Chase',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.URBAN],
@@ -713,7 +671,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	44: {
 		id: 44,
-		name: 'Skyscraper',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.URBAN],
@@ -726,7 +683,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	45: {
 		id: 45,
-		name: 'Falling Debris',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.URBAN],
@@ -739,7 +695,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	46: {
 		id: 46,
-		name: 'Runaway Train',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.URBAN],
@@ -752,7 +707,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	47: {
 		id: 47,
-		name: 'Krakoa, The Living Island',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [],
@@ -763,7 +717,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	48: {
 		id: 48,
-		name: 'Factory',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [],
@@ -776,7 +729,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	49: {
 		id: 49,
-		name: 'Birnin Zana',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.TECH, TAG.URBAN, TAG.WAKANDA],
@@ -789,7 +741,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	50: {
 		id: 50,
-		name: 'Madripoor',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.URBAN],
@@ -800,7 +751,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	51: {
 		id: 51,
-		name: 'Halls of Asgard',
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.ASGARD, TAG.URBAN],
@@ -813,7 +763,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	52: {
 		id: 52,
-		name: 'Hidden Lair',
 		type: CARD_TYPE.LOCATION,
 		power: 16,
 		tags: [],
@@ -843,7 +792,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	53: {
 		id: 53,
-		name: 'Remote Fortress',
 		type: CARD_TYPE.LOCATION,
 		power: 15,
 		tags: [],
@@ -858,7 +806,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	54: {
 		id: 54,
-		name: 'Xavier Mansion',
 		type: CARD_TYPE.LOCATION,
 		power: 4,
 		tags: [],
@@ -917,7 +864,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Maneuver
 	55: {
 		id: 55,
-		name: 'Find Higher Ground',
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
 		tags: [],
@@ -937,7 +883,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	56: {
 		id: 56,
-		name: 'Discover Weakness',
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
 		tags: [],
@@ -957,7 +902,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	57: {
 		id: 57,
-		name: 'Precise Shot',
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
 		tags: [],
@@ -977,7 +921,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	58: {
 		id: 58,
-		name: 'Build Gadgets',
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
 		tags: [],
@@ -997,7 +940,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	59: {
 		id: 59,
-		name: 'Throw Car',
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
 		tags: [TAG.RANGE],
@@ -1020,7 +962,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	60: {
 		id: 60,
-		name: 'Avoid Crossfire',
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
 		tags: [],
@@ -1042,7 +983,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	61: {
 		id: 61,
-		name: 'Hack In',
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
 		tags: [TAG.INTEL],
@@ -1065,7 +1005,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Villain
 	62: {
 		id: 62,
-		name: 'Kang',
 		type: CARD_TYPE.VILLAIN,
 		power: -10,
 		tags: [],
@@ -1081,7 +1020,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	63: {
 		id: 63,
-		name: 'Black Cat',
 		type: CARD_TYPE.VILLAIN,
 		power: 8,
 		tags: [],
@@ -1104,7 +1042,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	64: {
 		id: 64,
-		name: 'Sauron',
 		type: CARD_TYPE.VILLAIN,
 		power: -7,
 		tags: [],
@@ -1117,7 +1054,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	65: {
 		id: 65,
-		name: 'Killmonger',
 		type: CARD_TYPE.VILLAIN,
 		power: -9,
 		tags: [TAG.WAKANDA],
@@ -1130,7 +1066,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	66: {
 		id: 66,
-		name: 'Mystique',
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.MUTANT],
@@ -1149,7 +1084,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	67: {
 		id: 67,
-		name: 'Sentinels',
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
 		tags: [],
@@ -1160,7 +1094,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	68: {
 		id: 68,
-		name: 'Abomination',
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
 		tags: [TAG.GAMMA],
@@ -1171,7 +1104,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	69: {
 		id: 69,
-		name: 'Ultron',
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.BOSS],
@@ -1182,7 +1114,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	70: {
 		id: 70,
-		name: 'Hela',
 		type: CARD_TYPE.VILLAIN,
 		power: 18,
 		tags: [TAG.ASGARD],
@@ -1195,7 +1126,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	71: {
 		id: 71,
-		name: 'The Leader',
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
 		tags: [TAG.BOSS, TAG.GAMMA],
@@ -1208,7 +1138,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	72: {
 		id: 72,
-		name: 'Baron Zemo',
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
 		tags: [TAG.BOSS],
@@ -1219,7 +1148,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	73: {
 		id: 73,
-		name: 'Loki',
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
 		tags: [TAG.ASGARD],
@@ -1229,7 +1157,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	74: {
 		id: 74,
-		name: 'Magneto',
 		type: CARD_TYPE.VILLAIN,
 		power: 17,
 		tags: [TAG.BOSS, TAG.MUTANT],
@@ -1254,7 +1181,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	75: {
 		id: 75,
-		name: 'Taskmaster',
 		type: CARD_TYPE.VILLAIN,
 		power: 11,
 		tags: [],
@@ -1278,7 +1204,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	76: {
 		id: 76,
-		name: 'Selene',
 		type: CARD_TYPE.VILLAIN,
 		power: 25,
 		tags: [TAG.MUTANT],
@@ -1320,7 +1245,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	77: {
 		id: 77,
-		name: 'Juggernaut',
 		type: CARD_TYPE.VILLAIN,
 		power: 16,
 		tags: [TAG.MUTANT],
@@ -1356,7 +1280,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	78: {
 		id: 78,
-		name: 'Kingpin',
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
 		tags: [TAG.BOSS],
@@ -1372,7 +1295,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	},
 	79: {
 		id: 79,
-		name: 'Toad',
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.MUTANT],
@@ -1387,7 +1309,6 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Promo
 	80: {
 		id: 80,
-		name: 'Squirrel Girl',
 		type: CARD_TYPE.HERO,
 		power: 1,
 		tags: [],

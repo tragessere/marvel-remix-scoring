@@ -1,10 +1,12 @@
 import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
 import { CARD_SELECT_MODE, CardSelectionModeContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
 import { CARD_TYPE } from '../../types/card.ts'
 
 export const LokiDrawnCard = () => {
+	const { t } = useTranslation('card-info')
 	const { lokiCardId, setLokiDraw } = useCardSelection()
 	const { cardSelectMode, setCardSelectMode } = useContext(CardSelectionModeContext)
 
@@ -22,7 +24,7 @@ export const LokiDrawnCard = () => {
 						event.stopPropagation()
 					}}>
 					<span className="base-power">{card.power}</span>
-					<span className="name">{card.name}</span>
+					<span className="name">{t(`${card.id}.name`)}</span>
 				</div>
 			) : (
 				<button

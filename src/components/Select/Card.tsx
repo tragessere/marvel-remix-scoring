@@ -1,4 +1,5 @@
 import { FunctionComponent, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CARD_SELECT_MODE, CardSelectionModeContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
 import { Card, CARD_TYPE } from '../../types/card.ts'
@@ -8,6 +9,7 @@ interface SelectCardProps {
 }
 
 export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
+	const { t } = useTranslation('card-info')
 	const { selectedCardIds, addCard, removeCard, setLokiDraw } = useCardSelection()
 	const { cardSelectMode, setCardSelectMode } = useContext(CardSelectionModeContext)
 
@@ -31,7 +33,7 @@ export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
 			className={`select-card bg-color-${category}${includesCard ? ' selected' : ''}`}
 			onClick={onClick}
 			aria-selected={includesCard}>
-			{card.name}
+			{t(`${card.id}.name`)}
 		</button>
 	)
 }

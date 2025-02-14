@@ -14,7 +14,7 @@ export interface SimpleCardProps {
 }
 
 export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
-	const { t, i18n } = useTranslation('card-info')
+	const { i18n, t } = useTranslation('card-info')
 	const { removeCard } = useCardSelection()
 	const card = cardList[cardId]
 	const category = CARD_TYPE[card.type].toLowerCase()
@@ -26,7 +26,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 		<div className={`simple-card${scoredCard.isBlanked ? ' blanked' : ''} ${category}`} role="button" tabIndex={0} onClick={() => removeCard(cardId)}>
 			<div className={`card-top-border bg-color-${category}`}>
 				<span className="base-power">{card.power}</span>
-				<span className="name">{t(`${card.id}.name`)}</span>
+				<span className="name">{scoredCard.modifiedName || t(`${card.id}.name`)}</span>
 				{result.score !== 0 && <span className="final-score">{scoredCard.score(result.finalHand)}</span>}
 			</div>
 			<div className="card-content">
