@@ -18,6 +18,8 @@ export const LokiDrawnCard = () => {
 			{card ? (
 				<div
 					className={`loki-card card-top-border bg-color-${category}`}
+					role="button"
+					tabIndex={0}
 					onClick={event => {
 						setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
 						setLokiDraw(undefined)
