@@ -25,6 +25,10 @@ body {
 main {
   flex-grow: 1;
   padding: 1rem;
+
+  @media (max-width: 450px) {
+    padding: 0.75rem 0.5rem;
+  }
 }
 
 .content {
@@ -37,7 +41,8 @@ main {
 }
 
 .column-select {
-  width: 8rem;
+  width: 8.5rem;
   padding-right: 1px;
   border-right: 1px solid #ccc;
+  flex-shrink: 0;
 }

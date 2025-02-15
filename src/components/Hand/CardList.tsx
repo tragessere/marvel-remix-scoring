@@ -11,7 +11,7 @@ export const HandCardList: FunctionComponent = () => {
 
 	return (
 		<>
-			<h2>{t('header')}</h2>
+			<h2 className={selectedCardIds.length ? 'sr-only' : ''}>{t('header')}</h2>
 			{hasSelectedCards ? (
 				selectedCardIds.map(id => <SimpleCard key={id} cardId={id} />)
 			) : (
