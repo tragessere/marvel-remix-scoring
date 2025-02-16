@@ -9,7 +9,7 @@ import { SelectCardCategory } from './CardCategory.tsx'
 import './select.css'
 
 export const SelectCategories: FunctionComponent = () => {
-	const { t } = useTranslation('common', { keyPrefix: 'card-info' })
+	const { t } = useTranslation('card-info', { keyPrefix: 'category' })
 	const cardGroups = groupBy(cardList, 'type')
 	// Create list of categories using the keys of the CARD_TYPE enum
 	const categories = sortBy(
