@@ -27,6 +27,15 @@ button:focus-visible {
 	outline: 4px auto -webkit-focus-ring-color;
 }
 
+.outline {
+	color: white;
+	text-shadow:
+			-1px -1px 0 black,
+			-1px 1px 0 black,
+			1px -1px 0 black,
+			1px 1px 0 black;
+	font-weight: 700;
+}
 
 .bg-color-ally {
 	background-color: var(--color-ally);

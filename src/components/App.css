@@ -71,7 +71,7 @@ main {
 
     background: linear-gradient(to bottom, #57ff68, #00f302, #00a508, #6afd47);
     background-size: 200% 200%;
-    animation: animateGlow 2.5s linear infinite, animateGrow 0.5s linear;
+    animation: animateGlow 2.5s linear infinite, animateGrow 2s linear;
     clip-path: polygon(0 0, 250% 0%, 2500% 100%, 0% 100%)
   }
 }
