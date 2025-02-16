@@ -32,6 +32,7 @@ main {
 }
 
 .content {
+  position: relative;
   display: flex;
   flex-grow: 1;
   max-width: 60rem;
@@ -45,4 +46,59 @@ main {
   padding-right: 1px;
   border-right: 1px solid #ccc;
   flex-shrink: 0;
+  z-index: 3;
+
+  &.alternate-selection-mode:before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: calc(100% - 8.5rem);
+    left: 8.5rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    animation: animateDim 0.25s linear;
+  }
+
+  &.alternate-selection-mode:after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 0.5rem;
+    top: 0;
+    left: 8.5rem;
+    z-index: 2;
+    filter: blur(0.5rem);
+
+    background: linear-gradient(to bottom, #57ff68, #00f302, #00a508, #6afd47);
+    background-size: 200% 200%;
+    animation: animateGlow 2.5s linear infinite, animateGrow 0.5s linear;
+    clip-path: polygon(0 0, 250% 0%, 2500% 100%, 0% 100%)
+  }
 }
+@keyframes animateDim {
+  0% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+@keyframes animateGlow {
+  0% {
+    background-position: 50% 200%;
+  }
+  100% {
+    background-position: 50% 0;
+  }
+}
+@keyframes animateGrow {
+  0% {
+    width: 0;
+    filter: blur(0.25rem);
+  }
+  100% {
+    width: 0.5rem;
+    filter: blur(0.5rem);
+  }
+}
+

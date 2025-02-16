@@ -1,8 +1,7 @@
 import { groupBy, map, sortBy } from 'lodash'
-import { FunctionComponent, useContext, useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
-import { CARD_SELECT_MODE, CardSelectionModeContext } from '../../contexts/ContextList.tsx'
 import { CARD_TYPE } from '../../types/card.ts'
 import { SelectCardCategory } from './CardCategory.tsx'
 
@@ -17,7 +16,6 @@ export const SelectCategories: FunctionComponent = () => {
 		c => t(c.toLowerCase())
 	)
 
-	const { cardSelectMode } = useContext(CardSelectionModeContext)
 	const [expandedCategory, setExpandedCategory] = useState<CARD_TYPE | undefined>()
 
 	const onCategoryClick = (category: CARD_TYPE) => {
@@ -29,7 +27,7 @@ export const SelectCategories: FunctionComponent = () => {
 	}
 
 	return (
-		<div className={cardSelectMode === CARD_SELECT_MODE.DEFAULT ? '' : 'alternate-selection-mode'}>
+		<div>
 			{categories.map(c => (
 				<SelectCardCategory
 					key={c}

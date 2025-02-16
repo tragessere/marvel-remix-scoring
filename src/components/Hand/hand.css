@@ -83,6 +83,8 @@ h2 {
 	& button.active-card-use {
 		margin-left: 0.5rem;
 		border: 1px solid #222;
+		z-index: 5;
+		position: relative;
 	}
 
 	& .score {
