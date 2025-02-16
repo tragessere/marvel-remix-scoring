@@ -23,21 +23,35 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 	const scoredCard = findCard(result.finalHand, cardId)
 
 	return (
-		<div className={`simple-card${scoredCard.isBlanked ? ' blanked' : ''} ${category}`} role="button" tabIndex={0} onClick={() => removeCard(cardId)}>
+		<div
+			className={`simple-card${scoredCard.isBlanked ? ' blanked' : ''} ${category}`}
+			role="button"
+			tabIndex={0}
+			onClick={() => removeCard(cardId)}>
 			<div className={`card-top-border bg-color-${category}`}>
-				<span className="base-power">{card.power}</span>
+				<span className="base-power">{scoredCard.isBlanked ? '-' : card.power}</span>
 				<span className="name">{scoredCard.modifiedName || t(`${card.id}.name`)}</span>
-				{result.score !== 0 && <span className="final-score">{scoredCard.score(result.finalHand)}</span>}
+				{result.score !== undefined && <span className="final-score">{scoredCard.modifiedPower}</span>}
 			</div>
 			<div className="card-content">
-				<div>
-					<div className="tag-list">{scoredCard.modifiedTags.sort(t => t).map(((t, index) => <TagIcon key={index} tag={t} />))}</div>
+				<>
+					{scoredCard.modifiedTags.length > 0 && (
+						<div className="tag-list">
+							{scoredCard.modifiedTags
+								.sort(t => t)
+								.map((t, index) => (
+									<TagIcon key={index} tag={t} />
+								))}
+						</div>
+					)}
 					{i18n.exists(`card-info:${card.id}.text`) && <CardText i18nKey={`card-info:${card.id}.text`} />}
-				</div>
-				{card.id === 73 && <div className="loki-draw">
-					<span>Drawn Card:</span>
-					<LokiDrawnCard />
-				</div>}
+				</>
+				{card.id === 73 && (
+					<div className="loki-draw">
+						<span>Drawn Card:</span>
+						<LokiDrawnCard />
+					</div>
+				)}
 			</div>
 		</div>
 	)

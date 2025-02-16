@@ -18,7 +18,8 @@ h2 {
 	}
 
 	&.blanked {
-		opacity: 80%;
+		opacity: 65%;
+		filter: brightness(1.2) grayscale(0.85)
 	}
 
 	& .card-top-border {
@@ -67,6 +68,7 @@ h2 {
 	}
 
 	& .loki-draw {
+		font-weight: bold;
 		padding-top: 0.2rem;
 
 		& .loki-card {
@@ -88,6 +90,18 @@ h2 {
 	}
 
 	& .tag-list {
+		display: inline-block;
+		padding: 4px;
+		margin-top: -4px;
+		margin-left: -4px;
+		border-width: 0;
+		border-color: #ebebeb;
+		border-style: groove;
+		border-bottom-width: 2px;
+		border-right-width: 2px;
+		border-bottom-right-radius: 21px 15px;
+		border-top-right-radius: 7px 33px;
+
 		& .tag {
 			margin-left: 0.15rem;
 			margin-right: 0.15rem;
