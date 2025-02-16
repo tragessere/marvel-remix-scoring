@@ -61,7 +61,7 @@
 	width: calc(100% - 0.5rem);
 	margin-left: 0.5rem;
 	color: white;
-	-webkit-text-stroke: 1px black;
+	-webkit-text-stroke: 0.8px black;
 	font-weight: 800;
 
 	&.selected {

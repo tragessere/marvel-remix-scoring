@@ -11,67 +11,67 @@ i.tag {
 	top: 3px;
 }
 
-i.mr-tech:before {
+i.mr-tech:after {
 	content: '\E001';
 	color: #CC0952;
 }
 
-i.mr-intel:before {
+i.mr-intel:after {
 	content: '\E002';
 	color: #565C6D;
 }
 
-i.mr-strength:before {
+i.mr-strength:after {
 	content: '\E003';
 	color: #009344;
 }
 
-i.mr-agility:before {
+i.mr-agility:after {
 	content: '\E004';
 	color: #F68B1F;
 }
 
-i.mr-flight:before {
+i.mr-flight:after {
 	content: '\E005';
 	color: #00A7EA;
 }
 
-i.mr-range:before {
+i.mr-range:after {
 	content: '\E006';
 	color: #92278F
 }
 
-i.mr-wakanda:before {
+i.mr-wakanda:after {
 	content: '\E007';
 	color: #38002D;
 }
 
-i.mr-asgard:before {
+i.mr-asgard:after {
 	content: '\E008';
 	color: #C58F68;
 }
 
-i.mr-mutant:before {
+i.mr-mutant:after {
 	content: '\E009';
 	color: #00487A;
 }
 
-i.mr-gamma:before {
+i.mr-gamma:after {
 	content: '\E00A';
 	color: #88AC2E;
 }
 
-i.mr-worthy:before {
+i.mr-worthy:after {
 	content: '\E00B';
 	color: #968359;
 }
 
-i.mr-urban:before {
+i.mr-urban:after {
 	content: '\E00C';
 	color: #EC0B8C;
 }
 
-i.mr-boss:before {
+i.mr-boss:after {
 	content: '\E00D';
 	color: #ED1D24;
 }
