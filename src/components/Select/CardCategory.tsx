@@ -11,7 +11,8 @@ interface SelectCardCategoryProps {
 }
 
 export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({ cards, isExpanded, onClick }) => {
-	const { t } = useTranslation('card-info', { keyPrefix: 'category' })
+	const { t } = useTranslation('card-info')
+	cards.sort((a, b) => t(`${a.id}.name`).localeCompare(t(`${b.id}.name`)))
 	const category = cards[0].type
 	const categoryName = CARD_TYPE[category].toLowerCase()
 	const nodeRef = useRef(null)
@@ -23,7 +24,7 @@ export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({
 				data-category={categoryName}
 				onClick={() => onClick(category)}
 				aria-expanded={isExpanded}>
-				{t(categoryName)}
+				{t(`category.${categoryName}`)}
 			</button>
 			<CSSTransition
 				nodeRef={nodeRef}
