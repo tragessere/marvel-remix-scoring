@@ -28,15 +28,16 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 		}
 	})
 
-	const { containsVillain, containsHeroOrAlly } = hand.reduce(
+	const { containsVillain, containsHeroOrAlly, containsLoki } = hand.reduce(
 		(acc, card) => {
 			if (card.type === CARD_TYPE.VILLAIN) acc.containsVillain = true
 			else if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) acc.containsHeroOrAlly = true
+			if (card.id === 73) acc.containsLoki = true
 			return acc
 		},
-		{ containsVillain: false, containsHeroOrAlly: false }
+		{ containsVillain: false, containsHeroOrAlly: false, containsLoki: false }
 	)
-	if (hand.length !== 7 || !containsVillain || !containsHeroOrAlly) {
+	if (hand.length !== 7 || !containsVillain || !containsHeroOrAlly || (lokiPenalty === undefined && containsLoki)) {
 		return {
 			score: undefined,
 			message: 'Invalid hand',
@@ -56,7 +57,7 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 		const orderedHand = order.map(index => modifyCards[index]).concat(countCards)
 		const modifiedHand = cloneDeep(orderedHand)
 		try {
-			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, 0)
+			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, 0, lokiPenalty)
 			if (score !== undefined && (maxScore === undefined || score > maxScore)) {
 				maxScore = score
 				optimalHand = resultHand
@@ -78,7 +79,7 @@ interface Result {
 	hand: ModifiedCard[]
 }
 
-const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
+const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty: number | undefined): Result => {
 	if (index === hand.length) {
 		if (!containsRequiredCards(hand)) {
 			return {
@@ -92,6 +93,9 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 				card.modifiedTags = []
 			} else if (!card.isTextBlanked) {
 				card.modifiedPower = card.score(hand)
+				if (card.id === 73) {
+					card.modifiedPower -= lokiPenalty || 0
+				}
 			}
 		}
 		return { score: sumBy(hand, card => card.modifiedPower), hand }
@@ -105,7 +109,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	if (!currentCard.isBlanked && !currentCard.isTextBlanked && currentCard.modificationOptions && currentCard.effect) {
 		const optionCount = currentCard.modificationOptions(hand)
 		if (!optionCount) {
-			return applyEffectsRecursive(hand, index + 1)
+			return applyEffectsRecursive(hand, index + 1, lokiPenalty)
 		}
 		let optimalHand: ModifiedCard[] = []
 		let optimalScore = undefined
@@ -117,7 +121,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			// was checked on the card before cloning.
 			clonedCurrentCard.effect?.(unblankedHand, i)
 			modifiedHand.forEach(card => card.transform?.(unblankedHand, card))
-			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, index + 1)
+			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, index + 1, lokiPenalty)
 			if (optimalScore === undefined || (typeof score === 'number' && score > optimalScore)) {
 				optimalScore = score
 				optimalHand = resultHand
@@ -125,7 +129,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 		}
 		return { score: optimalScore, hand: optimalHand }
 	} else {
-		return applyEffectsRecursive(hand, index + 1)
+		return applyEffectsRecursive(hand, index + 1, lokiPenalty)
 	}
 }
 

@@ -26,7 +26,7 @@ export const LokiDrawnCard = () => {
 						event.stopPropagation()
 					}}>
 					<span className="base-power">{card.power}</span>
-					<span className="name">{t(`${card.id}.name`)}</span>
+					<span className="name outline">{t(`${card.id}.name`)}</span>
 				</div>
 			) : (
 				<button
