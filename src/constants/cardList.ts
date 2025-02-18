@@ -9,6 +9,7 @@ import { count } from '../utils/whyIsThisNotInLodash.ts'
 export const cardList: Readonly<Dictionary<Card>> = {
 	//#region Ally
 	1: {
+		// Forge
 		id: 1,
 		type: CARD_TYPE.ALLY,
 		power: 4,
@@ -19,6 +20,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	2: {
+		// Heimdall
 		id: 2,
 		type: CARD_TYPE.ALLY,
 		power: 4,
@@ -29,6 +31,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	3: {
+		// Lockheed
 		id: 3,
 		type: CARD_TYPE.ALLY,
 		power: 5,
@@ -39,6 +42,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	4: {
+		// Jane Foster
 		id: 4,
 		type: CARD_TYPE.ALLY,
 		power: 5,
@@ -49,6 +53,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	5: {
+		// Moira Mactagger
 		id: 5,
 		type: CARD_TYPE.ALLY,
 		power: 3,
@@ -74,6 +79,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	6: {
+		// Dora Milaje
 		id: 6,
 		type: CARD_TYPE.ALLY,
 		power: 6,
@@ -83,6 +89,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	7: {
+		// Hulk Operations
 		id: 7,
 		type: CARD_TYPE.ALLY,
 		power: 4,
@@ -94,6 +101,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#endregion Ally
 	//#region Condition
 	8: {
+		// Assembled
 		id: 8,
 		type: CARD_TYPE.CONDITION,
 		power: 0,
@@ -104,6 +112,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	9: {
+		// Fearless
 		id: 9,
 		type: CARD_TYPE.CONDITION,
 		power: 16,
@@ -116,6 +125,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	10: {
+		// Secret ID
 		id: 10,
 		type: CARD_TYPE.CONDITION,
 		power: 8,
@@ -132,6 +142,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	11: {
+		// Worthy
 		id: 11,
 		type: CARD_TYPE.CONDITION,
 		power: 11,
@@ -144,6 +155,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	12: {
+		// Berserk
 		id: 12,
 		type: CARD_TYPE.CONDITION,
 		power: 18,
@@ -160,6 +172,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#endregion Condition
 	//#region Equipment
 	13: {
+		// Spear of Bashenga
 		id: 13,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 0,
@@ -173,6 +186,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	14: {
+		// Arc Reactor
 		id: 14,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 0,
@@ -183,6 +197,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	15: {
+		// X-Jet
 		id: 15,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 7,
@@ -212,6 +227,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	16: {
+		// Vibranium Shield
 		id: 16,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 9,
@@ -224,6 +240,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	17: {
+		// Mjolnir
 		id: 17,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 10,
@@ -242,6 +259,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	18: {
+		// Cerebro
 		id: 18,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 8,
@@ -254,6 +272,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#endregion Equipment
 	//#region Hero
 	19: {
+		// Captain America
 		id: 19,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -265,6 +284,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	20: {
+		// Cyclops
 		id: 20,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -277,6 +297,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	21: {
+		// Shadowcat
 		id: 21,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -287,6 +308,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	22: {
+		// Spider-Man
 		id: 22,
 		type: CARD_TYPE.HERO,
 		power: 5,
@@ -296,7 +318,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 				c => c.type === CARD_TYPE.LOCATION && c.modifiedTags.includes(TAG.URBAN)
 			)
 			if (hasMatchingLocation) {
-				const self = findCard(hand, 22)
+				const self = findCard(hand, this.id)
 				self.modifiedTags.push(TAG.FLIGHT)
 			}
 		},
@@ -311,6 +333,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	23: {
+		// She-Hulk
 		id: 23,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -323,6 +346,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	24: {
+		// Black Panther
 		id: 24,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -335,6 +359,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	25: {
+		// Professor X
 		id: 25,
 		type: CARD_TYPE.HERO,
 		power: 3,
@@ -346,6 +371,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	26: {
+		// Wolverine
 		id: 26,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -356,6 +382,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	27: {
+		// Rogue
 		id: 27,
 		type: CARD_TYPE.HERO,
 		power: 0,
@@ -383,6 +410,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	28: {
+		// Shuri
 		id: 28,
 		type: CARD_TYPE.HERO,
 		power: 2,
@@ -419,6 +447,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	29: {
+		// Bruce Banner
 		id: 29,
 		type: CARD_TYPE.HERO,
 		power: 1,
@@ -452,6 +481,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	30: {
+		// Thor Odinson
 		id: 30,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -484,6 +514,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	31: {
+		// Tony Stark
 		id: 31,
 		type: CARD_TYPE.HERO,
 		power: 3,
@@ -514,6 +545,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	32: {
+		// Jean Grey
 		id: 32,
 		type: CARD_TYPE.HERO,
 		power: 3,
@@ -548,6 +580,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	33: {
+		// Vision
 		id: 33,
 		type: CARD_TYPE.HERO,
 		power: 3,
@@ -575,6 +608,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	34: {
+		// Angel
 		id: 34,
 		type: CARD_TYPE.HERO,
 		power: 6,
@@ -584,6 +618,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	35: {
+		// Beast
 		id: 35,
 		type: CARD_TYPE.HERO,
 		power: 6,
@@ -593,6 +628,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	36: {
+		// Black Widow
 		id: 36,
 		type: CARD_TYPE.HERO,
 		power: 6,
@@ -602,6 +638,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	37: {
+		// Colossus
 		id: 37,
 		type: CARD_TYPE.HERO,
 		power: 6,
@@ -611,6 +648,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	38: {
+		// Falcon
 		id: 38,
 		type: CARD_TYPE.HERO,
 		power: 6,
@@ -620,6 +658,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	39: {
+		// Hawkeye
 		id: 39,
 		type: CARD_TYPE.HERO,
 		power: 5,
@@ -629,6 +668,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	40: {
+		// Storm
 		id: 40,
 		type: CARD_TYPE.HERO,
 		power: 4,
@@ -638,6 +678,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	41: {
+		// Valkyrie
 		id: 41,
 		type: CARD_TYPE.HERO,
 		power: 7,
@@ -649,6 +690,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#endregion Hero
 	//#region Location
 	42: {
+		// Bifrost
 		id: 42,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -659,6 +701,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	43: {
+		// High Speed Chase
 		id: 43,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -671,6 +714,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	44: {
+		// Skyscraper
 		id: 44,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -683,6 +727,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	45: {
+		// Falling Debris
 		id: 45,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -695,6 +740,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	46: {
+		// Runaway Train
 		id: 46,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -707,6 +753,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	47: {
+		// Krakoa, The Living Island
 		id: 47,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -717,6 +764,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	48: {
+		// Factory
 		id: 48,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -729,6 +777,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	49: {
+		// Birnin Zana
 		id: 49,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -741,6 +790,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	50: {
+		// Madripoor
 		id: 50,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -751,6 +801,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	51: {
+		// Halls of Asgard
 		id: 51,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
@@ -763,6 +814,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	52: {
+		// Hidden Lair
 		id: 52,
 		type: CARD_TYPE.LOCATION,
 		power: 16,
@@ -792,6 +844,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	53: {
+		// Remote Fortress
 		id: 53,
 		type: CARD_TYPE.LOCATION,
 		power: 15,
@@ -804,6 +857,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	54: {
+		// Xavier Mansion
 		id: 54,
 		type: CARD_TYPE.LOCATION,
 		power: 4,
@@ -862,6 +916,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#endregion Location
 	//#region Maneuver
 	55: {
+		// Find Higher Ground
 		id: 55,
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
@@ -881,6 +936,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	56: {
+		// Discover Weakness
 		id: 56,
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
@@ -900,6 +956,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	57: {
+		// Precise Shot
 		id: 57,
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
@@ -919,6 +976,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	58: {
+		// Build Gadgets
 		id: 58,
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
@@ -938,6 +996,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	59: {
+		// Throw Car
 		id: 59,
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
@@ -960,6 +1019,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	60: {
+		// Avoid Crossfire
 		id: 60,
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
@@ -981,6 +1041,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	61: {
+		// Hack In
 		id: 61,
 		type: CARD_TYPE.MANEUVER,
 		power: 0,
@@ -1003,6 +1064,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#endregion Maneuver
 	//#region Villain
 	62: {
+		// Kang
 		id: 62,
 		type: CARD_TYPE.VILLAIN,
 		power: -10,
@@ -1018,6 +1080,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	63: {
+		// Black Cat
 		id: 63,
 		type: CARD_TYPE.VILLAIN,
 		power: 8,
@@ -1040,6 +1103,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	64: {
+		// Sauron
 		id: 64,
 		type: CARD_TYPE.VILLAIN,
 		power: -7,
@@ -1052,6 +1116,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	65: {
+		// Killmonger
 		id: 65,
 		type: CARD_TYPE.VILLAIN,
 		power: -9,
@@ -1064,6 +1129,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	66: {
+		// Mystique
 		id: 66,
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
@@ -1082,6 +1148,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	67: {
+		// Sentinels
 		id: 67,
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
@@ -1092,6 +1159,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	68: {
+		// Abomination
 		id: 68,
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
@@ -1102,6 +1170,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	69: {
+		// Ultron
 		id: 69,
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
@@ -1112,6 +1181,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	70: {
+		// Hela
 		id: 70,
 		type: CARD_TYPE.VILLAIN,
 		power: 18,
@@ -1124,6 +1194,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	71: {
+		// The Leader
 		id: 71,
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
@@ -1136,6 +1207,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	72: {
+		// Baron Zemo
 		id: 72,
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
@@ -1146,6 +1218,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	73: {
+		// Loki
 		id: 73,
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
@@ -1155,6 +1228,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	74: {
+		// Magneto
 		id: 74,
 		type: CARD_TYPE.VILLAIN,
 		power: 17,
@@ -1179,6 +1253,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	75: {
+		// Taskmaster
 		id: 75,
 		type: CARD_TYPE.VILLAIN,
 		power: 11,
@@ -1202,6 +1277,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	76: {
+		// Selene
 		id: 76,
 		type: CARD_TYPE.VILLAIN,
 		power: 25,
@@ -1243,6 +1319,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	77: {
+		// Juggernaut
 		id: 77,
 		type: CARD_TYPE.VILLAIN,
 		power: 16,
@@ -1278,6 +1355,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	78: {
+		// Kingpin
 		id: 78,
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
@@ -1295,6 +1373,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	79: {
+		// Toad
 		id: 79,
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
@@ -1311,6 +1390,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 	//#endregion Villain
 	//#region Promo
 	80: {
+		// Squirrel Girl
 		id: 80,
 		type: CARD_TYPE.HERO,
 		power: 1,
