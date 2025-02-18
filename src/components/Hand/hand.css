@@ -34,6 +34,14 @@ h2 {
 		background-size: 0.75rem 0.75rem;
 		background-position: 0 0, 0.4rem 0.4rem;
 
+		&.transformed {
+			background-image:
+					radial-gradient(circle at center, #ff15156b 0.1rem, transparent 0),
+					radial-gradient(circle at center, #fa802370 0.1rem, transparent 0);
+			background-size: 0.55rem 0.55rem;
+			background-position: 0 0, 0.3rem 0.3rem;
+		}
+
 		> .base-power {
 			font-size: 0.75rem;
 			border-radius: 0.25rem;

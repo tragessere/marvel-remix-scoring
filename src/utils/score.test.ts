@@ -10,22 +10,12 @@ interface HandTest {
 
 describe('scoreHand', () => {
 	it('returns undefined without 7 cards', () => {
-		const hand: Card[] = [
-			cardList[1],
-		]
+		const hand: Card[] = [cardList[1]]
 		const result = scoreHand(hand)
 		expect(result.score).toBeUndefined()
 	})
 	it('returns undefined without villain', () => {
-		const hand: Card[] = [
-			cardList[1],
-			cardList[2],
-			cardList[3],
-			cardList[4],
-			cardList[5],
-			cardList[6],
-			cardList[7]
-		]
+		const hand: Card[] = [cardList[1], cardList[2], cardList[3], cardList[4], cardList[5], cardList[6], cardList[7]]
 		const result = scoreHand(hand)
 		expect(result.score).toBeUndefined()
 	})
@@ -58,7 +48,7 @@ describe('scoreHand', () => {
 			// Bifrost
 			cardList[42],
 			// Halls of Asgard
-			cardList[51],
+			cardList[51]
 		]
 		const result = scoreHand(hand, 8)
 		expect(result.score).toBe(105)

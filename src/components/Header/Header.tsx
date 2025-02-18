@@ -18,7 +18,9 @@ export const Header: FunctionComponent = () => {
 			<div className="right-side">
 				<span className="card-count">{selectedCardCount}/7</span>
 				<span className="score">{result.score === undefined ? '-' : result.score}</span>
-				<button className="reset" aria-label={t('reset')} onClick={resetSelection}>↻</button>
+				<button className="reset" aria-label={t('reset')} onClick={resetSelection}>
+					↻
+				</button>
 			</div>
 		</div>
 	)

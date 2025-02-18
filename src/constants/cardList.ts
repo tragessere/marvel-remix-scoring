@@ -202,7 +202,8 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			}
 		},
 		modificationOptions(hand) {
-			return count(hand,
+			return count(
+				hand,
 				card => !card.isBlanked && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			)
 		},
@@ -796,9 +797,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 15,
 		tags: [],
 		transform(hand, self) {
-			self.isBlanked = !hand.some(
-				card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS)
-			)
+			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS))
 		},
 		score() {
 			return this.power
@@ -989,7 +988,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		effect(hand) {
 			for (const card of hand) {
 				const techCount = count(card.modifiedTags, tag => tag === TAG.TECH)
-				const addIntel = Array(techCount).fill(TAG.INTEL)
+				const addIntel = Array<TAG>(techCount).fill(TAG.INTEL)
 				card.modifiedTags.push(...addIntel)
 			}
 		},
@@ -1284,7 +1283,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 13,
 		tags: [TAG.BOSS],
 		transform(hand, self) {
-			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.LOCATION && card.modifiedTags.includes(TAG.URBAN))
+			self.isBlanked = !hand.some(
+				card => card.type === CARD_TYPE.LOCATION && card.modifiedTags.includes(TAG.URBAN)
+			)
 		},
 		modificationOptions() {
 			return 1
@@ -1299,7 +1300,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		power: 14,
 		tags: [TAG.MUTANT],
 		transform(hand, self) {
-			self.isBlanked = !hand.some(card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS) && card.id !== this.id)
+			self.isBlanked = !hand.some(
+				card => card.type === CARD_TYPE.VILLAIN && card.modifiedTags.includes(TAG.BOSS) && card.id !== this.id
+			)
 		},
 		score() {
 			return this.power

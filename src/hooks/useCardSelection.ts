@@ -4,7 +4,7 @@ import { CARD_SELECT_MODE, CardSelectionModeContext } from '../contexts/ContextL
 import { QueryParams } from '../types/route.ts'
 
 export const useCardSelection = () => {
-	const [ searchParams, setSearchParams ] = useSearchParams({ selectedCards: '' })
+	const [searchParams, setSearchParams] = useSearchParams({ selectedCards: '' })
 	const { setCardSelectMode } = useContext(CardSelectionModeContext)
 	const selectedCards = searchParams.get(QueryParams.SELECTED_CARDS)
 	const selectedCardIds = selectedCards ? selectedCards.split(',').map(Number) : []
@@ -56,7 +56,7 @@ export const useCardSelection = () => {
 	}
 
 	const resetSelection = () => {
-		setSearchParams({ [QueryParams.SELECTED_CARDS]: ''})
+		setSearchParams({ [QueryParams.SELECTED_CARDS]: '' })
 	}
 
 	return {

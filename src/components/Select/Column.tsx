@@ -6,10 +6,10 @@ export const SelectColumn = () => {
 	const { cardSelectMode } = useContext(CardSelectionModeContext)
 
 	return (
-		<section className={`column-select ${cardSelectMode === CARD_SELECT_MODE.DEFAULT ? '' : 'alternate-selection-mode'}`}>
+		<section
+			className={`column-select ${cardSelectMode === CARD_SELECT_MODE.DEFAULT ? '' : 'alternate-selection-mode'}`}>
 			<h2 className="sr-only">Select Cards</h2>
 			<SelectCategories />
 		</section>
 	)
 }
-

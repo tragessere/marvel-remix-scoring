@@ -28,11 +28,14 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 		}
 	})
 
-	const { containsVillain, containsHeroOrAlly } = hand.reduce((acc, card) => {
-		if (card.type === CARD_TYPE.VILLAIN) acc.containsVillain = true
-		else if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) acc.containsHeroOrAlly = true
-		return acc
-	}, { containsVillain: false, containsHeroOrAlly: false })
+	const { containsVillain, containsHeroOrAlly } = hand.reduce(
+		(acc, card) => {
+			if (card.type === CARD_TYPE.VILLAIN) acc.containsVillain = true
+			else if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) acc.containsHeroOrAlly = true
+			return acc
+		},
+		{ containsVillain: false, containsHeroOrAlly: false }
+	)
 	if (hand.length !== 7 || !containsVillain || !containsHeroOrAlly) {
 		return {
 			score: undefined,
@@ -58,7 +61,9 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 				maxScore = score
 				optimalHand = resultHand
 			}
-		} catch (e) { /* invalid order of operation, skip hand */ }
+		} catch {
+			/* invalid order of operation, skip hand */
+		}
 	}
 
 	return {
@@ -77,7 +82,8 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	if (index === hand.length) {
 		if (!containsRequiredCards(hand)) {
 			return {
-				score: undefined, hand
+				score: undefined,
+				hand
 			}
 		}
 		for (const card of hand) {
@@ -124,10 +130,14 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 }
 
 const containsRequiredCards = (hand: ModifiedCard[]): boolean => {
-	const { containsVillain, containsHeroOrAlly } = hand.reduce((acc, card) => {
-		if (card.type === CARD_TYPE.VILLAIN && !card.isBlanked) acc.containsVillain = true
-		else if ((card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) && !card.isBlanked) acc.containsHeroOrAlly = true
-		return acc
-	}, { containsVillain: false, containsHeroOrAlly: false })
+	const { containsVillain, containsHeroOrAlly } = hand.reduce(
+		(acc, card) => {
+			if (card.type === CARD_TYPE.VILLAIN && !card.isBlanked) acc.containsVillain = true
+			else if ((card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) && !card.isBlanked)
+				acc.containsHeroOrAlly = true
+			return acc
+		},
+		{ containsVillain: false, containsHeroOrAlly: false }
+	)
 	return containsVillain && containsHeroOrAlly
 }

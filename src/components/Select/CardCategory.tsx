@@ -22,16 +22,13 @@ export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({
 			<button
 				className={`select-card-category-button ${categoryName}`}
 				data-category={categoryName}
-				onClick={() => onClick(category)}
+				onClick={() => {
+					onClick(category)
+				}}
 				aria-expanded={isExpanded}>
 				{t(`category.${categoryName}`)}
 			</button>
-			<CSSTransition
-				nodeRef={nodeRef}
-				in={isExpanded}
-				timeout={250}
-				classNames="category-animated"
-				unmountOnExit>
+			<CSSTransition nodeRef={nodeRef} in={isExpanded} timeout={250} classNames="category-animated" unmountOnExit>
 				<div ref={nodeRef} className="select-card-category-wrapper-outer">
 					<div className="select-card-category-wrapper-inner">
 						{cards.map(c => (

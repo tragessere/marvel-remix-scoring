@@ -23,7 +23,7 @@ export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
 			setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
 		} else if (includesCard) {
 			removeCard(card.id)
-		} else if (!includesCard && canAddCard) {
+		} else if (canAddCard) {
 			addCard(card.id)
 		}
 	}

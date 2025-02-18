@@ -16,14 +16,14 @@ export function findCard<T extends Card>(hand: T[], id: number) {
 
 export function removeTag(card: ModifiedCard, tag: TAG, count: number = 1) {
 	let deletedCount = 0
-	const finalTags = card.modifiedTags.reduce((acc, t) => {
+	const finalTags = card.modifiedTags.reduce<TAG[]>((acc, t) => {
 		if (t === tag && deletedCount < count) {
 			deletedCount++
 			return acc
 		}
 		acc.push(t)
 		return acc
-	}, [] as TAG[])
+	}, [])
 	if (deletedCount < count) {
 		throw new Error('Not enough tags to remove')
 	}

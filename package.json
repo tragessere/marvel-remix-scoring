@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint --report-unused-disable-directives",
     "preview": "vite preview",
     "test": "vitest"
   },
@@ -22,27 +22,28 @@
     "tachyons": "^4.12.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.13",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
+    "@eslint/js": "^9.20.0",
+    "@types/lodash": "^4.17.15",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "@types/react-transition-group": "^4.4.12",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "@vitejs/plugin-react-swc": "^3.7.0",
-    "@vitest/coverage-v8": "^3.0.4",
-    "babel-plugin-react-compiler": "19.0.0-beta-201e55d-20241215",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react-compiler": "19.0.0-beta-201e55d-20241215",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "@vitest/coverage-v8": "^3.0.5",
+    "babel-plugin-react-compiler": "19.0.0-beta-21e868a-20250216",
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react-compiler": "19.0.0-beta-21e868a-20250216",
     "eslint-plugin-react-hooks": "^5.1.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "postcss": "^8.4.49",
-    "postcss-preset-env": "^10.1.2",
-    "prettier": "~3.3.3",
-    "typescript": "~5.5.4",
-    "vite": "^5.4.11",
-    "vitest": "^3.0.4"
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "postcss": "^8.5.2",
+    "postcss-preset-env": "^10.1.4",
+    "prettier": "~3.5.1",
+    "typescript": "~5.7.3",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^5.4.14",
+    "vitest": "^3.0.5"
   },
-  "packageManager": "yarn@4.5.3"
+  "packageManager": "yarn@4.6.0"
 }

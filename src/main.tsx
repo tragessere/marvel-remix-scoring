@@ -12,18 +12,18 @@ import './css/variables.css'
 import './assets/Marvel-Remix-Icons.woff'
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <App />
-    }
+	{
+		path: '/',
+		element: <App />
+	}
 ])
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-      <React.Suspense>
-          <div className="background">
-              <RouterProvider router={router} />
-          </div>
-      </React.Suspense>
-  </React.StrictMode>
+ReactDOM.createRoot(document.getElementById('root')).render(
+	<React.StrictMode>
+		<React.Suspense>
+			<div className="background">
+				<RouterProvider router={router} />
+			</div>
+		</React.Suspense>
+	</React.StrictMode>
 )

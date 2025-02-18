@@ -1,4 +1,3 @@
-
 export enum CARD_TYPE {
 	'VILLAIN',
 	'HERO',
@@ -6,7 +5,7 @@ export enum CARD_TYPE {
 	'LOCATION',
 	'CONDITION',
 	'EQUIPMENT',
-	'MANEUVER',
+	'MANEUVER'
 }
 
 export enum TAG {
@@ -27,13 +26,13 @@ export enum TAG {
 
 export interface Card {
 	id: number
-	type: CARD_TYPE,
-	power: number,
+	type: CARD_TYPE
+	power: number
 	tags: TAG[]
-	effect?: ((hand: ModifiedCard[], index: number) => void)
-	modificationOptions?: ((hand: ModifiedCard[]) => number)
+	effect?: (hand: ModifiedCard[], index: number) => void
+	modificationOptions?: (hand: ModifiedCard[]) => number
 	score: (hand: ModifiedCard[]) => number
-	transform?: ((hand: ModifiedCard[], currentCard: ModifiedCard) => void)
+	transform?: (hand: ModifiedCard[], currentCard: ModifiedCard) => void
 }
 
 export interface ModifiedCard extends Card {

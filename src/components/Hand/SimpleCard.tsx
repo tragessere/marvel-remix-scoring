@@ -27,7 +27,9 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 			className={`simple-card${scoredCard.isBlanked ? ' blanked' : ''} ${category}`}
 			role="button"
 			tabIndex={0}
-			onClick={() => removeCard(cardId)}>
+			onClick={() => {
+				removeCard(cardId)
+			}}>
 			<div className={`card-top-border bg-color-${category}`}>
 				<span className="base-power">{scoredCard.isBlanked ? '-' : card.power}</span>
 				<span className="name outline">{scoredCard.modifiedName || t(`${card.id}.name`)}</span>
