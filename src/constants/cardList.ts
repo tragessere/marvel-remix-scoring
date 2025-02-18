@@ -53,7 +53,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		}
 	},
 	5: {
-		// Moira Mactagger
+		// Moira Mactaggert
 		id: 5,
 		type: CARD_TYPE.ALLY,
 		power: 3,

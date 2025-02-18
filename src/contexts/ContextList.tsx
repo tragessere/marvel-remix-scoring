@@ -11,6 +11,8 @@ export interface ActiveCardSelection {
 	setCardSelectMode: (mode: CARD_SELECT_MODE) => void
 }
 
-export const CardSelectionModeContext = createContext<ActiveCardSelection>(undefined)
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const CardSelectionModeContext = createContext<ActiveCardSelection>(undefined!)
 
-export const ScoreContext = createContext<ScoreResult>(undefined)
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const ScoreContext = createContext<ScoreResult>(undefined!)
