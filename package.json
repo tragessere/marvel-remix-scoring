@@ -16,7 +16,7 @@
     "lodash": "^4.17.21",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-i18next": "^15.4.0",
+    "react-i18next": "^15.4.1",
     "react-router-dom": "^6.26.2",
     "react-transition-group": "^4.4.5",
     "tachyons": "^4.12.0"

@@ -50,7 +50,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.5.1"],\
           ["react", "npm:19.0.0"],\
           ["react-dom", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:19.0.0"],\
-          ["react-i18next", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.0"],\
+          ["react-i18next", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.1"],\
           ["react-router-dom", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:6.26.2"],\
           ["react-transition-group", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.4.5"],\
           ["tachyons", "npm:4.12.0"],\
@@ -5197,7 +5197,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.5.1"],\
           ["react", "npm:19.0.0"],\
           ["react-dom", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:19.0.0"],\
-          ["react-i18next", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.0"],\
+          ["react-i18next", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.1"],\
           ["react-router-dom", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:6.26.2"],\
           ["react-transition-group", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:4.4.5"],\
           ["tachyons", "npm:4.12.0"],\
@@ -6466,17 +6466,17 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["react-i18next", [\
-      ["npm:15.4.0", {\
-        "packageLocation": "../../../../AppData/Local/Yarn/Berry/cache/react-i18next-npm-15.4.0-36bdaf18dd-10c0.zip/node_modules/react-i18next/",\
+      ["npm:15.4.1", {\
+        "packageLocation": "../../../../AppData/Local/Yarn/Berry/cache/react-i18next-npm-15.4.1-c8d3af5202-10c0.zip/node_modules/react-i18next/",\
         "packageDependencies": [\
-          ["react-i18next", "npm:15.4.0"]\
+          ["react-i18next", "npm:15.4.1"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.0", {\
-        "packageLocation": "./.yarn/__virtual__/react-i18next-virtual-8b72018c77/5/AppData/Local/Yarn/Berry/cache/react-i18next-npm-15.4.0-36bdaf18dd-10c0.zip/node_modules/react-i18next/",\
+      ["virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.1", {\
+        "packageLocation": "./.yarn/__virtual__/react-i18next-virtual-56506ffa99/5/AppData/Local/Yarn/Berry/cache/react-i18next-npm-15.4.1-c8d3af5202-10c0.zip/node_modules/react-i18next/",\
         "packageDependencies": [\
-          ["react-i18next", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.0"],\
+          ["react-i18next", "virtual:2201125d38e29054ef12486701747a0dddaab87a019407366166a12f1d59af98d7d603a2661d4bb3930cc4c6d06e0a19ce1d835cb00eb35ddec75709fe8b0ba6#npm:15.4.1"],\
           ["@babel/runtime", "npm:7.26.7"],\
           ["@types/i18next", null],\
           ["@types/react", "npm:19.0.10"],\
