@@ -1203,7 +1203,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.STRENGTH || (card.id !== this.id && tag === TAG.GAMMA))
 			)
-			return this.power + (matchingTagCount > 1 ? 0 : -20)
+			return this.power - matchingTagCount * 3
 		}
 	},
 	72: {
@@ -1214,7 +1214,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		tags: [TAG.BOSS],
 		score(hand) {
 			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
-			return this.power + heroCount * -3
+			return this.power - heroCount * 3
 		}
 	},
 	73: {
