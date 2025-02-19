@@ -1290,8 +1290,8 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			const selectedCard = heroesAndAllies[index]
 			selectedCard.isBlanked = true
 			const self = findCard(hand, this.id)
-			// TODO: does this count the transformed powers of heroes?
-			self.modifiedPower = this.power - selectedCard.power
+			// Use modified power to include hero transformations. Check for Rogue card who's modifiedPower can also change, but base power counts as 0.
+			self.modifiedPower = this.power - selectedCard.id === 27 ? 0 : selectedCard.modifiedPower
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
