@@ -1,4 +1,5 @@
 import { CardSelectionModeProvider } from '../contexts/CardSelectionModeProvider.tsx'
+import { Footer } from './Footer/Footer.tsx'
 import { HandCardList } from './Hand/CardList.tsx'
 import { Header } from './Header/Header.tsx'
 import { SelectColumn } from './Select/Column.tsx'
@@ -17,6 +18,7 @@ function App() {
 						<HandCardList />
 					</main>
 				</div>
+				<Footer />
 			</ScoreProvider>
 		</CardSelectionModeProvider>
 	)
