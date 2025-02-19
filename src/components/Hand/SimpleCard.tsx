@@ -30,7 +30,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 			onClick={() => {
 				removeCard(cardId)
 			}}>
-			<div className={`card-top-border bg-color-${category}`}>
+			<div className={`card-top-border bg-color-${category}${scoredCard.isTransformed ? ' transformed' : ''}`}>
 				<span className="base-power">{scoredCard.isBlanked ? '-' : card.power}</span>
 				<span className="name outline">{scoredCard.modifiedName || t(`${card.id}.name`)}</span>
 				{result.score !== undefined && <span className="final-score outline">{scoredCard.modifiedPower}</span>}

@@ -35,11 +35,15 @@ h2 {
 		background-position: 0 0, 0.4rem 0.4rem;
 
 		&.transformed {
+			background-color: #333;
 			background-image:
 					radial-gradient(circle at center, #ff15156b 0.1rem, transparent 0),
 					radial-gradient(circle at center, #fa802370 0.1rem, transparent 0);
 			background-size: 0.55rem 0.55rem;
 			background-position: 0 0, 0.3rem 0.3rem;
+			transition:
+				background-color 1s,
+				background-image 1s;
 		}
 
 		> .base-power {
