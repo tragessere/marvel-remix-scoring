@@ -96,42 +96,24 @@ main {
     content: '';
     position: absolute;
     height: 100%;
-    width: 0.5rem;
+    width: 2rem;
     top: 0;
     left: 8.5rem;
     z-index: 2;
-    filter: blur(0.5rem);
 
-    background: linear-gradient(to bottom, #57ff68, #00f302, #00a508, #6afd47);
-    background-size: 200% 200%;
-    animation: animateGlow 2.5s linear infinite, animateGrow 2s linear;
-    clip-path: polygon(0 0, 250% 0%, 2500% 100%, 0% 100%)
-  }
-}
-@keyframes animateDim {
-  0% {
-    background-color: rgba(0, 0, 0, 0);
-  }
-  100% {
-    background-color: rgba(0, 0, 0, 0.3);
-  }
-}
-@keyframes animateGlow {
-  0% {
-    background-position: 50% 200%;
-  }
-  100% {
-    background-position: 50% 0;
+    background: linear-gradient(90deg, rgba(12, 120, 0, 0.66) 0%, rgba(12, 135, 0, 0.47) 5%, rgba(15, 152, 0, 0.32) 25%, rgba(0,0,0,0) 45%, rgba(0,0,0,0) 100%);
+    animation: animateGrow 2.5s infinite;
   }
 }
 @keyframes animateGrow {
   0% {
-    width: 0;
-    filter: blur(0.25rem);
+    background-size: 100%;
+  }
+  50% {
+    background-size: 200%;
   }
   100% {
-    width: 0.5rem;
-    filter: blur(0.5rem);
+    background-size: 100%;
   }
 }
 
