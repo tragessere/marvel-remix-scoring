@@ -91,7 +91,7 @@
 	},
 	"18": {
 		"name": "Cerebro",
-		"text": "If you take <name>Cerebro</name from the discard area, you may swap a card in your hand with a card in the discard area if either has <mutant />."
+		"text": "If you take <name>Cerebro</name> from the discard area, you may swap a card in your hand with a card in the discard area if either has <mutant />."
 	},
 	"19": {
 		"name": "Captain America",
@@ -119,7 +119,7 @@
 	},
 	"25": {
 		"name": "Professor X",
-		"text": "<score>+6</score> for each <name>Cerebro</name> and <name>Xavier Mansion</name>."
+		"text": "<score>+6</score> for each of <name>Cerebro</name> and <name>Xavier Mansion</name>."
 	},
 	"26": {
 		"name": "Wolverine",
@@ -151,7 +151,7 @@
 	"32": {
 		"name": "Jean Grey",
 		"modified-name": "Phoenix",
-		"text": "Transform with two or more <mutant />."
+		"text": "Transform with two or more other <mutant />."
 	},
 	"33": {
 		"name": "Vision",
