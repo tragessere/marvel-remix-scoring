@@ -13,7 +13,7 @@ import './assets/Marvel-Remix-Icons.woff'
 
 const router = createBrowserRouter([
 	{
-		path: '/',
+		path: '/marvel-remix-scoring',
 		element: <App />
 	}
 ])

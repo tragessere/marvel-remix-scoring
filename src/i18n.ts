@@ -8,5 +8,8 @@ void i18n
 	.init<HttpBackendOptions>({
 		lng: 'en',
 		fallbackLng: 'en',
-		ns: ['common']
+		ns: ['common'],
+		backend: {
+			loadPath: '/marvel-remix-scoring/locales/{{lng}}/{{ns}}.json'
+		}
 	})
