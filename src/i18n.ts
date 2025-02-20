@@ -8,6 +8,5 @@ void i18n
 	.init<HttpBackendOptions>({
 		lng: 'en',
 		fallbackLng: 'en',
-		ns: ['common'],
-		debug: true
+		ns: ['common']
 	})
