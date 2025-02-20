@@ -287,7 +287,7 @@
 	},
 	"68": {
 		"name": "Abomination",
-		"text": "<score-negative>-20</score-negative> unless with two or more <gamma />."
+		"text": "<score-negative>-20</score-negative> unless with two or more <strength />."
 	},
 	"69": {
 		"name": "Ultron",
