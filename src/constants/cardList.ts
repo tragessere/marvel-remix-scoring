@@ -612,7 +612,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 34,
 		type: CARD_TYPE.HERO,
 		power: 6,
-		tags: [TAG.AGILITY, TAG.FLIGHT, TAG.WORTHY],
+		tags: [TAG.AGILITY, TAG.FLIGHT, TAG.MUTANT],
 		score() {
 			return this.power
 		}
@@ -1291,7 +1291,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			selectedCard.isBlanked = true
 			const self = findCard(hand, this.id)
 			// Use modified power to include hero transformations. Check for Rogue card who's modifiedPower can also change, but base power counts as 0.
-			self.modifiedPower = this.power - selectedCard.id === 27 ? 0 : selectedCard.modifiedPower
+			self.modifiedPower = this.power - (selectedCard.id === 27 ? 0 : selectedCard.modifiedPower)
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
