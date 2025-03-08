@@ -390,7 +390,12 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		effect(hand, index) {
 			let indexCount = index
 			const targetCard = hand.find(card => {
-				if (!card.isBlanked && card.type === CARD_TYPE.HERO && card.modifiedTags.length > 0) {
+				if (
+					!card.isBlanked &&
+					card.type === CARD_TYPE.HERO &&
+					card.id !== this.id &&
+					card.modifiedTags.length > 0
+				) {
 					if (indexCount < card.modifiedTags.length) {
 						return true
 					}
@@ -402,7 +407,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			self.modifiedTags.push(targetCard.modifiedTags[indexCount])
 		},
 		modificationOptions(hand) {
-			return sumBy(hand, card => (card.type === CARD_TYPE.HERO && !card.isBlanked ? card.modifiedTags.length : 0))
+			return sumBy(hand, card =>
+				card.type === CARD_TYPE.HERO && card.id !== this.id && !card.isBlanked ? card.modifiedTags.length : 0
+			)
 		},
 		score(cards) {
 			const self = findCard(cards, 27)
