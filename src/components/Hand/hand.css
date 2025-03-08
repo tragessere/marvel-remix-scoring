@@ -19,7 +19,17 @@ h2 {
 
 	&.blanked {
 		opacity: 65%;
-		filter: brightness(1.2) grayscale(0.85)
+		filter: brightness(1.2) grayscale(0.85);
+
+		& .card-top-border {
+			background-image: none;
+		}
+
+		& .card-text {
+			text-decoration: underline;
+			text-underline-offset: -0.3rem;
+			text-decoration-skip-ink: none;
+		}
 	}
 
 	& .card-top-border {
