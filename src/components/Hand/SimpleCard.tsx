@@ -22,6 +22,17 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 	const result = useContext(ScoreContext)
 	const scoredCard = findCard(result.finalHand, cardId)
 
+	const addedTags = scoredCard.modifiedTags.slice().sort(t => t)
+	const tags = scoredCard.tags.sort(t => t).map(t => ({ tag: t, isDeleted: false }))
+	for (const tag of tags) {
+		const resultIndex = addedTags.indexOf(tag.tag)
+		if (resultIndex > -1) {
+			addedTags.splice(resultIndex, 1)
+		} else {
+			tag.isDeleted = true
+		}
+	}
+
 	return (
 		<div
 			className={`simple-card${scoredCard.isBlanked ? ' blanked' : ''} ${category}`}
@@ -37,13 +48,19 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 			</div>
 			<div className="card-content">
 				<>
-					{scoredCard.modifiedTags.length > 0 && (
+					{tags.length > 0 && (
 						<div className="tag-list">
-							{scoredCard.modifiedTags
-								.sort(t => t)
-								.map((t, index) => (
-									<TagIcon key={index} tag={t} />
-								))}
+							{tags.map((t, index) => (
+								<TagIcon key={index} tag={t.tag} isDeleted={t.isDeleted} />
+							))}
+							{addedTags.length > 0 && (
+								<>
+									+
+									{addedTags.map((t, index) => (
+										<TagIcon key={index} tag={t} />
+									))}
+								</>
+							)}
 						</div>
 					)}
 					{i18n.exists(`card-info:${card.id}.text`) && <CardText i18nKey={`card-info:${card.id}.text`} />}
