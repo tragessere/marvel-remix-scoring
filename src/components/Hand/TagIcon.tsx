@@ -4,13 +4,20 @@ import { TAG } from '../../types/card.ts'
 
 interface TagIconProps {
 	tag: TAG
+	isDeleted?: boolean
 }
 
-export const TagIcon: FunctionComponent<TagIconProps> = ({ tag }) => {
+export const TagIcon: FunctionComponent<TagIconProps> = ({ tag, isDeleted }) => {
 	const { t } = useTranslation('card-info')
 	const tagKey = TAG[tag].toLowerCase()
 
-	return (
+	return isDeleted ? (
+		<div className="deleted-tag-container">
+			<i className={`tag mr-${tagKey}`}>
+				<span className="sr-only">{t(`tag.${tagKey}`)}</span>
+			</i>
+		</div>
+	) : (
 		<i className={`tag mr-${tagKey}`}>
 			<span className="sr-only">{t(`tag.${tagKey}`)}</span>
 		</i>

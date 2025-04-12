@@ -120,6 +120,24 @@ h2 {
 		border-bottom-right-radius: 21px 15px;
 		border-top-right-radius: 7px 33px;
 
+		& .deleted-tag-container {
+			display: inline;
+			position: relative;
+
+			& .tag {
+				filter: opacity(50%) grayscale(25%);
+			}
+
+			&::after {
+				content: '\2716'; /* Unicode for a cross symbol */
+				position: absolute;
+				color: black;
+				font-size: 1.42em;
+				top: -.31rem;
+				left: 0.19rem;
+			}
+		}
+
 		& .tag {
 			margin-left: 0.15rem;
 			margin-right: 0.15rem;

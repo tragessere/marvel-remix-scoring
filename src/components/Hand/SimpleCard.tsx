@@ -4,7 +4,7 @@ import { cardList } from '../../constants/cardList.ts'
 import { ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
 import { CARD_TYPE } from '../../types/card.ts'
-import { findCard } from '../../utils/card.ts'
+import { findCard, mapCardTags } from '../../utils/card.ts'
 import { CardText } from './CardText.tsx'
 import { LokiDrawnCard } from './LokiDrawnCard.tsx'
 import { TagIcon } from './TagIcon.tsx'
@@ -21,6 +21,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 
 	const result = useContext(ScoreContext)
 	const scoredCard = findCard(result.finalHand, cardId)
+	const [tags, addedTags] = mapCardTags(scoredCard)
 
 	return (
 		<div
@@ -37,13 +38,19 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 			</div>
 			<div className="card-content">
 				<>
-					{scoredCard.modifiedTags.length > 0 && (
+					{tags.length > 0 && (
 						<div className="tag-list">
-							{scoredCard.modifiedTags
-								.sort(t => t)
-								.map((t, index) => (
-									<TagIcon key={index} tag={t} />
-								))}
+							{tags.map((t, index) => (
+								<TagIcon key={index} tag={t.tag} isDeleted={t.isDeleted} />
+							))}
+							{addedTags.length > 0 && (
+								<>
+									+
+									{addedTags.map((t, index) => (
+										<TagIcon key={index} tag={t} />
+									))}
+								</>
+							)}
 						</div>
 					)}
 					{i18n.exists(`card-info:${card.id}.text`) && <CardText i18nKey={`card-info:${card.id}.text`} />}
