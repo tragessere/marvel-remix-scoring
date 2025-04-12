@@ -87,12 +87,13 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty:
 				hand
 			}
 		}
+		const unblankedHand = hand.filter(card => !card.isBlanked)
 		for (const card of hand) {
 			if (card.isBlanked) {
 				card.modifiedPower = 0
 				card.modifiedTags = []
 			} else if (!card.isTextBlanked) {
-				card.modifiedPower = card.score(hand)
+				card.modifiedPower = card.score(unblankedHand)
 				if (card.id === 73) {
 					card.modifiedPower -= lokiPenalty || 0
 				}
