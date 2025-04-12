@@ -601,7 +601,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			const options = [TAG.FLIGHT, TAG.RANGE, TAG.STRENGTH, TAG.TECH]
 			let optionIndex = 0
 			for (let i = 0; i < options.length - 1; i++) {
-				for (let j = 1; j < options.length; j++) {
+				for (let j = i + 1; j < options.length; j++) {
 					if (index === optionIndex) {
 						self.modifiedTags.push(options[i])
 						self.modifiedTags.push(options[j])
