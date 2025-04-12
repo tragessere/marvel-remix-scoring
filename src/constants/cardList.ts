@@ -24,7 +24,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 2,
 		type: CARD_TYPE.ALLY,
 		power: 4,
-		tags: [TAG.ASGARD, TAG.INTEL],
+		tags: [TAG.INTEL, TAG.ASGARD],
 		score(hand) {
 			const containsBifrost = hand.some(card => card.id === 42)
 			return this.power + (containsBifrost ? 6 : 0)
@@ -83,7 +83,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 6,
 		type: CARD_TYPE.ALLY,
 		power: 6,
-		tags: [TAG.AGILITY, TAG.INTEL, TAG.WAKANDA],
+		tags: [TAG.INTEL, TAG.AGILITY, TAG.WAKANDA],
 		score() {
 			return this.power
 		}
@@ -93,7 +93,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 7,
 		type: CARD_TYPE.ALLY,
 		power: 4,
-		tags: [TAG.GAMMA, TAG.RANGE, TAG.TECH],
+		tags: [TAG.TECH, TAG.RANGE, TAG.GAMMA],
 		score() {
 			return this.power
 		}
@@ -159,7 +159,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 12,
 		type: CARD_TYPE.CONDITION,
 		power: 18,
-		tags: [TAG.GAMMA, TAG.STRENGTH],
+		tags: [TAG.STRENGTH, TAG.GAMMA],
 		score(hand) {
 			let heroOrAllyCount = count(hand, card => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			const urbanCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.URBAN))
@@ -231,7 +231,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 16,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 9,
-		tags: [TAG.RANGE, TAG.STRENGTH],
+		tags: [TAG.STRENGTH, TAG.RANGE],
 		transform(hand, self) {
 			self.isBlanked = !hand.some(c => c.type === CARD_TYPE.HERO && c.modifiedTags.includes(TAG.AGILITY))
 		},
@@ -244,7 +244,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 17,
 		type: CARD_TYPE.EQUIPMENT,
 		power: 10,
-		tags: [TAG.ASGARD, TAG.FLIGHT, TAG.RANGE],
+		tags: [TAG.FLIGHT, TAG.RANGE, TAG.ASGARD],
 		transform(hand, self) {
 			self.isBlanked = !hand.some(
 				c =>
@@ -301,7 +301,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 21,
 		type: CARD_TYPE.HERO,
 		power: 4,
-		tags: [TAG.MUTANT, TAG.TECH],
+		tags: [TAG.TECH, TAG.MUTANT],
 		score(hand) {
 			const hasLocation = hand.some(card => card.type === CARD_TYPE.LOCATION)
 			return this.power + (hasLocation ? 4 : 0)
@@ -312,7 +312,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 22,
 		type: CARD_TYPE.HERO,
 		power: 5,
-		tags: [TAG.AGILITY, TAG.STRENGTH],
+		tags: [TAG.STRENGTH, TAG.AGILITY],
 		effect(hand) {
 			const hasMatchingLocation = hand.some(
 				c => c.type === CARD_TYPE.LOCATION && c.modifiedTags.includes(TAG.URBAN)
@@ -337,7 +337,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 23,
 		type: CARD_TYPE.HERO,
 		power: 4,
-		tags: [TAG.GAMMA, TAG.STRENGTH],
+		tags: [TAG.STRENGTH, TAG.GAMMA],
 		score(hand) {
 			const gammaCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, t => t === TAG.GAMMA) : 0
@@ -451,7 +451,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 29,
 		type: CARD_TYPE.HERO,
 		power: 1,
-		tags: [TAG.GAMMA, TAG.TECH],
+		tags: [TAG.TECH, TAG.GAMMA],
 		transformedTags: [TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH, TAG.GAMMA],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
@@ -486,7 +486,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 30,
 		type: CARD_TYPE.HERO,
 		power: 4,
-		tags: [TAG.ASGARD, TAG.STRENGTH, TAG.WORTHY],
+		tags: [TAG.STRENGTH, TAG.ASGARD, TAG.WORTHY],
 		transformedTags: [TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE, TAG.ASGARD, TAG.WORTHY],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
@@ -552,7 +552,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 32,
 		type: CARD_TYPE.HERO,
 		power: 3,
-		tags: [TAG.INTEL, TAG.MUTANT, TAG.RANGE],
+		tags: [TAG.INTEL, TAG.RANGE, TAG.MUTANT],
 		transformedTags: [TAG.INTEL, TAG.RANGE, TAG.RANGE, TAG.FLIGHT, TAG.MUTANT],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
@@ -626,7 +626,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 35,
 		type: CARD_TYPE.HERO,
 		power: 6,
-		tags: [TAG.AGILITY, TAG.MUTANT, TAG.TECH],
+		tags: [TAG.TECH, TAG.AGILITY, TAG.MUTANT],
 		score() {
 			return this.power
 		}
@@ -636,7 +636,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 36,
 		type: CARD_TYPE.HERO,
 		power: 6,
-		tags: [TAG.AGILITY, TAG.AGILITY, TAG.INTEL],
+		tags: [TAG.INTEL, TAG.AGILITY, TAG.AGILITY],
 		score() {
 			return this.power
 		}
@@ -646,7 +646,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 37,
 		type: CARD_TYPE.HERO,
 		power: 6,
-		tags: [TAG.MUTANT, TAG.STRENGTH, TAG.STRENGTH],
+		tags: [TAG.STRENGTH, TAG.STRENGTH, TAG.MUTANT],
 		score() {
 			return this.power
 		}
@@ -656,7 +656,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 38,
 		type: CARD_TYPE.HERO,
 		power: 6,
-		tags: [TAG.FLIGHT, TAG.RANGE, TAG.TECH],
+		tags: [TAG.TECH, TAG.FLIGHT, TAG.RANGE],
 		score() {
 			return this.power
 		}
@@ -666,7 +666,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 39,
 		type: CARD_TYPE.HERO,
 		power: 5,
-		tags: [TAG.RANGE, TAG.RANGE, TAG.TECH],
+		tags: [TAG.TECH, TAG.RANGE, TAG.RANGE],
 		score() {
 			return this.power
 		}
@@ -676,7 +676,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 40,
 		type: CARD_TYPE.HERO,
 		power: 4,
-		tags: [TAG.FLIGHT, TAG.MUTANT, TAG.RANGE],
+		tags: [TAG.FLIGHT, TAG.RANGE, TAG.MUTANT],
 		score() {
 			return this.power
 		}
@@ -686,7 +686,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 41,
 		type: CARD_TYPE.HERO,
 		power: 7,
-		tags: [TAG.ASGARD, TAG.FLIGHT, TAG.STRENGTH],
+		tags: [TAG.STRENGTH, TAG.FLIGHT, TAG.ASGARD],
 		score() {
 			return this.power
 		}
@@ -785,7 +785,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 49,
 		type: CARD_TYPE.LOCATION,
 		power: 0,
-		tags: [TAG.TECH, TAG.URBAN, TAG.WAKANDA],
+		tags: [TAG.TECH, TAG.WAKANDA, TAG.URBAN],
 		score(hand) {
 			const wakandaTagCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.WAKANDA) : 0
@@ -1202,7 +1202,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 71,
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
-		tags: [TAG.BOSS, TAG.GAMMA],
+		tags: [TAG.GAMMA, TAG.BOSS],
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.STRENGTH || (card.id !== this.id && tag === TAG.GAMMA))
@@ -1236,7 +1236,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		id: 74,
 		type: CARD_TYPE.VILLAIN,
 		power: 17,
-		tags: [TAG.BOSS, TAG.MUTANT],
+		tags: [TAG.MUTANT, TAG.BOSS],
 		effect(hand) {
 			for (const card of hand) {
 				if (card.type === CARD_TYPE.EQUIPMENT) {
