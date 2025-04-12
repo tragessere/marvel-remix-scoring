@@ -452,6 +452,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 1,
 		tags: [TAG.GAMMA, TAG.TECH],
+		transformedTags: [TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH, TAG.GAMMA],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(
@@ -486,6 +487,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.ASGARD, TAG.STRENGTH, TAG.WORTHY],
+		transformedTags: [TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE, TAG.ASGARD, TAG.WORTHY],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const hasMjolnir = hand.some(card => card.id === 17 && !card.isBlanked)
@@ -519,6 +521,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.TECH, TAG.RANGE],
+		transformedTags: [TAG.TECH, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = sumBy(hand, card => count(card.modifiedTags, t => t === TAG.INTEL)) > 1
@@ -550,6 +553,7 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.INTEL, TAG.MUTANT, TAG.RANGE],
+		transformedTags: [TAG.INTEL, TAG.RANGE, TAG.RANGE, TAG.FLIGHT, TAG.MUTANT],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform =

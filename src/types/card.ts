@@ -29,6 +29,7 @@ export interface Card {
 	type: CARD_TYPE
 	power: number
 	tags: TAG[]
+	transformedTags?: TAG[]
 	effect?: (hand: ModifiedCard[], index: number) => void
 	modificationOptions?: (hand: ModifiedCard[]) => number
 	score: (hand: ModifiedCard[]) => number

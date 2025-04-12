@@ -22,8 +22,10 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 	const result = useContext(ScoreContext)
 	const scoredCard = findCard(result.finalHand, cardId)
 
-	const addedTags = scoredCard.modifiedTags.slice().sort(t => t)
-	const tags = scoredCard.tags.sort(t => t).map(t => ({ tag: t, isDeleted: false }))
+	const addedTags = scoredCard.modifiedTags.slice().sort((a, b) => a - b)
+	const originalTagList =
+		scoredCard.isTransformed && scoredCard.transformedTags ? scoredCard.transformedTags : scoredCard.tags
+	const tags = originalTagList.map(t => ({ tag: t, isDeleted: false }))
 	for (const tag of tags) {
 		const resultIndex = addedTags.indexOf(tag.tag)
 		if (resultIndex > -1) {
