@@ -4,7 +4,7 @@ import { cardList } from '../../constants/cardList.ts'
 import { ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
 import { CARD_TYPE } from '../../types/card.ts'
-import { findCard } from '../../utils/card.ts'
+import { findCard, mapCardTags } from '../../utils/card.ts'
 import { CardText } from './CardText.tsx'
 import { LokiDrawnCard } from './LokiDrawnCard.tsx'
 import { TagIcon } from './TagIcon.tsx'
@@ -21,19 +21,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 
 	const result = useContext(ScoreContext)
 	const scoredCard = findCard(result.finalHand, cardId)
-
-	const addedTags = scoredCard.modifiedTags.slice().sort((a, b) => a - b)
-	const originalTagList =
-		scoredCard.isTransformed && scoredCard.transformedTags ? scoredCard.transformedTags : scoredCard.tags
-	const tags = originalTagList.map(t => ({ tag: t, isDeleted: false }))
-	for (const tag of tags) {
-		const resultIndex = addedTags.indexOf(tag.tag)
-		if (resultIndex > -1) {
-			addedTags.splice(resultIndex, 1)
-		} else {
-			tag.isDeleted = true
-		}
-	}
+	const [tags, addedTags] = mapCardTags(scoredCard)
 
 	return (
 		<div
