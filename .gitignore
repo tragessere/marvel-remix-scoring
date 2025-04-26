@@ -25,4 +25,5 @@ dist-ssr
 
 # outputs
 tsconfig.app.tsbuildinfo
+tsconfig.tsbuildinfo
 coverage
