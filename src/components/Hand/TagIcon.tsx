@@ -14,7 +14,9 @@ export const TagIcon: FunctionComponent<TagIconProps> = ({ tag, isDeleted }) => 
 	return isDeleted ? (
 		<div className="deleted-tag-container">
 			<i className={`tag mr-${tagKey}`}>
-				<span className="sr-only">{t(`tag.${tagKey}`)}</span>
+				<span className="sr-only">
+					{t(`tag.${tagKey}`)} {t('deleted')}
+				</span>
 			</i>
 		</div>
 	) : (

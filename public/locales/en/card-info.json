@@ -8,6 +8,7 @@
 		"maneuver": "Maneuver",
 		"villain": "Villain"
 	},
+	"deleted": "deleted",
 	"tag": {
 		"tech": "Tech",
 		"intel": "Intel",

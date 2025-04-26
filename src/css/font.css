@@ -9,6 +9,14 @@ i.tag {
 	font-size: 20px;
 	position: relative;
 	top: 3px;
+	display: inline-block;
+	line-height: 0;
+}
+
+i.tag:after {
+	display: inline-block;
+	line-height: 27px;
+	height: 21px;
 }
 
 i.mr-tech:after {
