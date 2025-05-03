@@ -240,6 +240,46 @@ describe('scoreHand', () => {
 					cardList[62]
 				],
 				score: 94
+			},
+			{
+				id: 9,
+				hand: [
+					// Avoid Crossfire
+					cardList[60],
+					// Shuri
+					cardList[28],
+					// Jean Grey
+					cardList[32],
+					// X-Jet
+					cardList[15],
+					// Spider-Man
+					cardList[22],
+					// Angel
+					cardList[34],
+					// Selene
+					cardList[76]
+				],
+				score: 89
+			},
+			{
+				id: 10,
+				hand: [
+					// Avoid Crossfire
+					cardList[60],
+					// Shuri
+					cardList[28],
+					// Jean Grey
+					cardList[32],
+					// Sauron
+					cardList[64],
+					// Angel
+					cardList[34],
+					// Find Higher Ground
+					cardList[55],
+					// Cerebro
+					cardList[18]
+				],
+				score: 77
 			}
 		]
 		//#endregion example hands

@@ -427,30 +427,29 @@ export const cardList: Readonly<Record<number, Card>> = {
 		tags: [TAG.TECH, TAG.WAKANDA],
 		effect(hand, index) {
 			const tagOptions = [TAG.AGILITY, TAG.RANGE, TAG.STRENGTH]
-			const ownTagSelectionIndex = index % 3
-			const ownTagChoice = tagOptions[ownTagSelectionIndex]
-			const targetCardSelectionIndex = Math.floor(index / 3)
-			let indexCount = targetCardSelectionIndex
-			const targetCard = hand.find(card => {
-				if (card.id !== this.id && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)) {
-					if (indexCount < 3) {
-						return true
-					}
-					indexCount -= card.modifiedTags.length
-				}
-			}) as ModifiedCard
-			const targetCardTagChoice = tagOptions[indexCount]
-			const self = findCard(hand, 28)
+			const ownTagChoice = tagOptions[index % 3]
+
+			const self = findCard(hand, this.id)
 			self.modifiedTags.push(ownTagChoice)
-			targetCard.modifiedTags.push(targetCardTagChoice)
+
+			const targetCards = hand.filter(
+				card => (card.id !== this.id && card.type === CARD_TYPE.HERO) || card.type === CARD_TYPE.ALLY
+			)
+			if (targetCards.length === 0) return
+
+			const targetCardSelectionIndex = Math.floor(index / 9)
+			const targetCardTagChoice = Math.floor((index % 9) / 3)
+			const targetCard = targetCards[targetCardSelectionIndex]
+			targetCard.modifiedTags.push(tagOptions[targetCardTagChoice])
 		},
 		modificationOptions(hand) {
 			const targetCardCount = count(
 				hand,
 				card => card.id !== this.id && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			)
-			// Affects self plus one other card
-			return (targetCardCount + 1) * 3
+			// 3 options if Shuri is the only hero/ally.
+			// Otherwise, 3 options for Shuri times 3 for the target card times the number of target cards
+			return targetCardCount === 0 ? 3 : targetCardCount * 9
 		},
 		score() {
 			return this.power
