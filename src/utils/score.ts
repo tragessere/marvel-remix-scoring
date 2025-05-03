@@ -68,7 +68,7 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 	}
 
 	return {
-		score: maxScore === undefined ? undefined : maxScore - (lokiPenalty || 0),
+		score: maxScore,
 		message: 'Success',
 		finalHand: optimalHand
 	}
