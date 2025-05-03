@@ -1,12 +1,11 @@
 import i18n from 'i18next'
-import type { Dictionary } from 'lodash'
 import sumBy from 'lodash/sumBy'
 import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
 import { findCard, removeTag } from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
 
-export const cardList: Readonly<Dictionary<Card>> = {
+export const cardList: Readonly<Record<number, Card>> = {
 	//#region Ally
 	1: {
 		// Forge
@@ -217,6 +216,10 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			}
 		},
 		modificationOptions(hand) {
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			if (hand.some((card, index) => card.id === 33 && index > selfIndex)) {
+				throw new Error('X-Jet must be evaluated after Vision')
+			}
 			return count(
 				hand,
 				card => !card.isBlanked && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
@@ -424,30 +427,29 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		tags: [TAG.TECH, TAG.WAKANDA],
 		effect(hand, index) {
 			const tagOptions = [TAG.AGILITY, TAG.RANGE, TAG.STRENGTH]
-			const ownTagSelectionIndex = index % 3
-			const ownTagChoice = tagOptions[ownTagSelectionIndex]
-			const targetCardSelectionIndex = Math.floor(index / 3)
-			let indexCount = targetCardSelectionIndex
-			const targetCard = hand.find(card => {
-				if (card.id !== this.id && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)) {
-					if (indexCount < 3) {
-						return true
-					}
-					indexCount -= card.modifiedTags.length
-				}
-			}) as ModifiedCard
-			const targetCardTagChoice = tagOptions[indexCount]
-			const self = findCard(hand, 28)
+			const ownTagChoice = tagOptions[index % 3]
+
+			const self = findCard(hand, this.id)
 			self.modifiedTags.push(ownTagChoice)
-			targetCard.modifiedTags.push(targetCardTagChoice)
+
+			const targetCards = hand.filter(
+				card => (card.id !== this.id && card.type === CARD_TYPE.HERO) || card.type === CARD_TYPE.ALLY
+			)
+			if (targetCards.length === 0) return
+
+			const targetCardSelectionIndex = Math.floor(index / 9)
+			const targetCardTagChoice = Math.floor((index % 9) / 3)
+			const targetCard = targetCards[targetCardSelectionIndex]
+			targetCard.modifiedTags.push(tagOptions[targetCardTagChoice])
 		},
 		modificationOptions(hand) {
 			const targetCardCount = count(
 				hand,
 				card => card.id !== this.id && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			)
-			// Affects self plus one other card
-			return (targetCardCount + 1) * 3
+			// 3 options if Shuri is the only hero/ally.
+			// Otherwise, 3 options for Shuri times 3 for the target card times the number of target cards
+			return targetCardCount === 0 ? 3 : targetCardCount * 9
 		},
 		score() {
 			return this.power
@@ -1254,6 +1256,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
+			if (hand.some((card, index) => card.id === 61 && index < selfIndex)) {
+				throw new Error('Using Magneto after Hack In')
+			}
 			if (hand.some((card, index) => card.type === CARD_TYPE.EQUIPMENT && index < selfIndex)) {
 				throw new Error('Trying to blank a used card')
 			}
@@ -1416,8 +1421,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
-			const usedVillainCount = count(hand, (card, index) => card.type === CARD_TYPE.VILLAIN && index < selfIndex)
-			if (usedVillainCount) {
+			// Block villain effects from happening before Squirrel Girl blanks their text.
+			// Only allow Selene to go before Squirrel Girl since it's up to the player which one blanks the other
+			if (hand.some((card, index) => index < selfIndex && card.type === CARD_TYPE.VILLAIN && card.id !== 76)) {
 				throw new Error('Trying to blank the text of a used card')
 			}
 			return 1

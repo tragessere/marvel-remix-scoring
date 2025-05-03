@@ -32,6 +32,28 @@ describe('scoreHand', () => {
 		]
 		const result = scoreHand(hand)
 		expect(result.score).toBeUndefined()
+		expect(result.finalHand.length).toBe(7)
+	})
+	it('returns undefined score and a card list when hand is invalid from blanked cards', () => {
+		const hand: Card[] = [
+			// X-Jet
+			cardList[15],
+			// Vision
+			cardList[33],
+			// Find Higher Ground
+			cardList[55],
+			// Mystique (becomes blanked)
+			cardList[66],
+			// Avoid Crossfire
+			cardList[60],
+			// Hidden Lair
+			cardList[52],
+			// Vibranium Shield
+			cardList[16]
+		]
+		const result = scoreHand(hand)
+		expect(result.score).toBeUndefined()
+		expect(result.finalHand.length).toBe(7)
 	})
 	it('subtracts points for Loki draw', () => {
 		const hand: Card[] = [
@@ -177,7 +199,107 @@ describe('scoreHand', () => {
 					// Heimdall
 					cardList[2]
 				],
-				score: 33
+				score: 13
+			},
+			{
+				id: 7,
+				hand: [
+					// Magneto
+					cardList[74],
+					// Hack In
+					cardList[61],
+					// Discover Weakness
+					cardList[56],
+					// Dora Milaja
+					cardList[6],
+					// Hulk Operations
+					cardList[7],
+					// Angel
+					cardList[34],
+					// Beast
+					cardList[35]
+				],
+				score: 61
+			},
+			{
+				id: 8,
+				hand: [
+					// X-Jet
+					cardList[15],
+					// Vision
+					cardList[33],
+					// Find Higher Ground
+					cardList[55],
+					// Angel
+					cardList[34],
+					// Hawkeye
+					cardList[39],
+					// Jean Grey
+					cardList[32],
+					// Kang
+					cardList[62]
+				],
+				score: 94
+			},
+			{
+				id: 9,
+				hand: [
+					// Avoid Crossfire
+					cardList[60],
+					// Shuri
+					cardList[28],
+					// Jean Grey
+					cardList[32],
+					// X-Jet
+					cardList[15],
+					// Spider-Man
+					cardList[22],
+					// Angel
+					cardList[34],
+					// Selene
+					cardList[76]
+				],
+				score: 89
+			},
+			{
+				id: 10,
+				hand: [
+					// Avoid Crossfire
+					cardList[60],
+					// Shuri
+					cardList[28],
+					// Jean Grey
+					cardList[32],
+					// Sauron
+					cardList[64],
+					// Angel
+					cardList[34],
+					// Find Higher Ground
+					cardList[55],
+					// Cerebro
+					cardList[18]
+				],
+				score: 77
+			},
+			{
+				id: 11,
+				hand: [
+					// Squirrel Girl
+					cardList[80],
+					// Hulk Operations
+					cardList[7],
+					// Angel
+					cardList[34],
+					// Kang
+					cardList[62],
+					// Selene
+					cardList[76],
+					// Sauron
+					cardList[64],
+					// Hawkeye
+					cardList[39]
+				],
+				score: 80
 			}
 		]
 		//#endregion example hands
