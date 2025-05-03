@@ -32,6 +32,28 @@ describe('scoreHand', () => {
 		]
 		const result = scoreHand(hand)
 		expect(result.score).toBeUndefined()
+		expect(result.finalHand.length).toBe(7)
+	})
+	it('returns undefined score and a card list when hand is invalid from blanked cards', () => {
+		const hand: Card[] = [
+			// X-Jet
+			cardList[15],
+			// Vision
+			cardList[33],
+			// Find Higher Ground
+			cardList[55],
+			// Mystique (becomes blanked)
+			cardList[66],
+			// Avoid Crossfire
+			cardList[60],
+			// Hidden Lair
+			cardList[52],
+			// Vibranium Shield
+			cardList[16]
+		]
+		const result = scoreHand(hand)
+		expect(result.score).toBeUndefined()
+		expect(result.finalHand.length).toBe(7)
 	})
 	it('subtracts points for Loki draw', () => {
 		const hand: Card[] = [

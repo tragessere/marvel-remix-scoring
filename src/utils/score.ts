@@ -58,7 +58,9 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 		const modifiedHand = cloneDeep(orderedHand)
 		try {
 			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, 0, lokiPenalty)
-			if (score !== undefined && (maxScore === undefined || score > maxScore)) {
+			// Save cards as optimal hand for the first result so we can guarantee having updated cards
+			// Otherwise only update the hand when we successfully get a score and it's higher than the previous one
+			if (optimalHand.length === 0 || (score !== undefined && (maxScore === undefined || score > maxScore))) {
 				maxScore = score
 				optimalHand = resultHand
 			}
