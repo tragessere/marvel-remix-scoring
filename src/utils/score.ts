@@ -110,7 +110,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty:
 
 	const currentCard = hand[index]
 	if (!currentCard.isBlanked && !currentCard.isTextBlanked && currentCard.modificationOptions && currentCard.effect) {
-		const optionCount = currentCard.modificationOptions(hand)
+		const optionCount = currentCard.modificationOptions(hand.filter(card => !card.isBlanked))
 		if (!optionCount) {
 			return applyEffectsRecursive(hand, index + 1, lokiPenalty)
 		}
