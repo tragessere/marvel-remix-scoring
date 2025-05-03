@@ -1,12 +1,11 @@
 import i18n from 'i18next'
-import type { Dictionary } from 'lodash'
 import sumBy from 'lodash/sumBy'
 import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
 import { findCard, removeTag } from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
 
-export const cardList: Readonly<Dictionary<Card>> = {
+export const cardList: Readonly<Record<number, Card>> = {
 	//#region Ally
 	1: {
 		// Forge
@@ -217,6 +216,10 @@ export const cardList: Readonly<Dictionary<Card>> = {
 			}
 		},
 		modificationOptions(hand) {
+			const selfIndex = hand.findIndex(card => card.id === this.id)
+			if (hand.some((card, index) => card.id === 33 && index > selfIndex)) {
+				throw new Error('X-Jet must be evaluated after Vision')
+			}
 			return count(
 				hand,
 				card => !card.isBlanked && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
@@ -1254,6 +1257,9 @@ export const cardList: Readonly<Dictionary<Card>> = {
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
+			if (hand.some((card, index) => card.id === 61 && index < selfIndex)) {
+				throw new Error('Using Magneto after Hack In')
+			}
 			if (hand.some((card, index) => card.type === CARD_TYPE.EQUIPMENT && index < selfIndex)) {
 				throw new Error('Trying to blank a used card')
 			}
