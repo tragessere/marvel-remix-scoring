@@ -280,6 +280,26 @@ describe('scoreHand', () => {
 					cardList[18]
 				],
 				score: 77
+			},
+			{
+				id: 11,
+				hand: [
+					// Squirrel Girl
+					cardList[80],
+					// Hulk Operations
+					cardList[7],
+					// Angel
+					cardList[34],
+					// Kang
+					cardList[62],
+					// Selene
+					cardList[76],
+					// Sauron
+					cardList[64],
+					// Hawkeye
+					cardList[39]
+				],
+				score: 80
 			}
 		]
 		//#endregion example hands

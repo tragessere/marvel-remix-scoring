@@ -1421,8 +1421,9 @@ export const cardList: Readonly<Record<number, Card>> = {
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
-			const usedVillainCount = count(hand, (card, index) => card.type === CARD_TYPE.VILLAIN && index < selfIndex)
-			if (usedVillainCount) {
+			// Block villain effects from happening before Squirrel Girl blanks their text.
+			// Only allow Selene to go before Squirrel Girl since it's up to the player which one blanks the other
+			if (hand.some((card, index) => index < selfIndex && card.type === CARD_TYPE.VILLAIN && card.id !== 76)) {
 				throw new Error('Trying to blank the text of a used card')
 			}
 			return 1
