@@ -25,7 +25,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 
 	return (
 		<div
-			className={`simple-card${scoredCard.isBlanked ? ' blanked' : ''} ${category}`}
+			className={`simple-card${scoredCard.isBlanked ? ' blanked' : scoredCard.isTextBlanked ? ' text-blanked' : ''} ${category}`}
 			role="button"
 			tabIndex={0}
 			onClick={() => {

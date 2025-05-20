@@ -24,7 +24,9 @@ h2 {
 		& .card-top-border {
 			background-image: none;
 		}
+	}
 
+	&.blanked, &.text-blanked {
 		& .card-text {
 			text-decoration: underline;
 			text-underline-offset: -0.3rem;
