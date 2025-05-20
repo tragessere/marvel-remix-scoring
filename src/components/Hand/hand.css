@@ -17,11 +17,11 @@ h2 {
 		outline: 2px solid #222222;
 	}
 
-	&.blanked {
+	&.blanked, & .loki-card.blanked {
 		opacity: 65%;
 		filter: brightness(1.2) grayscale(0.85);
 
-		& .card-top-border {
+		& .card-top-border, &.card-top-border {
 			background-image: none;
 		}
 	}
@@ -95,6 +95,10 @@ h2 {
 			border-radius: 5px;
 			border: 1px solid #222;
 			padding: 0.3rem 1rem;
+
+			&.blanked {
+				cursor: not-allowed;
+			}
 		}
 	}
 
@@ -103,6 +107,12 @@ h2 {
 		border: 1px solid #222;
 		z-index: 5;
 		position: relative;
+
+		&.disabled {
+			border: 1px solid #999;
+			background-color: #ccc;
+			cursor: not-allowed;
+		}
 	}
 
 	& .score {

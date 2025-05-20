@@ -1,9 +1,10 @@
 import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
-import { CARD_SELECT_MODE, CardSelectionModeContext } from '../../contexts/ContextList.tsx'
+import { CARD_SELECT_MODE, CardSelectionModeContext, ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
 import { CARD_TYPE } from '../../types/card.ts'
+import { findCard } from '../../utils/card.ts'
 
 export const LokiDrawnCard = () => {
 	const { t } = useTranslation('card-info')
@@ -13,16 +14,24 @@ export const LokiDrawnCard = () => {
 	const card = lokiCardId ? cardList[lokiCardId] : undefined
 	const category = card ? CARD_TYPE[card.type].toLowerCase() : ''
 
+	// Get Loki's scored card inof
+	const result = useContext(ScoreContext)
+	const scoredCard = findCard(result.finalHand, 73)
+
+	const isDisabled = scoredCard.isBlanked || scoredCard.isTextBlanked
+
 	return (
 		<>
 			{card ? (
 				<div
-					className={`loki-card card-top-border bg-color-${category}`}
+					className={`loki-card card-top-border bg-color-${category}${isDisabled ? ' blanked' : ''}`}
 					role="button"
 					tabIndex={0}
 					onClick={event => {
-						setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
-						setLokiDraw(undefined)
+						if (!isDisabled) {
+							setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
+							setLokiDraw(undefined)
+						}
 						event.stopPropagation()
 					}}>
 					<span className="base-power">{card.power}</span>
@@ -30,7 +39,8 @@ export const LokiDrawnCard = () => {
 				</div>
 			) : (
 				<button
-					className="active-card-use"
+					className={`active-card-use${isDisabled ? ' disabled' : ''}`}
+					disabled={isDisabled}
 					onClick={event => {
 						if (cardSelectMode === CARD_SELECT_MODE.DEFAULT) {
 							setCardSelectMode(CARD_SELECT_MODE.LOKI_DRAW)
