@@ -14,7 +14,7 @@ export const LokiDrawnCard = () => {
 	const card = lokiCardId ? cardList[lokiCardId] : undefined
 	const category = card ? CARD_TYPE[card.type].toLowerCase() : ''
 
-	// Get Loki's scored card inof
+	// Get Loki's scored card info to check if it is blanked
 	const result = useContext(ScoreContext)
 	const scoredCard = findCard(result.finalHand, 73)
 
