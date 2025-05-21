@@ -18,20 +18,18 @@ export const LokiDrawnCard = () => {
 	const result = useContext(ScoreContext)
 	const scoredCard = findCard(result.finalHand, 73)
 
-	const isDisabled = scoredCard.isBlanked || scoredCard.isTextBlanked
+	const isEffectBlanked = scoredCard.isBlanked || scoredCard.isTextBlanked
 
 	return (
 		<>
 			{card ? (
 				<div
-					className={`loki-card card-top-border bg-color-${category}${isDisabled ? ' blanked' : ''}`}
+					className={`loki-card card-top-border bg-color-${category}${isEffectBlanked ? ' blanked' : ''}`}
 					role="button"
 					tabIndex={0}
 					onClick={event => {
-						if (!isDisabled) {
-							setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
-							setLokiDraw(undefined)
-						}
+						setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
+						setLokiDraw(undefined)
 						event.stopPropagation()
 					}}>
 					<span className="base-power">{card.power}</span>
@@ -39,8 +37,7 @@ export const LokiDrawnCard = () => {
 				</div>
 			) : (
 				<button
-					className={`active-card-use${isDisabled ? ' disabled' : ''}`}
-					disabled={isDisabled}
+					className={`active-card-use${isEffectBlanked ? ' blanked' : ''}`}
 					onClick={event => {
 						if (cardSelectMode === CARD_SELECT_MODE.DEFAULT) {
 							setCardSelectMode(CARD_SELECT_MODE.LOKI_DRAW)
