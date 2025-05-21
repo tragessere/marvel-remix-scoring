@@ -17,14 +17,16 @@ h2 {
 		outline: 2px solid #222222;
 	}
 
-	&.blanked {
+	&.blanked, & .loki-card.blanked {
 		opacity: 65%;
 		filter: brightness(1.2) grayscale(0.85);
 
-		& .card-top-border {
+		& .card-top-border, &.card-top-border {
 			background-image: none;
 		}
+	}
 
+	&.blanked, &.text-blanked {
 		& .card-text {
 			text-decoration: underline;
 			text-underline-offset: -0.3rem;
@@ -101,6 +103,12 @@ h2 {
 		border: 1px solid #222;
 		z-index: 5;
 		position: relative;
+
+		&.blanked {
+			border: 1px solid #999;
+			background-color: #ddd;
+			color: #555;
+		}
 	}
 
 	& .score {
