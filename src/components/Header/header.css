@@ -37,10 +37,21 @@
 		}
 
 		& .score {
+			position: relative;
 			color: #ffffff;
 			font-size: 2rem;
 			font-weight: bold;
 			margin-right: 0.75rem;
+
+			&.invalid:after {
+				content: '';
+				position: absolute;
+				width: 120%;
+				left: -10%;
+				top: 50%;
+				border-bottom: 0.15rem solid #FFFFFFBD;
+				transform: rotate(-20deg);
+			}
 		}
 
 		& .reset {

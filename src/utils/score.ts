@@ -6,8 +6,8 @@ import { generatePermutations } from './randomization.ts'
 
 export interface ScoreResult {
 	score: number | undefined
-	message: string
 	finalHand: ModifiedCard[]
+	isValid: boolean
 }
 
 /**
@@ -28,23 +28,6 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 		}
 	})
 
-	const { containsVillain, containsHeroOrAlly, containsLoki } = hand.reduce(
-		(acc, card) => {
-			if (card.type === CARD_TYPE.VILLAIN) acc.containsVillain = true
-			else if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY) acc.containsHeroOrAlly = true
-			if (card.id === 73) acc.containsLoki = true
-			return acc
-		},
-		{ containsVillain: false, containsHeroOrAlly: false, containsLoki: false }
-	)
-	if (hand.length !== 7 || !containsVillain || !containsHeroOrAlly || (lokiPenalty === undefined && containsLoki)) {
-		return {
-			score: undefined,
-			message: 'Invalid hand',
-			finalHand: initialHand
-		}
-	}
-
 	initialHand.sort(sortEffectCardsFirst)
 	const modifyCardCount = initialHand.filter(card => !!card.effect).length
 	const modifyCards = initialHand.slice(0, modifyCardCount)
@@ -53,16 +36,18 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 
 	let maxScore = undefined
 	let optimalHand: ModifiedCard[] = []
+	let optimalHandIsValid = false
 	for (const order of orderCombinations) {
 		const orderedHand = order.map(index => modifyCards[index]).concat(countCards)
 		const modifiedHand = cloneDeep(orderedHand)
 		try {
-			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, 0, lokiPenalty)
-			// Save cards as optimal hand for the first result so we can guarantee having updated cards
+			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, 0, lokiPenalty)
+			// Save cards as optimal hand for the first result so we can guarantee having updated cards.
 			// Otherwise only update the hand when we successfully get a score and it's higher than the previous one
 			if (optimalHand.length === 0 || (score !== undefined && (maxScore === undefined || score > maxScore))) {
 				maxScore = score
 				optimalHand = resultHand
+				optimalHandIsValid = isValid
 			}
 		} catch {
 			/* invalid order of operation, skip hand */
@@ -71,24 +56,19 @@ export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
 
 	return {
 		score: maxScore,
-		message: 'Success',
-		finalHand: optimalHand
+		finalHand: optimalHand,
+		isValid: optimalHandIsValid
 	}
 }
 
 interface Result {
 	score: number | undefined
 	hand: ModifiedCard[]
+	isValid: boolean
 }
 
 const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty: number | undefined): Result => {
 	if (index === hand.length) {
-		if (!containsRequiredCards(hand)) {
-			return {
-				score: undefined,
-				hand
-			}
-		}
 		const unblankedHand = hand.filter(card => !card.isBlanked)
 		for (const card of hand) {
 			if (card.isBlanked) {
@@ -101,7 +81,11 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty:
 				}
 			}
 		}
-		return { score: sumBy(hand, card => card.modifiedPower), hand }
+		return {
+			score: sumBy(hand, card => card.modifiedPower),
+			hand,
+			isValid: containsRequiredCards(hand)
+		}
 	}
 
 	if (index === 0) {
@@ -116,6 +100,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty:
 		}
 		let optimalHand: ModifiedCard[] = []
 		let optimalScore = undefined
+		let isOptimalScoreValid = false
 		for (let i = 0; i < optionCount; i++) {
 			const modifiedHand = cloneDeep(hand)
 			const clonedCurrentCard = findCard(modifiedHand, currentCard.id)
@@ -124,13 +109,14 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty:
 			// was checked on the card before cloning.
 			clonedCurrentCard.effect?.(unblankedHand, i)
 			modifiedHand.forEach(card => card.transform?.(unblankedHand, card))
-			const { score, hand: resultHand } = applyEffectsRecursive(modifiedHand, index + 1, lokiPenalty)
+			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, index + 1, lokiPenalty)
 			if (optimalScore === undefined || (typeof score === 'number' && score > optimalScore)) {
 				optimalScore = score
 				optimalHand = resultHand
+				isOptimalScoreValid = isValid
 			}
 		}
-		return { score: optimalScore, hand: optimalHand }
+		return { score: optimalScore, hand: optimalHand, isValid: isOptimalScoreValid }
 	} else {
 		return applyEffectsRecursive(hand, index + 1, lokiPenalty)
 	}
