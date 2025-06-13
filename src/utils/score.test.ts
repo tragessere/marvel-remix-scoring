@@ -9,15 +9,15 @@ interface HandTest {
 }
 
 describe('scoreHand', () => {
-	it('returns undefined without 7 cards', () => {
+	it('returns invalid score without 7 cards', () => {
 		const hand: Card[] = [cardList[1]]
 		const result = scoreHand(hand)
-		expect(result.score).toBeUndefined()
+		expect(result.isValid).toBe(false)
 	})
 	it('returns undefined without villain', () => {
 		const hand: Card[] = [cardList[1], cardList[2], cardList[3], cardList[4], cardList[5], cardList[6], cardList[7]]
 		const result = scoreHand(hand)
-		expect(result.score).toBeUndefined()
+		expect(result.isValid).toBe(false)
 	})
 	it('returns undefined without hero or ally', () => {
 		const hand: Card[] = [
@@ -31,7 +31,7 @@ describe('scoreHand', () => {
 			cardList[62]
 		]
 		const result = scoreHand(hand)
-		expect(result.score).toBeUndefined()
+		expect(result.isValid).toBe(false)
 		expect(result.finalHand.length).toBe(7)
 	})
 	it('returns undefined score and a card list when hand is invalid from blanked cards', () => {
@@ -52,7 +52,7 @@ describe('scoreHand', () => {
 			cardList[16]
 		]
 		const result = scoreHand(hand)
-		expect(result.score).toBeUndefined()
+		expect(result.isValid).toBe(false)
 		expect(result.finalHand.length).toBe(7)
 	})
 	it('subtracts points for Loki draw', () => {
