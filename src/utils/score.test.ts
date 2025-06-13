@@ -14,12 +14,12 @@ describe('scoreHand', () => {
 		const result = scoreHand(hand)
 		expect(result.isValid).toBe(false)
 	})
-	it('returns undefined without villain', () => {
+	it('returns invalid score without villain', () => {
 		const hand: Card[] = [cardList[1], cardList[2], cardList[3], cardList[4], cardList[5], cardList[6], cardList[7]]
 		const result = scoreHand(hand)
 		expect(result.isValid).toBe(false)
 	})
-	it('returns undefined without hero or ally', () => {
+	it('returns invalid score without hero or ally', () => {
 		const hand: Card[] = [
 			cardList[8],
 			cardList[9],
@@ -34,7 +34,7 @@ describe('scoreHand', () => {
 		expect(result.isValid).toBe(false)
 		expect(result.finalHand.length).toBe(7)
 	})
-	it('returns undefined score and a card list when hand is invalid from blanked cards', () => {
+	it('returns invalid score score and a card list when hand is invalid from blanked cards', () => {
 		const hand: Card[] = [
 			// X-Jet
 			cardList[15],
