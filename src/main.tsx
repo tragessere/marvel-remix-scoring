@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import App from './components/App.tsx'
 
 import './i18n.ts'
@@ -15,6 +15,10 @@ const router = createBrowserRouter([
 	{
 		path: '/marvel-remix-scoring',
 		element: <App />
+	},
+	{
+		path: '*',
+		element: <Navigate to="/marvel-remix-scoring" />
 	}
 ])
 
