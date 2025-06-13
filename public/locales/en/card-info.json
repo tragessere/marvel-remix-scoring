@@ -336,6 +336,6 @@
 	},
 	"80": {
 		"name": "Squirrel Girl",
-		"text": "Ignore the text box for all <villain>Villains</villain>. All negative <villain /> base powers become positive."
+		"text": "Ignore the text box for all <villain>Villains</villain>. All negative <villain>Villain</villain> base powers become positive."
 	}
 }
