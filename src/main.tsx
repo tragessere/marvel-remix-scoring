@@ -1,6 +1,6 @@
 import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router'
 import App from './components/App.tsx'
 
 import './i18n.ts'

@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router'
 import { CARD_SELECT_MODE, CardSelectionModeContext } from '../contexts/ContextList.tsx'
 import { QueryParams } from '../types/route.ts'
 
