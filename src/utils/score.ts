@@ -3,6 +3,7 @@ import sumBy from 'lodash/sumBy'
 import { Card, CARD_TYPE, ModifiedCard } from '../types/card.ts'
 import { findCard, sortEffectCardsFirst } from './card.ts'
 import { generatePermutations } from './randomization.ts'
+import { count } from './whyIsThisNotInLodash.ts'
 
 export interface ScoreResult {
 	score: number | undefined
@@ -89,7 +90,15 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty:
 	}
 
 	if (index === 0) {
-		hand.forEach(card => card.transform?.(hand, card))
+		let enabledCardCount = 7
+		let updatedEnabledCardCount = 7
+		let unblankedHand = hand
+		do {
+			enabledCardCount = updatedEnabledCardCount
+			hand.forEach(card => card.transform?.(unblankedHand, card))
+			unblankedHand = hand.filter(card => !card.isBlanked)
+			updatedEnabledCardCount = count(hand, card => !card.isBlanked)
+		} while (enabledCardCount !== updatedEnabledCardCount)
 	}
 
 	const currentCard = hand[index]

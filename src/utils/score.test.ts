@@ -300,6 +300,26 @@ describe('scoreHand', () => {
 					cardList[39]
 				],
 				score: 80
+			},
+			{
+				id: 12,
+				hand: [
+					// Remote Fortress
+					cardList[53],
+					// Bifrost
+					cardList[42],
+					// Forge
+					cardList[1],
+					// Jane Foster
+					cardList[4],
+					// Kingpin
+					cardList[78],
+					// Build Gadgets
+					cardList[58],
+					// Toad
+					cardList[79]
+				],
+				score: 9
 			}
 		]
 		//#endregion example hands
