@@ -1,5 +1,5 @@
 import i18n from 'i18next'
-import sumBy from 'lodash/sumBy'
+import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
 import { findCard, removeTag } from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'

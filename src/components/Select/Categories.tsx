@@ -1,4 +1,4 @@
-import { groupBy, map, sortBy } from 'lodash'
+import { groupBy, map, sortBy } from 'lodash-es'
 import { FunctionComponent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'

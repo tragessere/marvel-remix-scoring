@@ -1,5 +1,5 @@
-import cloneDeep from 'lodash/cloneDeep'
-import sumBy from 'lodash/sumBy'
+import cloneDeep from 'lodash-es/cloneDeep'
+import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, ModifiedCard } from '../types/card.ts'
 import { findCard, sortEffectCardsFirst } from './card.ts'
 import { generatePermutations } from './randomization.ts'
