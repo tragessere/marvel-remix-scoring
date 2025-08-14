@@ -1,6 +1,7 @@
 {
   "name": "Marvel Remix Scoring",
   "short_name": "Marvel Remix",
+  "description": "A scoring app for the Marvel Remix card game",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
