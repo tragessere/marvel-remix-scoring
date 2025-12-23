@@ -1,33 +1,64 @@
 import eslint from '@eslint/js'
+import { defineConfig } from 'eslint/config'
+import globals from 'globals'
 import tseslint from 'typescript-eslint'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
-import reactCompiler from 'eslint-plugin-react-compiler'
+import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
-export default tseslint.config(
-    eslint.configs.recommended,
-    tseslint.configs.strictTypeChecked,
+export default defineConfig(
     {
-        languageOptions: {
-            parserOptions: {
-                projectService: true,
+		files: ['**/*.ts?(x)'],
+		languageOptions: {
+			parserOptions: {
+				projectService: true,
                 tsconfigRootDir: import.meta.dirname
-            }
-        },
-        rules: {
-            '@typescript-eslint/restrict-template-expressions': [
-                'error',
-                {
-                    allowBoolean: true,
-                    allowNumber: true
-                }
-            ]
-        }
+			},
+			globals: {
+				...globals.es2020,
+				...globals.node,
+				...globals.browser,
+				...globals.jest
+			}
+		},
+		extends: [
+			eslint.configs.recommended,
+			tseslint.configs.strictTypeChecked,
+			eslintPluginPrettierRecommended,
+            reactHooks.configs.flat.recommended,
+            reactRefresh.configs.vite,
+		],
     },
     {
         ignores: ['**/*.mjs', '**/*.cjs', '**/coverage/**', '**/dist/**', '**/.yarn/**'],
     },
-    reactCompiler.configs.recommended,
-    reactRefresh.configs.vite,
-    eslintPluginPrettierRecommended
+	{
+		rules: {
+			'@typescript-eslint/restrict-template-expressions': [
+				'error',
+				{
+					allowBoolean: true,
+					allowNumber: true
+				}
+			]
+		}
+	},
+    {
+	    rules: {
+            'prettier/prettier': [
+                'error',
+                {
+                    trailingComma: 'none',
+                    useTabs: true,
+                    tabWidth: 4,
+                    semi: false,
+                    singleQuote: true,
+                    printWidth: 120,
+                    bracketSameLine: true,
+                    arrowParens: 'avoid',
+                    endOfLine: 'auto'
+                }
+            ]
+        }
+    }
 )
