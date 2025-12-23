@@ -320,6 +320,26 @@ describe('scoreHand', () => {
 					cardList[79]
 				],
 				score: 9
+			},
+			{
+				id: 13,
+				hand: [
+					// Heimdall
+					cardList[2],
+					// Colossus
+					cardList[37],
+					// Captain America
+					cardList[19],
+					// Halls of Asgard
+					cardList[51],
+					// Arc Reactor
+					cardList[14],
+					// Vibranium Shield
+					cardList[16],
+					// Mystique
+					cardList[66]
+				],
+				score: 32
 			}
 		]
 		//#endregion example hands

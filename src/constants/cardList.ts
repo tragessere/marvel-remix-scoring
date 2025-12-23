@@ -1153,7 +1153,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 			for (const card of hand) {
 				intelCount += count(card.modifiedTags, tag => tag === TAG.INTEL)
 				if (intelCount > 1) break
-				for (const tag of card.modifiedTags) {
+				const tagSet = new Set<TAG>(card.modifiedTags)
+				for (const tag of tagSet) {
 					cardTagCount[tag] = (cardTagCount[tag] || 0) + 1
 				}
 			}
