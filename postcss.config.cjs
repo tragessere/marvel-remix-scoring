@@ -9,6 +9,6 @@ module.export = {
 				'color-mod-function': true
 			},
 			importFrom: ['src/css/variables.css']
-		}),
+		})
 	]
 }

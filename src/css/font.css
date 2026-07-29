@@ -21,12 +21,12 @@ i.tag:after {
 
 i.mr-tech:after {
 	content: '\E001';
-	color: #CC0952;
+	color: #cc0952;
 }
 
 i.mr-intel:after {
 	content: '\E002';
-	color: #565C6D;
+	color: #565c6d;
 }
 
 i.mr-strength:after {
@@ -36,37 +36,37 @@ i.mr-strength:after {
 
 i.mr-agility:after {
 	content: '\E004';
-	color: #F68B1F;
+	color: #f68b1f;
 }
 
 i.mr-flight:after {
 	content: '\E005';
-	color: #00A7EA;
+	color: #00a7ea;
 }
 
 i.mr-range:after {
 	content: '\E006';
-	color: #92278F
+	color: #92278f;
 }
 
 i.mr-wakanda:after {
 	content: '\E007';
-	color: #38002D;
+	color: #38002d;
 }
 
 i.mr-asgard:after {
 	content: '\E008';
-	color: #C58F68;
+	color: #c58f68;
 }
 
 i.mr-mutant:after {
 	content: '\E009';
-	color: #00487A;
+	color: #00487a;
 }
 
 i.mr-gamma:after {
 	content: '\E00A';
-	color: #88AC2E;
+	color: #88ac2e;
 }
 
 i.mr-worthy:after {
@@ -76,11 +76,10 @@ i.mr-worthy:after {
 
 i.mr-urban:after {
 	content: '\E00C';
-	color: #EC0B8C;
+	color: #ec0b8c;
 }
 
 i.mr-boss:after {
 	content: '\E00D';
-	color: #ED1D24;
+	color: #ed1d24;
 }
-

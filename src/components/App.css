@@ -1,119 +1,125 @@
 body {
-  margin: 0;
-  min-width: 320px;
-  overflow-y: scroll;
-  background-color: #E5E5E5;
+	margin: 0;
+	min-width: 320px;
+	overflow-y: scroll;
+	background-color: #e5e5e5;
 }
 
 #root {
-  width: 100%;
-  max-width: 61rem;
-  margin: 0 auto;
+	width: 100%;
+	max-width: 61rem;
+	margin: 0 auto;
 }
 
 .background {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  min-height: 100vh;
-  background-image: url("../assets/background.webp");
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  box-shadow: 0 0 19px 2px black;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	min-height: 100vh;
+	background-image: url('../assets/background.webp');
+	background-size: cover;
+	background-attachment: fixed;
+	background-position: center;
+	box-shadow: 0 0 19px 2px black;
 }
 
 main {
-  flex-grow: 1;
-  padding: 1rem;
+	flex-grow: 1;
+	padding: 1rem;
 
-  @media (max-width: 450px) {
-    padding: 0.75rem 0.5rem;
-  }
+	@media (max-width: 450px) {
+		padding: 0.75rem 0.5rem;
+	}
 }
 
 .content {
-  position: relative;
-  display: flex;
-  flex-grow: 1;
-  max-width: 60rem;
-  width: 100%;
-  margin: 0 auto;
-  background-color: #fffffffa;
+	position: relative;
+	display: flex;
+	flex-grow: 1;
+	max-width: 60rem;
+	width: 100%;
+	margin: 0 auto;
+	background-color: #fffffffa;
 }
 
 .footer {
-  display: flex;
-  width: 100%;
-  max-width: 60rem;
-  margin: 0 auto;
-  padding-bottom: 0.25rem;
-  background-color: #fffffffa;
+	display: flex;
+	width: 100%;
+	max-width: 60rem;
+	margin: 0 auto;
+	padding-bottom: 0.25rem;
+	background-color: #fffffffa;
 
-  & > .spacer {
-    width: 8.5rem;
-    padding-right: 1px;
-    border-right: 1px solid #ccc;
+	& > .spacer {
+		width: 8.5rem;
+		padding-right: 1px;
+		border-right: 1px solid #ccc;
 
-    @media (max-width: 450px) {
-      display: none;
-    }
-  }
+		@media (max-width: 450px) {
+			display: none;
+		}
+	}
 
-  & > p {
-    flex: 1 0;
-    padding: 0 2rem;
-    text-align: center;
-    font-size: 12px;
-    color: #222;
-    margin: 0;
+	& > p {
+		flex: 1 0;
+		padding: 0 2rem;
+		text-align: center;
+		font-size: 12px;
+		color: #222;
+		margin: 0;
 
-    @media (max-width: 650px) {
-      padding: 0 1rem;
-    }
-  }
+		@media (max-width: 650px) {
+			padding: 0 1rem;
+		}
+	}
 }
 
 .column-select {
-  width: 8.5rem;
-  padding-right: 1px;
-  border-right: 1px solid #ccc;
-  flex-shrink: 0;
-  z-index: 3;
+	width: 8.5rem;
+	padding-right: 1px;
+	border-right: 1px solid #ccc;
+	flex-shrink: 0;
+	z-index: 3;
 
-  &.alternate-selection-mode:before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: calc(100% - 8.5rem);
-    left: 8.5rem;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1;
-    animation: animateDim 0.25s linear;
-  }
+	&.alternate-selection-mode:before {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: calc(100% - 8.5rem);
+		left: 8.5rem;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 1;
+		animation: animateDim 0.25s linear;
+	}
 
-  &.alternate-selection-mode:after {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 2rem;
-    top: 0;
-    left: 8.5rem;
-    z-index: 2;
+	&.alternate-selection-mode:after {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 2rem;
+		top: 0;
+		left: 8.5rem;
+		z-index: 2;
 
-    background: linear-gradient(90deg, rgba(12, 120, 0, 0.66) 0%, rgba(12, 135, 0, 0.47) 5%, rgba(15, 152, 0, 0.32) 25%, rgba(0,0,0,0) 45%, rgba(0,0,0,0) 100%);
-    animation: animateGrow 2.5s infinite;
-  }
+		background: linear-gradient(
+			90deg,
+			rgba(12, 120, 0, 0.66) 0%,
+			rgba(12, 135, 0, 0.47) 5%,
+			rgba(15, 152, 0, 0.32) 25%,
+			rgba(0, 0, 0, 0) 45%,
+			rgba(0, 0, 0, 0) 100%
+		);
+		animation: animateGrow 2.5s infinite;
+	}
 }
 @keyframes animateGrow {
-  0% {
-    background-size: 100%;
-  }
-  50% {
-    background-size: 200%;
-  }
-  100% {
-    background-size: 100%;
-  }
+	0% {
+		background-size: 100%;
+	}
+	50% {
+		background-size: 200%;
+	}
+	100% {
+		background-size: 100%;
+	}
 }
-

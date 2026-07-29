@@ -1,6 +1,6 @@
 # Marvel Remix Scoring
 
-This is an unofficial application for scoring the [Marvel Remix](https://wizkids.com/marvel-remix/) card game. It is inspired by the similar scoring app for Fantasy Realms, the [Fantasy Realms App of Scoring](https://fantasy-realms.github.io/index.html) 
+This is an unofficial application for scoring the [Marvel Remix](https://wizkids.com/marvel-remix/) card game. It is inspired by the similar scoring app for Fantasy Realms, the [Fantasy Realms App of Scoring](https://fantasy-realms.github.io/index.html)
 
 All images and characters used are property of WizKids or The Walt Disney Company.
 
@@ -11,6 +11,7 @@ This app is built using React with Vite and Yarn as a package manager. First ins
 ## Bug Reports
 
 If you find any issues with scoring please open an issue with the following information:
+
 - The selected cards in your hand (this can be a copy of the URL after picking the cards)
 - The expected score
 - The actual score
