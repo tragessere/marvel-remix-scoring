@@ -19,8 +19,8 @@ export interface ScoreResult {
  * @param lokiPenalty Power of the card drawn at the end from Loki's effect
  */
 export const scoreHand = (hand: Card[], lokiPenalty?: number): ScoreResult => {
-	const initialHand = hand.map(card => {
-		return <ModifiedCard>{
+	const initialHand: ModifiedCard[] = hand.map(card => {
+		return {
 			...card,
 			isBlanked: false,
 			isTextBlanked: false,
