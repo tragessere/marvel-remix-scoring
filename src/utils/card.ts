@@ -31,7 +31,7 @@ export const removeTag = (card: ModifiedCard, tag: TAG, count: number = 1) => {
 }
 
 export const mapCardTags = (card: ModifiedCard) => {
-	const addedTags = card.modifiedTags.slice().sort((a, b) => a - b)
+	const addedTags = card.modifiedTags.toSorted((a, b) => a - b)
 	const originalTagList = card.isTransformed && card.transformedTags ? card.transformedTags : card.tags
 	const tags = originalTagList.map(t => ({ tag: t, isDeleted: false }))
 	for (const tag of tags) {

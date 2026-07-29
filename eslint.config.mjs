@@ -7,15 +7,15 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default defineConfig(
-    {
+	{
 		files: ['**/*.ts?(x)'],
 		languageOptions: {
 			parserOptions: {
 				projectService: true,
-                tsconfigRootDir: import.meta.dirname
+				tsconfigRootDir: import.meta.dirname
 			},
 			globals: {
-				...globals.es2020,
+				...globals.es2023,
 				...globals.node,
 				...globals.browser,
 				...globals.jest
@@ -25,13 +25,13 @@ export default defineConfig(
 			eslint.configs.recommended,
 			tseslint.configs.strictTypeChecked,
 			eslintPluginPrettierRecommended,
-            reactHooks.configs.flat.recommended,
-            reactRefresh.configs.vite,
-		],
-    },
-    {
-        ignores: ['**/*.mjs', '**/*.cjs', '**/coverage/**', '**/dist/**', '**/.yarn/**'],
-    },
+			reactHooks.configs.flat.recommended,
+			reactRefresh.configs.vite
+		]
+	},
+	{
+		ignores: ['**/*.mjs', '**/*.cjs', '**/coverage/**', '**/dist/**', '**/.yarn/**']
+	},
 	{
 		rules: {
 			'@typescript-eslint/restrict-template-expressions': [
@@ -43,22 +43,22 @@ export default defineConfig(
 			]
 		}
 	},
-    {
-	    rules: {
-            'prettier/prettier': [
-                'error',
-                {
-                    trailingComma: 'none',
-                    useTabs: true,
-                    tabWidth: 4,
-                    semi: false,
-                    singleQuote: true,
-                    printWidth: 120,
-                    bracketSameLine: true,
-                    arrowParens: 'avoid',
-                    endOfLine: 'auto'
-                }
-            ]
-        }
-    }
+	{
+		rules: {
+			'prettier/prettier': [
+				'error',
+				{
+					trailingComma: 'none',
+					useTabs: true,
+					tabWidth: 4,
+					semi: false,
+					singleQuote: true,
+					printWidth: 120,
+					bracketSameLine: true,
+					arrowParens: 'avoid',
+					endOfLine: 'auto'
+				}
+			]
+		}
+	}
 )
