@@ -1,7 +1,7 @@
 {
 	"category": {
 		"ally": "Ally",
-		"condition":  "Condition",
+		"condition": "Condition",
 		"equipment": "Equipment",
 		"hero": "Hero",
 		"location": "Location",
@@ -300,6 +300,7 @@
 	},
 	"71": {
 		"name": "The Leader",
+		"sortName": "Leader, The",
 		"text": "<score-negative>-3</score-negative> for each <strength /> and other <gamma />."
 	},
 	"72": {
