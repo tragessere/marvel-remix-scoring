@@ -90,7 +90,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number, lokiPenalty:
 	}
 
 	if (index === 0) {
-		let enabledCardCount = 7
+		let enabledCardCount: number
 		let updatedEnabledCardCount = 7
 		let unblankedHand = hand
 		do {
