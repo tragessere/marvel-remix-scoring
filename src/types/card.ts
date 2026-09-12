@@ -1,24 +1,33 @@
 export enum CARD_TYPE {
-	'VILLAIN',
-	'HERO',
-	'ALLY',
-	'LOCATION',
-	'CONDITION',
-	'EQUIPMENT',
-	'MANEUVER'
+	VILLAIN,
+	HERO,
+	ALLY,
+	LOCATION,
+	CONDITION,
+	EQUIPMENT,
+	MANEUVER
 }
 
 export enum TAG {
 	AGILITY,
 	ASGARD,
 	BOSS,
+	COSMIC,
+	FANTASTIC_FOUR,
 	FLIGHT,
 	GAMMA,
+	GUARDIAN,
+	INFINITY_STONE,
 	INTEL,
+	KREE,
+	MAGIC,
 	MUTANT,
 	RANGE,
 	STRENGTH,
+	SPACE,
+	SYMBIOTE,
 	TECH,
+	TIME,
 	URBAN,
 	WAKANDA,
 	WORTHY
@@ -40,6 +49,7 @@ export interface ModifiedCard extends Card {
 	isBlanked: boolean
 	isTextBlanked: boolean
 	modifiedName?: string
+	modifiedType?: CARD_TYPE
 	modifiedPower: number
 	modifiedTags: TAG[]
 	isTransformed?: boolean

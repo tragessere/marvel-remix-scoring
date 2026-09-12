@@ -1,4 +1,3 @@
-import i18n from 'i18next'
 import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
 import { findCard, removeTag } from '../utils/card.ts'
@@ -6,6 +5,7 @@ import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
 
 export const cardList: Readonly<Record<number, Card>> = {
+	//#region Marvel Remix
 	//#region Ally
 	1: {
 		// Forge
@@ -474,13 +474,11 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 13
 				removeTag(self, TAG.TECH)
 				self.modifiedTags.push(TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 1
 				removeTag(self, TAG.STRENGTH, 3)
 				self.modifiedTags.push(TAG.TECH)
@@ -509,12 +507,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 12
 				self.modifiedTags.push(TAG.FLIGHT, TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 4
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
@@ -541,12 +537,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 8
 				self.modifiedTags.push(TAG.FLIGHT, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.STRENGTH)
@@ -576,13 +570,11 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
 				self.modifiedPower = 9
 				self.modifiedTags.push(TAG.FLIGHT)
 				self.modifiedTags.push(TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
 				self.modifiedPower = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
@@ -1432,6 +1424,908 @@ export const cardList: Readonly<Record<number, Card>> = {
 		score() {
 			return this.power
 		}
-	}
+	},
 	//#endregion Promo
+	//#endregion Marvel Remix
+
+	//#region Marvel Remix - The Cosmos
+	//#region Ally
+	81: {
+		// Mantis
+		id: 81,
+		type: CARD_TYPE.ALLY,
+		power: 2,
+		tags: [TAG.GUARDIAN, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	82: {
+		// Nick Fury, Jr.
+		id: 82,
+		type: CARD_TYPE.ALLY,
+		power: 3,
+		tags: [TAG.TECH, TAG.INTEL, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	83: {
+		// Eddie Brock
+		id: 83,
+		type: CARD_TYPE.ALLY,
+		power: 3,
+		tags: [TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	84: {
+		// Intergalactic Kingdom of Wakanda
+		id: 84,
+		type: CARD_TYPE.ALLY,
+		power: 5,
+		tags: [TAG.WAKANDA, TAG.SPACE, TAG.TECH],
+		score() {
+			return this.power
+		}
+	},
+	85: {
+		// Cosmo
+		id: 85,
+		type: CARD_TYPE.ALLY,
+		power: 5,
+		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	86: {
+		// Timekeepers
+		id: 86,
+		type: CARD_TYPE.ALLY,
+		power: 7,
+		tags: [TAG.TIME, TAG.INTEL, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	87: {
+		// Nova Corps
+		id: 87,
+		type: CARD_TYPE.ALLY,
+		power: 7,
+		tags: [TAG.SPACE, TAG.TECH, TAG.FLIGHT],
+		score() {
+			return this.power
+		}
+	},
+	88: {
+		// In-Betweener
+		id: 88,
+		type: CARD_TYPE.ALLY,
+		power: 7,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	89: {
+		// Uatu, The Watcher
+		id: 89,
+		type: CARD_TYPE.ALLY,
+		power: 10,
+		tags: [TAG.COSMIC, TAG.SPACE, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Ally
+	//#region Condition
+	90: {
+		// Unexpected Strength
+		id: 90,
+		type: CARD_TYPE.CONDITION,
+		power: 19,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	91: {
+		// Cosmically Attuned
+		id: 91,
+		type: CARD_TYPE.CONDITION,
+		power: 15,
+		tags: [TAG.TIME],
+		score() {
+			return this.power
+		}
+	},
+	92: {
+		// Rediscovered Artifact
+		id: 92,
+		type: CARD_TYPE.CONDITION,
+		power: 16,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	93: {
+		// Crimelord
+		id: 93,
+		type: CARD_TYPE.CONDITION,
+		power: 17,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	94: {
+		// Exiled
+		id: 94,
+		type: CARD_TYPE.CONDITION,
+		power: 18,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Condition
+	//#region Equipment
+	95: {
+		// Infinity Gauntlet
+		id: 95,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 0,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	96: {
+		// All-Black the Necrosword
+		id: 96,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 0,
+		tags: [TAG.SYMBIOTE, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	97: {
+		// The Milano
+		id: 97,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 0,
+		tags: [TAG.SPACE, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	98: {
+		// Forever Crystal
+		id: 98,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 6,
+		tags: [TAG.TIME],
+		score() {
+			return this.power
+		}
+	},
+	99: {
+		// Quantum Bands
+		id: 99,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 8,
+		tags: [TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	100: {
+		// Stormbreaker
+		id: 100,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 9,
+		tags: [TAG.ASGARD, TAG.STRENGTH, TAG.FLIGHT],
+		score() {
+			return this.power
+		}
+	},
+	101: {
+		// Power Stone
+		id: 101,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -9,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		score() {
+			return this.power
+		}
+	},
+	102: {
+		// Reality Stone
+		id: 102,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -8,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		score() {
+			return this.power
+		}
+	},
+	103: {
+		// Space Stone
+		id: 103,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -7,
+		tags: [TAG.COSMIC, TAG.SPACE, TAG.INFINITY_STONE],
+		score() {
+			return this.power
+		}
+	},
+	104: {
+		// Mind Stone
+		id: 104,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -5,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		score() {
+			return this.power
+		}
+	},
+	105: {
+		// Soul Stone
+		id: 105,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -4,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		score() {
+			return this.power
+		}
+	},
+	106: {
+		// Time Stone
+		id: 106,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -6,
+		tags: [TAG.COSMIC, TAG.TIME, TAG.INFINITY_STONE],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Equipment
+	//#region Hero
+	107: {
+		// Carol Danvers
+		id: 107,
+		type: CARD_TYPE.HERO,
+		power: 2,
+		tags: [TAG.FLIGHT],
+		transformedTags: [TAG.SPACE, TAG.KREE, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	108: {
+		// Silver Surfer
+		id: 108,
+		type: CARD_TYPE.HERO,
+		power: 7,
+		tags: [TAG.FLIGHT, TAG.RANGE, TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	109: {
+		// Doctor Strange
+		id: 109,
+		type: CARD_TYPE.HERO,
+		power: 1,
+		tags: [TAG.MAGIC, TAG.FLIGHT],
+		score() {
+			return this.power
+		}
+	},
+	110: {
+		// Mr. Fantastic
+		id: 110,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.FANTASTIC_FOUR, TAG.TECH, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	111: {
+		// Ms. Marvel
+		id: 111,
+		type: CARD_TYPE.HERO,
+		power: 5,
+		tags: [TAG.KREE, TAG.STRENGTH, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	112: {
+		// Human Torch
+		id: 112,
+		type: CARD_TYPE.HERO,
+		power: 5,
+		tags: [TAG.FANTASTIC_FOUR, TAG.AGILITY, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	113: {
+		// Groot
+		id: 113,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.GUARDIAN, TAG.STRENGTH, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	114: {
+		// Nova
+		id: 114,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.SPACE, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	115: {
+		// The Thing
+		id: 115,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.FANTASTIC_FOUR, TAG.STRENGTH, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	116: {
+		// She-Hulk, Attorney
+		id: 116,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.GAMMA, TAG.INTEL, TAG.STRENGTH, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	117: {
+		// Kitty Pryde
+		id: 117,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.GUARDIAN, TAG.MUTANT, TAG.TECH],
+		score() {
+			return this.power
+		}
+	},
+	118: {
+		// Star-Lord
+		id: 118,
+		type: CARD_TYPE.HERO,
+		power: 5,
+		tags: [TAG.GUARDIAN, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	119: {
+		// Drax
+		id: 119,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.GUARDIAN, TAG.STRENGTH, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	120: {
+		// Rocket Racoon
+		id: 120,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.GUARDIAN, TAG.TECH, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	121: {
+		// Spectrum
+		id: 121,
+		type: CARD_TYPE.HERO,
+		power: 7,
+		tags: [TAG.AGILITY, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	122: {
+		// Invisible Woman
+		id: 122,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.FANTASTIC_FOUR, TAG.INTEL, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	123: {
+		// Moondragon
+		id: 123,
+		type: CARD_TYPE.HERO,
+		power: 0,
+		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	124: {
+		// Gamora
+		id: 124,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	125: {
+		// Beta Ray Bill
+		id: 125,
+		type: CARD_TYPE.HERO,
+		power: 8,
+		tags: [TAG.ASGARD, TAG.WORTHY, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Hero
+	//#region Location
+	126: {
+		// Exploding Ship
+		id: 126,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	127: {
+		// Asteroid Field
+		id: 127,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	128: {
+		// Sakaar - Planet Hulk
+		id: 128,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.URBAN, TAG.GAMMA],
+		score() {
+			return this.power
+		}
+	},
+	129: {
+		// Baxter Building
+		id: 129,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.URBAN, TAG.TECH, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	130: {
+		// Knowhere
+		id: 130,
+		type: CARD_TYPE.LOCATION,
+		power: 4,
+		tags: [TAG.SPACE, TAG.URBAN],
+		score() {
+			return this.power
+		}
+	},
+	131: {
+		// Research Lab
+		id: 131,
+		type: CARD_TYPE.LOCATION,
+		power: 4,
+		tags: [TAG.MAGIC],
+		score() {
+			return this.power
+		}
+	},
+	132: {
+		// Latveria
+		id: 132,
+		type: CARD_TYPE.LOCATION,
+		power: 4,
+		tags: [TAG.URBAN, TAG.TECH],
+		score() {
+			return this.power
+		}
+	},
+	133: {
+		// The Peak (VII)
+		id: 133,
+		type: CARD_TYPE.LOCATION,
+		power: 5,
+		tags: [TAG.SPACE, TAG.TECH, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	134: {
+		// Citadel at the End of Time
+		id: 134,
+		type: CARD_TYPE.LOCATION,
+		power: 9,
+		tags: [TAG.TIME, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	135: {
+		// Anti-Alien Riots
+		id: 135,
+		type: CARD_TYPE.LOCATION,
+		power: 14,
+		tags: [TAG.URBAN],
+		score() {
+			return this.power
+		}
+	},
+	136: {
+		// Prison Break
+		id: 136,
+		type: CARD_TYPE.LOCATION,
+		power: 18,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	137: {
+		// Ego
+		id: 137,
+		type: CARD_TYPE.LOCATION,
+		power: -6,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	138: {
+		// Battleworld
+		id: 138,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	139: {
+		// Interdimensional Rift
+		id: 139,
+		type: CARD_TYPE.LOCATION,
+		power: 9,
+		tags: [TAG.COSMIC],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Location
+	//#region Maneuver
+	140: {
+		// Dodge Blasters
+		id: 140,
+		type: CARD_TYPE.MANEUVER,
+		power: 0,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	141: {
+		// Into Orbit
+		id: 141,
+		type: CARD_TYPE.MANEUVER,
+		power: 0,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	142: {
+		// Hurl Asteroids
+		id: 142,
+		type: CARD_TYPE.MANEUVER,
+		power: 0,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	143: {
+		// Investigation
+		id: 143,
+		type: CARD_TYPE.MANEUVER,
+		power: 12,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	144: {
+		// Buried in Soldiers
+		id: 144,
+		type: CARD_TYPE.MANEUVER,
+		power: 12,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	145: {
+		// Track Minion
+		id: 145,
+		type: CARD_TYPE.MANEUVER,
+		power: 13,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	146: {
+		// Travel Through Time
+		id: 146,
+		type: CARD_TYPE.MANEUVER,
+		power: -4,
+		tags: [TAG.COSMIC, TAG.TIME],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Maneuver
+	//#region Villain
+	147: {
+		// Galactus
+		id: 147,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	148: {
+		// Magus
+		id: 148,
+		type: CARD_TYPE.VILLAIN,
+		power: 7,
+		tags: [TAG.TIME],
+		transformedTags: [TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT],
+		score() {
+			return this.power
+		}
+	},
+	149: {
+		// Venom
+		id: 149,
+		type: CARD_TYPE.VILLAIN,
+		power: 8,
+		tags: [TAG.SYMBIOTE],
+		transformedTags: [TAG.SYMBIOTE, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	150: {
+		// Nebula
+		id: 150,
+		type: CARD_TYPE.VILLAIN,
+		power: 9,
+		tags: [],
+		transformedTags: [TAG.GUARDIAN, TAG.TECH, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	151: {
+		// Doctor Doom
+		id: 151,
+		type: CARD_TYPE.VILLAIN,
+		power: -20,
+		tags: [TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	152: {
+		// Thanos
+		id: 152,
+		type: CARD_TYPE.VILLAIN,
+		power: 10,
+		tags: [TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	153: {
+		// Invading Armada
+		id: 153,
+		type: CARD_TYPE.VILLAIN,
+		power: -10,
+		tags: [TAG.SPACE, TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	154: {
+		// Gorr
+		id: 154,
+		type: CARD_TYPE.VILLAIN,
+		power: -7,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	155: {
+		// Supreme Intelligence
+		id: 155,
+		type: CARD_TYPE.VILLAIN,
+		power: -7,
+		tags: [TAG.KREE, TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	156: {
+		// Emperor N'Jadaka
+		id: 156,
+		type: CARD_TYPE.VILLAIN,
+		power: -6,
+		tags: [TAG.SYMBIOTE, TAG.WAKANDA, TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	157: {
+		// Yon-Rogg
+		id: 157,
+		type: CARD_TYPE.VILLAIN,
+		power: -5,
+		tags: [TAG.KREE],
+		score() {
+			return this.power
+		}
+	},
+	158: {
+		// Ronan the Accuser
+		id: 158,
+		type: CARD_TYPE.VILLAIN,
+		power: -4,
+		tags: [TAG.KREE, TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	159: {
+		// Knull
+		id: 159,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	160: {
+		// Annihilus
+		id: 160,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [],
+		score() {
+			return this.power
+		}
+	},
+	161: {
+		// Carnage
+		id: 161,
+		type: CARD_TYPE.VILLAIN,
+		power: 10,
+		tags: [TAG.SYMBIOTE],
+		score() {
+			return this.power
+		}
+	},
+	162: {
+		// Immortus
+		id: 162,
+		type: CARD_TYPE.VILLAIN,
+		power: 14,
+		tags: [TAG.TIME],
+		score() {
+			return this.power
+		}
+	},
+	163: {
+		// The Matriarch
+		id: 163,
+		type: CARD_TYPE.VILLAIN,
+		power: 20,
+		tags: [TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	164: {
+		// The High Evolutionary
+		id: 164,
+		type: CARD_TYPE.VILLAIN,
+		power: 16,
+		tags: [TAG.BOSS],
+		score() {
+			return this.power
+		}
+	},
+	165: {
+		// Toxin
+		id: 165,
+		type: CARD_TYPE.VILLAIN,
+		power: 6,
+		tags: [TAG.SYMBIOTE],
+		score() {
+			return this.power
+		}
+	},
+	166: {
+		// Champion
+		id: 166,
+		type: CARD_TYPE.VILLAIN,
+		power: 8,
+		tags: [TAG.COSMIC],
+		score() {
+			return this.power
+		}
+	},
+	167: {
+		// Collector
+		id: 167,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [TAG.COSMIC],
+		score() {
+			return this.power
+		}
+	},
+	168: {
+		// Grandmaster
+		id: 168,
+		type: CARD_TYPE.VILLAIN,
+		power: 9,
+		tags: [TAG.COSMIC],
+		score() {
+			return this.power
+		}
+	}
+	//#endregion Villain
+	//#endregion Marvel Remix - The Cosmos
 }

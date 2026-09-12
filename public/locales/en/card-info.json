@@ -22,7 +22,16 @@
 		"gamma": "Gamma",
 		"worthy": "Worthy",
 		"urban": "Urban",
-		"boss": "Boss"
+		"boss": "Boss",
+		"time": "Time",
+		"space": "Space",
+		"cosmic": "Cosmic",
+		"fantastic_four": "Fantastic 4",
+		"guardian": "Guardian",
+		"kree": "Kree",
+		"symbiote": "Symbiote",
+		"magic": "Magic",
+		"infinity_stone": "Infinity Stone"
 	},
 	"1": {
 		"name": "Forge",
@@ -300,7 +309,7 @@
 	},
 	"71": {
 		"name": "The Leader",
-		"sortName": "Leader, The",
+		"sort-name": "Leader, The",
 		"text": "<score-negative>-3</score-negative> for each <strength /> and other <gamma />."
 	},
 	"72": {
@@ -338,5 +347,356 @@
 	"80": {
 		"name": "Squirrel Girl",
 		"text": "Ignore the text box for all <villain>Villains</villain>. All negative <villain>Villain</villain> base powers become positive."
+	},
+	"81": {
+		"name": "Mantis",
+		"text": "<score>+</score> one number that appears before the words 'for each' or 'with' on one other <hero /> or <ally />."
+	},
+	"82": {
+		"name": "Nick Fury, Jr.",
+		"text": "<score>+3</score> for each <hero />."
+	},
+	"83": {
+		"name": "Eddie Brock",
+		"text": "<score>+12</score> with any <symbiote />."
+	},
+	"84": {
+		"name": "Intergalactic Kingdom of Wakanda"
+	},
+	"85": {
+		"name": "Cosmo",
+		"text": "<score>+5</score> with another <guardian />."
+	},
+	"86": {
+		"name": "Timekeepers",
+		"text": "<score>+7</score> for each other <time />."
+	},
+	"87": {
+		"name": "Nova Corps",
+		"text": "Blanked unless with another <space />."
+	},
+	"88": {
+		"name": "In-Betweener",
+		"text": "<score-negative>-15</score-negative> unless you have at least three cards with base power values higher than <name>In-Betweener</name> and three cards with base power below."
+	},
+	"89": {
+		"name": "Uatu, The Watcher",
+		"text": "To keep or recruit <name>Uatu, The Watcher</name>, you must correctly name three non-<cosmic /> cards, and which other player holds each card. If you are correct, you may keep this card. Otherwise place it in the discard area and end your turn."
+	},
+	"90": {
+		"name": "Unexpected Strength",
+		"text": "Blanked unless your hand has more <ally>Allies</ally> than <hero>Heroes</hero>."
+	},
+	"91": {
+		"name": "Cosmically Attuned",
+		"text": "Blanked unless with <intel /> and <cosmic />."
+	},
+	"92": {
+		"name": "Rediscovered Artifact",
+		"text": "Blanked unless with both <intel /> and <equipment />."
+	},
+	"93": {
+		"name": "Crimelord",
+		"text": "Blanked unless with both <urban /> and <boss />."
+	},
+	"94": {
+		"name": "Exiled",
+		"text": "Blanked unless with three or more <space />."
+	},
+	"95": {
+		"name": "Infinity Gauntlet",
+		"text": "<score>+13</score> for each <infinity_stone />. If you have this card and six cards with <infinity_stone />, reveal it immediately and you win!"
+	},
+	"96": {
+		"name": "All-Black the Necrosword",
+		"text": "<score>+5</score> for each <cosmic /> and for each <asgard />."
+	},
+	"97": {
+		"name": "The Milano",
+		"sort-name": "Milano, The",
+		"text": "<score>+3</score> for each <guardian />, for each <tech />, and for each <agility />."
+	},
+	"98": {
+		"name": "Forever Crystal",
+		"text": "<score>+6</score> for each <kree />."
+	},
+	"99": {
+		"name": "Quantum Bands",
+		"text": "Blanked unless with <tech />."
+	},
+	"100": {
+		"name": "Stormbreaker",
+		"text": "Blanked unless with <strength /> or <worthy />."
+	},
+	"101": {
+		"name": "Power Stone",
+		"text": "Double all tags on one other card in your hand."
+	},
+	"102": {
+		"name": "Reality Stone",
+		"text": "Choose a tag on a card in your hand and count it as <magic />. (<magic /> may count as any other tag.)"
+	},
+	"103": {
+		"name": "Space Stone",
+		"text": "Shuffle all non-<cosmic /> cards from the discard area and place them onto the bottom of their deck, then replace them with an equal number of cards from the top of the Remix deck. Then take another turn."
+	},
+	"104": {
+		"name": "Mind Stone",
+		"text": "ENDGAME: You may choose one unblanked <hero /> or <ally /> in an opponent's hand and count it as an additional card in your hand. If it can transform, use the state the opponent is using."
+	},
+	"105": {
+		"name": "Soul Stone",
+		"text": "Discard a <hero /> or <ally /> from your hand and remove it from the game. Draw six cards from the Remix deck, keep one non-<cosmic /> card, and remove the other five from the game."
+	},
+	"106": {
+		"name": "Time Stone",
+		"text": "Name a tag. Reveal cards from either deck until you reveal a card with that tag or twelve cards. Place the last card in the discard area. Put the others on the bottom of the deck. Then take another turn."
+	},
+	"107": {
+		"name": "Carol Danvers",
+		"modified-name": "Captain Marvel",
+		"text": "Transform with <cosmic /> or <kree />."
+	},
+	"108": {
+		"name": "Silver Surfer",
+		"text": "If <name>Silver Surfer</name> is placed in the discard area with six or fewer other cards in the discard area, place the <name>Galactus</name> card in play."
+	},
+	"109": {
+		"name": "Doctor Strange",
+		"text": "(<magic /> may count as any other tag.)"
+	},
+	"110": {
+		"name": "Mr. Fantastic",
+		"text": "<score>+4</score> for each other <fantastic_four />."
+	},
+	"111": {
+		"name": "Ms. Marvel"
+	},
+	"112": {
+		"name": "Human Torch"
+	},
+	"113": {
+		"name": "Groot",
+		"text": "<score>+3</score> with <name>Rocket Racoon</name>."
+	},
+	"114": {
+		"name": "Nova"
+	},
+	"115": {
+		"name": "The Thing",
+		"sort-name": "Thing, The"
+	},
+	"116": {
+		"name": "She-Hulk, Attorney"
+	},
+	"117": {
+		"name": "Kitty Pryde",
+		"text": "<score>+4</score> with any <location />."
+	},
+	"118": {
+		"name": "Star-Lord",
+		"text": "<score>+4</score> for each other <guardian />."
+	},
+	"119": {
+		"name": "Drax"
+	},
+	"120": {
+		"name": "Rocket Racoon",
+		"text": "<score>+2</score> with <name>Groot</name>."
+	},
+	"121": {
+		"name": "Spectrum"
+	},
+	"122": {
+		"name": "Invisible Woman",
+		"text": "<score>+3</score> for each card with 0 base power."
+	},
+	"123": {
+		"name": "Moondragon",
+		"text": "<score>+3</score> for each other <intel /> and for each other <guardian /> in your hand and the hands of the players to your left and right."
+	},
+	"124": {
+		"name": "Gamora"
+	},
+	"125": {
+		"name": "Beta Ray Bill"
+	},
+	"126": {
+		"name": "Exploding Ship",
+		"text": "<score>+4</score> for each <flight /> and for each <tech />."
+	},
+	"127": {
+		"name": "Asteroid Field",
+		"text": "<score>+8</score> for each pair of <range /> and <agility />."
+	},
+	"128": {
+		"name": "Sakaar - Planet Hulk",
+		"text": "<score>+5</score> for each <hero /> in the discard area."
+	},
+	"129": {
+		"name": "Baxter Building",
+		"text": "<score>+8</score> for each <fantastic_four />."
+	},
+	"130": {
+		"name": "Knowhere",
+		"text": "<score>+4</score> for each <intel />."
+	},
+	"131": {
+		"name": "Research Lab",
+		"text": "Blanked unless with <tech />. (<magic /> may count as any other tag.)"
+	},
+	"132": {
+		"name": "Latveria",
+		"text": "<score>+12</score> with <fantastic_four /> or <name>Doctor Doom</name>."
+	},
+	"133": {
+		"name": "The Peak (VII)",
+		"sort-name": "Peak (VII), The"
+	},
+	"134": {
+		"name": "Citadel at the End of Time",
+		"text": "ENDGAME: Reveal <name>Citadel at the End of Time</name> from your hand at the end of the game to take one extra turn."
+	},
+	"135": {
+		"name": "Anti-Alien Riots",
+		"text": "Blanked unless with both <space /> and another <urban />."
+	},
+	"136": {
+		"name": "Prison Break",
+		"text": "Blanked unless with all of <intel />, <agility />, and <flight />."
+	},
+	"137": {
+		"name": "Ego",
+		"text": "Draw six cards from either deck. Add one to the discard area and remove the rest from the game. Then take another turn."
+	},
+	"138": {
+		"name": "Battleworld",
+		"text": "<score>+10</score> for each <hero />-<villain /> pair, <score-negative>-20</score-negative> for each unmatched <hero /> or <villain />."
+	},
+	"139": {
+		"name": "Interdimensional Rift",
+		"text": "To keep or recruit <name>Interdimensional Rift</name>, reveal cards from your hand with at least one <time /> and one <space />."
+	},
+	"140": {
+		"name": "Dodge Blasters",
+		"text": "<score>+10</score> for each pair of <flight /> and <agility />."
+	},
+	"141": {
+		"name": "Into Orbit",
+		"text": "<score>+9</score> for each pair of <space /> and <flight />."
+	},
+	"142": {
+		"name": "Hurl Asteroids",
+		"text": "<score>+9</score> for each pair of <strength /> and <space />."
+	},
+	"143": {
+		"name": "Investigation",
+		"text": "Blanked unless with both <boss /> and <intel />."
+	},
+	"144": {
+		"name": "Buried in Soldiers",
+		"text": "Blanked unless with both <boss /> and <strength />."
+	},
+	"145": {
+		"name": "Track Minion",
+		"text": "Blanked unless with both <boss /> and <tech />."
+	},
+	"146": {
+		"name": "Travel Through Time",
+		"text": "Choose 0-4 non-<cosmic /> cards from the discard area and remove them from the game, then replace them with an equal number of cards from the bottom of the Remix deck. Then take another turn."
+	},
+	"147": {
+		"name": "Galactus",
+		"text": "If <name>Galactus</name> is in play, any player with fewer than seven different tags on <hero>Heroes</hero>, <ally>Allies</ally>, and <equipment /> loses 30 points, and the player or players with the most different tags on these cards gains 15 points. <name>Galactus</name> counts as an extra card in all players' hands."
+	},
+	"148": {
+		"name": "Magus",
+		"modified-name": "Adam Warlock",
+		"text": "Transform with another <time />.",
+		"transformText": "Transform with another <time />. Cards with <infinity_stone /> all count as 0 for you, instead of their printed value."
+	},
+	"149": {
+		"name": "Venom",
+		"modified-name": "Venom, Space Knight",
+		"text": "Transform with one or more <ally />. (As <name>Venom, Space Knight</name>, copy a tag on one <ally />.)"
+	},
+	"150": {
+		"name": "Nebula",
+		"modified-name": "Nebula, Guardian",
+		"text": "Transform with <guardian /> or two or more <intel />."
+	},
+	"151": {
+		"name": "Doctor Doom",
+		"text": "<score>+45</score> with all of <tech />, <intel />, <strength />, and <range />."
+	},
+	"152": {
+		"name": "Thanos",
+		"text": "Instead of taking a normal turn, you may reveal this card and steal an <infinity_stone /> from another player. That player may immediately take an extra turn. After they do so, activate the <infinity_stone /> you stole if it has an ability. <score>+10</score> for each <infinity_stone />."
+	},
+	"153": {
+		"name": "Invading Armada",
+		"text": "<score>+5</score> for each other <space />, for each <flight />, and for each <range />."
+	},
+	"154": {
+		"name": "Gorr",
+		"text": "<score>+7</score> for each <cosmic /> and for each <asgard />."
+	},
+	"155": {
+		"name": "Supreme Intelligence",
+		"text": "<score>+7</score> for each <intel /> and for each other <kree />."
+	},
+	"156": {
+		"name": "Emperor N'Jadaka",
+		"text": "<score>+6</score> for each <space />."
+	},
+	"157": {
+		"name": "Yon-Rogg",
+		"text": "<score>+5</score> for each <strength /> and for each <agility />."
+	},
+	"158": {
+		"name": "Ronan the Accuser",
+		"text": "<score>+4</score> for each <strength /> and for each <range />."
+	},
+	"159": {
+		"name": "Knull",
+		"text": "<score>+11</score> for each <symbiote />."
+	},
+	"160": {
+		"name": "Annihilus",
+		"text": "Choose another card in your hand that contains a negative number anywhere on the card. Add the absolute value of that number (the same number without the negative sign) to <name>Annihilus</name>."
+	},
+	"161": {
+		"name": "Carnage",
+		"text": "Add one number that appears before the words 'for each' on one other <villain />."
+	},
+	"162": {
+		"name": "Immortus",
+		"text": "<score-negative>-20</score-negative> unless with at least one other <time />."
+	},
+	"163": {
+		"name": "The Matriarch",
+		"sort-name": "Matriarch, The",
+		"text": "<score-negative>-20</score-negative> if your hand contains more than six different tags."
+	},
+	"164": {
+		"name": "The High Evolutionary",
+		"sort-name": "High Evolutionary, The",
+		"text": "<score-negative>-20</score-negative> unless with six or more different types of card in the discard area."
+	},
+	"165": {
+		"name": "Toxin",
+		"text": "Double one tag on a <hero />, <ally />, or <villain />."
+	},
+	"166": {
+		"name": "Champion",
+		"text": "To keep or recruit <name>Champion</name>, reveal cards from your hand with at least three <strength /> tags."
+	},
+	"167": {
+		"name": "Collector",
+		"text": "<score>+3</score> with three cards of the same type, <score>+5</score> with four cards of the same type, <score>+10</score> with five, <score>+20</score> with six, or <score>+35</score> with seven."
+	},
+	"168": {
+		"name": "Grandmaster",
+		"text": "When <name>Grandmaster</name> is drawn, reveal it, and all players may simultaneously reveal any two non-<villain /> cards from their hands. The player with the highest total strength of the two cards may keep this card. If there is a tie, keep revealing cards until the tie is broken. Then take another turn."
 	}
 }

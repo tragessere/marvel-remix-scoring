@@ -23,6 +23,8 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 	const scoredCard = findCard(result.finalHand, cardId)
 	const [tags, addedTags] = mapCardTags(scoredCard)
 
+	const cardNameAccessor = scoredCard.isTransformed ? `${card.id}.modified-name` : `${card.id}.name`
+
 	return (
 		<div
 			className={`simple-card${scoredCard.isBlanked ? ' blanked' : scoredCard.isTextBlanked ? ' text-blanked' : ''} ${category}`}
@@ -33,7 +35,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 			}}>
 			<div className={`card-top-border bg-color-${category}${scoredCard.isTransformed ? ' transformed' : ''}`}>
 				<span className="base-power">{scoredCard.isBlanked ? '-' : card.power}</span>
-				<span className="name outline">{scoredCard.modifiedName || t(`${card.id}.name`)}</span>
+				<span className="name outline">{t(cardNameAccessor)}</span>
 				{result.score !== undefined && <span className="final-score outline">{scoredCard.modifiedPower}</span>}
 			</div>
 			<div className="card-content">
