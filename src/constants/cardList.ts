@@ -2140,8 +2140,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 0,
 		tags: [TAG.COSMIC, TAG.SPACE],
 		score(hand) {
-			const heroCount = count(hand, card => card.modifiedType === CARD_TYPE.HERO)
-			const villainCount = count(hand, card => card.modifiedType === CARD_TYPE.VILLAIN)
+			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
+			const villainCount = count(hand, card => card.type === CARD_TYPE.VILLAIN)
 			const pairCount = Math.min(heroCount, villainCount)
 			const unmatchedCount = Math.abs(heroCount - villainCount)
 			return this.power + pairCount * 10 - unmatchedCount * 20
@@ -2586,7 +2586,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 				cardTypes.add(card.type)
 			}
 			const typeScores = [0, 0, 3, 5, 10, 20, 35]
-			return this.power + typeScores[cardTypes.size]
+			return this.power + typeScores[cardTypes.size - 1]
 		}
 	},
 	168: {
