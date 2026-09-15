@@ -39,6 +39,8 @@ export interface Card {
 	power: number
 	tags: TAG[]
 	transformedTags?: TAG[]
+	bonusValue?: number
+	negativeValue?: number
 	effect?: (hand: ModifiedCard[], index: number) => void
 	modificationOptions?: (hand: ModifiedCard[]) => number
 	score: (hand: ModifiedCard[]) => number

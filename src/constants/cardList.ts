@@ -13,6 +13,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 4,
 		tags: [TAG.TECH, TAG.MUTANT],
+		bonusValue: 4,
 		score(hand) {
 			const equipmentCount = count(hand, card => card.type === CARD_TYPE.EQUIPMENT)
 			return this.power + equipmentCount * 4
@@ -24,6 +25,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 4,
 		tags: [TAG.INTEL, TAG.ASGARD],
+		bonusValue: 6,
 		score(hand) {
 			const containsBifrost = hand.some(card => card.id === 42)
 			return this.power + (containsBifrost ? 6 : 0)
@@ -35,6 +37,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 5,
 		tags: [TAG.FLIGHT, TAG.RANGE],
+		bonusValue: 7,
 		score(hand) {
 			const containsShadowcat = hand.some(card => card.id === 21)
 			return this.power + (containsShadowcat ? 7 : 0)
@@ -46,6 +49,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 5,
 		tags: [TAG.TECH, TAG.WORTHY],
+		bonusValue: 8,
 		score(hand) {
 			const containsThor = hand.some(card => card.id === 30)
 			return this.power + (containsThor ? 8 : 0)
@@ -159,6 +163,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 18,
 		tags: [TAG.STRENGTH, TAG.GAMMA],
+		negativeValue: -3,
 		score(hand) {
 			let heroOrAllyCount = count(hand, card => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			const urbanCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.URBAN))
@@ -280,6 +285,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.WORTHY],
+		bonusValue: 4,
 		score(hand) {
 			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO && card.id !== 19)
 			const hasShield = hand.some(card => card.id === 16)
@@ -292,6 +298,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.RANGE, TAG.MUTANT],
+		bonusValue: 3,
 		score(hand) {
 			const mutantCount = sumBy(hand, card =>
 				card.id !== 20 ? count(card.modifiedTags, t => t === TAG.MUTANT) : 0
@@ -305,6 +312,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.TECH, TAG.MUTANT],
+		bonusValue: 4,
 		score(hand) {
 			const hasLocation = hand.some(card => card.type === CARD_TYPE.LOCATION)
 			return this.power + (hasLocation ? 4 : 0)
@@ -316,6 +324,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 5,
 		tags: [TAG.STRENGTH, TAG.AGILITY],
+		bonusValue: 5,
 		effect(hand) {
 			const hasMatchingLocation = hand.some(
 				c => c.type === CARD_TYPE.LOCATION && c.modifiedTags.includes(TAG.URBAN)
@@ -341,6 +350,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.STRENGTH, TAG.GAMMA],
+		bonusValue: 5,
 		score(hand) {
 			const gammaCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, t => t === TAG.GAMMA) : 0
@@ -354,6 +364,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.WAKANDA],
+		bonusValue: 5,
 		score(hand) {
 			const wakandaCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, t => t === TAG.WAKANDA) : 0
@@ -367,6 +378,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.INTEL, TAG.MUTANT],
+		bonusValue: 6,
 		score(hand) {
 			const hasCerebro = hand.some(card => card.id === 18)
 			const hasMansion = hand.some(card => card.id === 54)
@@ -379,6 +391,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.MUTANT],
+		bonusValue: 6,
 		score(hand) {
 			const hasMatchingVillain = hand.some(c => c.type === CARD_TYPE.VILLAIN && c.modifiedTags.includes(TAG.BOSS))
 			return this.power + (hasMatchingVillain ? 6 : 0)
@@ -1074,6 +1087,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -10,
 		tags: [],
+		bonusValue: 5,
+		negativeValue: -10,
 		score(hand) {
 			const tagTypes = new Set<TAG>()
 			for (const card of hand) {
@@ -1090,6 +1105,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 8,
 		tags: [],
+		bonusValue: -5,
+		negativeValue: -5,
 		score(hand) {
 			const { hasMatchingLocation, maneuverCount } = hand.reduce(
 				(status, card) => {
@@ -1113,6 +1130,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -7,
 		tags: [],
+		bonusValue: 7,
+		negativeValue: -7,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.FLIGHT || tag === TAG.RANGE)
@@ -1126,6 +1145,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -9,
 		tags: [TAG.WAKANDA],
+		bonusValue: 9,
+		negativeValue: -9,
 		score(hand) {
 			const wakandaCount = sumBy(hand, card =>
 				card.id === this.id ? 0 : count(card.modifiedTags, tag => tag === TAG.WAKANDA)
@@ -1139,6 +1160,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.MUTANT],
+		negativeValue: -20,
 		score(hand) {
 			const cardTagCount: number[] = []
 			let intelCount = 0
@@ -1159,6 +1181,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
 		tags: [],
+		negativeValue: -20,
 		score(hand) {
 			const mutantCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.MUTANT))
 			return this.power + (mutantCount > 1 ? 0 : -20)
@@ -1170,6 +1193,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
 		tags: [TAG.GAMMA],
+		negativeValue: -20,
 		score(hand) {
 			const strengthCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.STRENGTH))
 			return this.power + (strengthCount > 1 ? 0 : -20)
@@ -1181,6 +1205,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.BOSS],
+		negativeValue: -20,
 		score(hand) {
 			const techCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.TECH))
 			return this.power + (techCount > 1 ? 0 : -20)
@@ -1192,6 +1217,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 18,
 		tags: [TAG.ASGARD],
+		negativeValue: -20,
 		score(hand) {
 			const asgardCount = sumBy(hand, card =>
 				card.id === this.id ? 0 : count(card.modifiedTags, tag => tag === TAG.ASGARD)
@@ -1205,6 +1231,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
 		tags: [TAG.GAMMA, TAG.BOSS],
+		bonusValue: -3,
+		negativeValue: -3,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.STRENGTH || (card.id !== this.id && tag === TAG.GAMMA))
@@ -1218,6 +1246,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
 		tags: [TAG.BOSS],
+		bonusValue: -3,
+		negativeValue: -3,
 		score(hand) {
 			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
 			return this.power - heroCount * 3
@@ -1436,9 +1466,13 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 2,
 		tags: [TAG.GUARDIAN, TAG.INTEL],
-		score() {
-			//TODO
-			return this.power
+		score(hand) {
+			const highestBonus = Math.max(
+				...hand
+					.filter(card => card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.HERO)
+					.map(card => card.bonusValue || 0)
+			)
+			return this.power + highestBonus
 		}
 	},
 	82: {
@@ -1447,6 +1481,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 3,
 		tags: [TAG.TECH, TAG.INTEL, TAG.RANGE],
+		bonusValue: 3,
 		score(hand) {
 			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
 			return this.power + heroCount * 3
@@ -1458,6 +1493,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 3,
 		tags: [TAG.INTEL],
+		bonusValue: 12,
 		score(hand) {
 			const hasSymbiote = hand.some(card => card.modifiedTags.includes(TAG.SYMBIOTE))
 			return this.power + (hasSymbiote ? 12 : 0)
@@ -1479,6 +1515,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 5,
 		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.RANGE],
+		bonusValue: 5,
 		score(hand) {
 			const hasOtherGuardian = hand.some(card => card.id !== this.id && card.modifiedTags.includes(TAG.GUARDIAN))
 			return this.power + (hasOtherGuardian ? 5 : 0)
@@ -1490,6 +1527,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 7,
 		tags: [TAG.TIME, TAG.INTEL, TAG.RANGE],
+		bonusValue: 7,
 		score(hand) {
 			const timeTagCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.TIME) : 0
@@ -1516,6 +1554,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 7,
 		tags: [TAG.COSMIC, TAG.SPACE],
+		negativeValue: -15,
 		score(hand) {
 			const higherCount = count(hand, card => card.power > this.power)
 			const lowerCount = count(hand, card => card.power < this.power)
@@ -1695,6 +1734,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: -9,
 		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -9,
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1706,6 +1746,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: -8,
 		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -8,
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1717,6 +1758,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: -7,
 		tags: [TAG.COSMIC, TAG.SPACE, TAG.INFINITY_STONE],
+		negativeValue: -7,
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1728,6 +1770,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: -5,
 		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -5,
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1739,6 +1782,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: -4,
 		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -4,
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1750,6 +1794,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.EQUIPMENT,
 		power: -6,
 		tags: [TAG.COSMIC, TAG.TIME, TAG.INFINITY_STONE],
+		negativeValue: -6,
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1817,6 +1862,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.FANTASTIC_FOUR, TAG.TECH, TAG.AGILITY],
+		bonusValue: 4,
 		score(hand) {
 			const fantastic4Count = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.FANTASTIC_FOUR) : 0
@@ -1850,6 +1896,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.GUARDIAN, TAG.STRENGTH, TAG.STRENGTH],
+		bonusValue: 3,
 		score(hand) {
 			const containsRocketRacoon = hand.some(card => card.id === 120)
 			return this.power + (containsRocketRacoon ? 3 : 0)
@@ -1891,6 +1938,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.GUARDIAN, TAG.MUTANT, TAG.TECH],
+		bonusValue: 4,
 		score(hand) {
 			const hasLocation = hand.some(card => card.type === CARD_TYPE.LOCATION)
 			return this.power + (hasLocation ? 4 : 0)
@@ -1902,6 +1950,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 5,
 		tags: [TAG.GUARDIAN, TAG.RANGE],
+		bonusValue: 4,
 		score(hand) {
 			const guardianCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.GUARDIAN) : 0
@@ -1925,6 +1974,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 6,
 		tags: [TAG.GUARDIAN, TAG.TECH, TAG.RANGE],
+		bonusValue: 2,
 		score(hand) {
 			const containsGroot = hand.some(card => card.id === 113)
 			return this.power + (containsGroot ? 2 : 0)
@@ -1946,6 +1996,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 6,
 		tags: [TAG.FANTASTIC_FOUR, TAG.INTEL, TAG.AGILITY],
+		bonusValue: 3,
 		score(hand) {
 			const zeroPowerCardCount = count(hand, card => card.power === 0)
 			return this.power + zeroPowerCardCount * 3
@@ -1957,6 +2008,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 0,
 		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.FLIGHT, TAG.RANGE],
+		bonusValue: 3,
 		score() {
 			// TODO
 			return this.power
@@ -2139,6 +2191,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.COSMIC, TAG.SPACE],
+		negativeValue: -20,
 		score(hand) {
 			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
 			const villainCount = count(hand, card => card.type === CARD_TYPE.VILLAIN)
@@ -2270,6 +2323,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.MANEUVER,
 		power: -4,
 		tags: [TAG.COSMIC, TAG.TIME],
+		negativeValue: -4,
 		score() {
 			return this.power
 		}
@@ -2387,6 +2441,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -20,
 		tags: [TAG.BOSS],
+		negativeValue: -20,
 		score(hand) {
 			const requiredTags = [TAG.TECH, TAG.INTEL, TAG.STRENGTH, TAG.RANGE]
 			const hasAllTags = requiredTags.every(tag => hand.some(card => card.modifiedTags.includes(tag)))
@@ -2410,6 +2465,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -10,
 		tags: [TAG.SPACE, TAG.BOSS],
+		bonusValue: 5,
+		negativeValue: -10,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(
@@ -2426,6 +2483,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -7,
 		tags: [],
+		bonusValue: 7,
+		negativeValue: -7,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.COSMIC || tag === TAG.ASGARD)
@@ -2439,6 +2498,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -7,
 		tags: [TAG.KREE, TAG.BOSS],
+		bonusValue: 7,
+		negativeValue: -7,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.INTEL || (card.id !== this.id && tag === TAG.KREE))
@@ -2452,6 +2513,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -6,
 		tags: [TAG.SYMBIOTE, TAG.WAKANDA, TAG.BOSS],
+		bonusValue: 6,
+		negativeValue: -6,
 		score(hand) {
 			const spaceCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.SPACE))
 			return this.power + spaceCount * 6
@@ -2463,6 +2526,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -5,
 		tags: [TAG.KREE],
+		bonusValue: 5,
+		negativeValue: -5,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.STRENGTH || tag === TAG.AGILITY)
@@ -2476,6 +2541,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -4,
 		tags: [TAG.KREE, TAG.BOSS],
+		bonusValue: 4,
+		negativeValue: -4,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.STRENGTH || tag === TAG.RANGE)
@@ -2489,6 +2556,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 0,
 		tags: [TAG.BOSS],
+		bonusValue: 11,
 		score(hand) {
 			const symbioteCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.SYMBIOTE))
 			return this.power + symbioteCount * 11
@@ -2500,9 +2568,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 0,
 		tags: [],
-		score() {
-			// TODO
-			return this.power
+		score(hand) {
+			// TODO - does this count Galactus?
+			const largestValue = Math.abs(Math.min(...hand.map(card => card.negativeValue || 0)))
+			return this.power + largestValue
 		}
 	},
 	161: {
@@ -2511,9 +2580,11 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 10,
 		tags: [TAG.SYMBIOTE],
-		score() {
-			// TODO
-			return this.power
+		score(hand) {
+			const highestBonus = Math.max(
+				...hand.filter(card => card.type === CARD_TYPE.VILLAIN).map(card => card.bonusValue || 0)
+			)
+			return this.power + highestBonus
 		}
 	},
 	162: {
@@ -2522,6 +2593,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.TIME],
+		negativeValue: -20,
 		score(hand) {
 			const hasTime = hand.some(card => card.id !== this.id && card.modifiedTags.includes(TAG.TIME))
 			return this.power - (hasTime ? 0 : 20)
@@ -2533,6 +2605,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 20,
 		tags: [TAG.BOSS],
+		negativeValue: -20,
 		score(hand) {
 			const tagTypes = new Set<TAG>()
 			for (const card of hand) {
@@ -2549,6 +2622,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 16,
 		tags: [TAG.BOSS],
+		negativeValue: -20,
 		score() {
 			// TODO
 			return this.power
