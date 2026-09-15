@@ -2581,12 +2581,13 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 0,
 		tags: [TAG.COSMIC],
 		score(hand) {
-			const cardTypes = new Set<CARD_TYPE>()
+			const cardTypes = new Array<number>(Object.keys(CARD_TYPE).length).fill(0)
 			for (const card of hand) {
-				cardTypes.add(card.type)
+				cardTypes[card.type]++
 			}
+			const setSize = Math.min(Math.max(...cardTypes), 7)
 			const typeScores = [0, 0, 3, 5, 10, 20, 35]
-			return this.power + typeScores[cardTypes.size - 1]
+			return this.power + typeScores[setSize - 1]
 		}
 	},
 	168: {
