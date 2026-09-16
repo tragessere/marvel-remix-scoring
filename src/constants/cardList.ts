@@ -1810,19 +1810,20 @@ export const cardList: Readonly<Record<number, Card>> = {
 		tags: [TAG.FLIGHT],
 		transformedTags: [TAG.SPACE, TAG.KREE, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
 		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(card =>
 				card.modifiedTags.some(tag => tag === TAG.COSMIC || tag === TAG.KREE)
 			)
 
-			if (self.isTransformed === shouldTransform) return
+			if (isTransformed === shouldTransform) return
 
 			if (shouldTransform) {
 				self.isTransformed = true
 				self.modifiedPower = 8
-				self.tags.push(TAG.SPACE)
-				self.tags.push(TAG.KREE)
-				self.tags.push(TAG.STRENGTH)
-				self.tags.push(TAG.RANGE)
+				self.modifiedTags.push(TAG.SPACE)
+				self.modifiedTags.push(TAG.KREE)
+				self.modifiedTags.push(TAG.STRENGTH)
+				self.modifiedTags.push(TAG.RANGE)
 			} else {
 				self.isTransformed = false
 				self.modifiedPower = 2
@@ -2349,9 +2350,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 		tags: [TAG.TIME],
 		transformedTags: [TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT],
 		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(card => card.id !== self.id && card.modifiedTags.includes(TAG.TIME))
 
-			if (self.isTransformed === shouldTransform) return
+			if (isTransformed === shouldTransform) return
 
 			if (shouldTransform) {
 				self.isTransformed = true
@@ -2381,9 +2383,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 		tags: [TAG.SYMBIOTE],
 		transformedTags: [TAG.SYMBIOTE, TAG.STRENGTH],
 		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(card => card.type === CARD_TYPE.ALLY)
 
-			if (self.isTransformed === shouldTransform) return
+			if (isTransformed === shouldTransform) return
 
 			if (shouldTransform) {
 				self.isTransformed = true
@@ -2409,11 +2412,12 @@ export const cardList: Readonly<Record<number, Card>> = {
 		tags: [],
 		transformedTags: [TAG.GUARDIAN, TAG.TECH, TAG.STRENGTH],
 		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
 			const hasGuardian = hand.some(card => card.modifiedTags.includes(TAG.GUARDIAN))
 			const hasIntel = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL)) > 2
 			const shouldTransform = hasGuardian && hasIntel
 
-			if (self.isTransformed == shouldTransform) return
+			if (isTransformed === shouldTransform) return
 
 			if (shouldTransform) {
 				self.isTransformed = true

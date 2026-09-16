@@ -78,6 +78,48 @@ describe('scoreHand', () => {
 		const result2 = scoreHand(hand, 12)
 		expect(result2.score).toBe(101)
 	})
+	it('counts as valid with a villain transformed to a hero', () => {
+		const hand: Card[] = [
+			// Magus (transforms into hero)
+			cardList[148],
+			// Doctor Doom
+			cardList[151],
+			// Exploding Ship
+			cardList[126],
+			// Asteroid Field
+			cardList[127],
+			// Baxter Building
+			cardList[129],
+			// Knowhere
+			cardList[130],
+			// Citadel at the End of Time
+			cardList[134]
+		]
+		const result = scoreHand(hand)
+		expect(result.isValid).toBe(true)
+		expect(result.score).toBe(16)
+	})
+	it('counts as invalid with no villains after a transformation', () => {
+		const hand: Card[] = [
+			// Magus (transforms into hero, leaving no villains)
+			cardList[148],
+			// Carol Danvers
+			cardList[107],
+			// Exploding Ship
+			cardList[126],
+			// Asteroid Field
+			cardList[127],
+			// Baxter Building
+			cardList[129],
+			// Knowhere
+			cardList[130],
+			// Citadel at the End of Time
+			cardList[134]
+		]
+		const result = scoreHand(hand)
+		expect(result.isValid).toBe(false)
+		expect(result.score).toBe(42)
+	})
 	describe('returns the correct scores', () => {
 		//#region example hands
 		const exampleHands: HandTest[] = [
