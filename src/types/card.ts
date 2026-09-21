@@ -33,6 +33,13 @@ export enum TAG {
 	WORTHY
 }
 
+/** How a manual input is entered and stored. Toggles are stored as 0 or 1. */
+export enum MANUAL_INPUT {
+	CARD,
+	TOGGLE,
+	COUNT
+}
+
 export interface Card {
 	id: number
 	type: CARD_TYPE
@@ -43,7 +50,8 @@ export interface Card {
 	negativeValue?: number
 	effect?: (hand: ModifiedCard[], index: number) => void
 	modificationOptions?: (hand: ModifiedCard[]) => number
-	score: (hand: ModifiedCard[]) => number
+	manualInput?: MANUAL_INPUT
+	score: (this: ModifiedCard, hand: ModifiedCard[]) => number
 	transform?: (hand: ModifiedCard[], currentCard: ModifiedCard) => void
 }
 
@@ -55,4 +63,5 @@ export interface ModifiedCard extends Card {
 	modifiedPower: number
 	modifiedTags: TAG[]
 	isTransformed?: boolean
+	manualInputValue?: number
 }

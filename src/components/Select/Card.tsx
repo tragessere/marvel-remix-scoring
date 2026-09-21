@@ -10,7 +10,7 @@ interface SelectCardProps {
 
 export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
 	const { t } = useTranslation('card-info')
-	const { selectedCardIds, addCard, removeCard, setLokiDraw } = useCardSelection()
+	const { selectedCardIds, addCard, removeCard, setManualInput } = useCardSelection()
 	const { cardSelectMode, setCardSelectMode } = useContext(CardSelectionModeContext)
 
 	const category = CARD_TYPE[card.type].toLowerCase()
@@ -19,7 +19,7 @@ export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
 
 	const onClick = () => {
 		if (cardSelectMode == CARD_SELECT_MODE.LOKI_DRAW) {
-			setLokiDraw(card.id)
+			setManualInput(73, card.id)
 			setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
 		} else if (includesCard) {
 			removeCard(card.id)

@@ -5,10 +5,9 @@ import { scoreHand } from '../utils/score.ts'
 import { ScoreContext } from './ContextList.tsx'
 
 export const ScoreProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
-	const { selectedCardIds, lokiCardId } = useCardSelection()
+	const { selectedCardIds, getManualInput } = useCardSelection()
 	const hand = selectedCardIds.map(id => cardList[id])
-	const lokiPenalty = lokiCardId ? cardList[lokiCardId].power : undefined
-	const result = scoreHand(hand, lokiPenalty)
+	const result = scoreHand(hand, getManualInput)
 
 	return <ScoreContext value={result}>{children}</ScoreContext>
 }

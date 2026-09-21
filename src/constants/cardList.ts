@@ -1,5 +1,5 @@
 import sumBy from 'lodash-es/sumBy'
-import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
+import { Card, CARD_TYPE, MANUAL_INPUT, ModifiedCard, TAG } from '../types/card.ts'
 import { findCard, removeTag } from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
@@ -487,18 +487,18 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedPower = 13
+				self.power = 13
 				removeTag(self, TAG.TECH)
 				self.modifiedTags.push(TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedPower = 1
+				self.power = 1
 				removeTag(self, TAG.STRENGTH, 3)
 				self.modifiedTags.push(TAG.TECH)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	30: {
@@ -520,17 +520,17 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedPower = 12
+				self.power = 12
 				self.modifiedTags.push(TAG.FLIGHT, TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedPower = 4
+				self.power = 4
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	31: {
@@ -550,17 +550,17 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedPower = 8
+				self.power = 8
 				self.modifiedTags.push(TAG.FLIGHT, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedPower = 3
+				self.power = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.STRENGTH)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	32: {
@@ -583,18 +583,18 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedPower = 9
+				self.power = 9
 				self.modifiedTags.push(TAG.FLIGHT)
 				self.modifiedTags.push(TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedPower = 3
+				self.power = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	33: {
@@ -1259,8 +1259,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
 		tags: [TAG.ASGARD],
+		manualInput: MANUAL_INPUT.CARD,
 		score() {
-			return this.power
+			const penaltyCardPower = this.manualInputValue ? cardList[this.manualInputValue].power : 0
+			return this.power - penaltyCardPower
 		}
 	},
 	74: {
@@ -1329,8 +1331,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 			const selectedCard = heroesAndAllies[index]
 			selectedCard.isBlanked = true
 			const self = findCard(hand, this.id)
-			// Use modified power to include hero transformations. Check for Rogue card who's modifiedPower can also change, but base power counts as 0.
-			self.modifiedPower = this.power - (selectedCard.id === 27 ? 0 : selectedCard.modifiedPower)
+			self.modifiedPower = this.power - selectedCard.power
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
@@ -2010,9 +2011,13 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 0,
 		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.FLIGHT, TAG.RANGE],
 		bonusValue: 3,
-		score() {
-			// TODO
-			return this.power
+		// Intel and Guardian tags in the hands of the players to the left and right
+		manualInput: MANUAL_INPUT.COUNT,
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.INTEL || tag === TAG.GUARDIAN) : 0
+			)
+			return this.power + (matchingTagCount + (this.manualInputValue ?? 0)) * 3
 		}
 	},
 	124: {
@@ -2076,9 +2081,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.LOCATION,
 		power: 0,
 		tags: [TAG.URBAN, TAG.GAMMA],
+		// Heroes in the discard area
+		manualInput: MANUAL_INPUT.COUNT,
 		score() {
-			// TODO
-			return this.power
+			return this.power + (this.manualInputValue ?? 0) * 5
 		}
 	},
 	129: {
@@ -2337,9 +2343,20 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 0,
 		tags: [TAG.COSMIC, TAG.SPACE],
-		score() {
-			// TODO
-			return this.power
+		// Whether this player has, or ties for, the most different tags at the table
+		manualInput: MANUAL_INPUT.TOGGLE,
+		score(hand) {
+			const tagTypes = new Set<TAG>()
+			for (const card of hand) {
+				if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.EQUIPMENT) {
+					for (const tag of card.modifiedTags) {
+						tagTypes.add(tag)
+					}
+				}
+			}
+
+			// Both halves can apply at once, leaving a player on the most tags but still short of seven at -15
+			return this.power - (tagTypes.size < 7 ? 30 : 0) + (this.manualInputValue ? 15 : 0)
 		}
 	},
 	148: {
@@ -2415,21 +2432,21 @@ export const cardList: Readonly<Record<number, Card>> = {
 			const isTransformed = !!self.isTransformed
 			const hasGuardian = hand.some(card => card.modifiedTags.includes(TAG.GUARDIAN))
 			const hasIntel = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL)) > 2
-			const shouldTransform = hasGuardian && hasIntel
+			const shouldTransform = hasGuardian || hasIntel
 
 			if (isTransformed === shouldTransform) return
 
 			if (shouldTransform) {
 				self.isTransformed = true
 				self.type = CARD_TYPE.HERO
-				self.modifiedPower = 14
+				self.power = 14
 				self.modifiedTags.push(TAG.GUARDIAN)
 				self.modifiedTags.push(TAG.TECH)
 				self.modifiedTags.push(TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
 				self.type = CARD_TYPE.VILLAIN
-				self.modifiedPower = 9
+				self.power = 9
 				removeTag(self, TAG.GUARDIAN)
 				removeTag(self, TAG.TECH)
 				removeTag(self, TAG.STRENGTH)
@@ -2627,9 +2644,9 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 16,
 		tags: [TAG.BOSS],
 		negativeValue: -20,
+		manualInput: MANUAL_INPUT.TOGGLE,
 		score() {
-			// TODO
-			return this.power
+			return this.power - (this.manualInputValue ? 0 : 20)
 		}
 	},
 	165: {

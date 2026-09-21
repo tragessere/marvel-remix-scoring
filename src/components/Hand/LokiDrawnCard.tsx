@@ -8,10 +8,11 @@ import { findCard } from '../../utils/card.ts'
 
 export const LokiDrawnCard = () => {
 	const { t } = useTranslation('card-info')
-	const { lokiCardId, setLokiDraw } = useCardSelection()
+	const { getManualInput, setManualInput } = useCardSelection()
 	const { cardSelectMode, setCardSelectMode } = useContext(CardSelectionModeContext)
 
-	const card = lokiCardId ? cardList[lokiCardId] : undefined
+	const selectedCardId = getManualInput(73)
+	const card = selectedCardId ? cardList[selectedCardId] : undefined
 	const category = card ? CARD_TYPE[card.type].toLowerCase() : ''
 
 	// Get Loki's scored card info to check if it is blanked
@@ -29,7 +30,7 @@ export const LokiDrawnCard = () => {
 					tabIndex={0}
 					onClick={event => {
 						setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
-						setLokiDraw(undefined)
+						setManualInput(73, undefined)
 						event.stopPropagation()
 					}}>
 					<span className="base-power">{card.power}</span>
