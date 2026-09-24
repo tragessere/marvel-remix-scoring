@@ -14,6 +14,11 @@ export const findCard = <T extends Card>(hand: T[], id: number) => {
 	return hand.find(card => card.id === id) as T
 }
 
+export const blankCard = (card: ModifiedCard) => {
+	card.isBlanked = true
+	card.isBlankedByOtherCard = true
+}
+
 export const removeTag = (card: ModifiedCard, tag: TAG, count: number = 1) => {
 	let deletedCount = 0
 	const finalTags = card.modifiedTags.reduce<TAG[]>((acc, t) => {

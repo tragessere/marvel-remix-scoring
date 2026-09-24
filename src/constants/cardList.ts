@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
-import { findCard, removeTag } from '../utils/card.ts'
+import { blankCard, findCard, removeTag } from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
 
@@ -835,7 +835,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		effect(hand, index) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
 			const villains = hand.filter((card, index) => index > selfIndex && card.type === CARD_TYPE.VILLAIN)
-			villains[index].isBlanked = true
+			blankCard(villains[index])
 		},
 		modificationOptions(hand) {
 			const intelCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL))
@@ -1250,7 +1250,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		effect(hand) {
 			for (const card of hand) {
 				if (card.type === CARD_TYPE.EQUIPMENT) {
-					card.isBlanked = true
+					blankCard(card)
 				}
 				card.modifiedTags = card.modifiedTags.filter(tag => tag !== TAG.TECH)
 			}
@@ -1278,7 +1278,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		effect(hand) {
 			for (const card of hand) {
 				if (card.type === CARD_TYPE.MANEUVER) {
-					card.isBlanked = true
+					blankCard(card)
 				}
 			}
 		},
@@ -1305,7 +1305,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 				(card, index) => index > selfIndex && (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			)
 			const selectedCard = heroesAndAllies[index]
-			selectedCard.isBlanked = true
+			blankCard(selectedCard)
 			const self = findCard(hand, this.id)
 			// Use modified power to include hero transformations. Check for Rogue card who's modifiedPower can also change, but base power counts as 0.
 			self.modifiedPower = this.power - (selectedCard.id === 27 ? 0 : selectedCard.modifiedPower)
@@ -1344,7 +1344,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		effect(hand, index) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
 			const locations = hand.filter((card, index) => card.type === CARD_TYPE.LOCATION && index > selfIndex)
-			locations[index].isBlanked = true
+			blankCard(locations[index])
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
