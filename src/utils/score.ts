@@ -1,9 +1,9 @@
 import cloneDeep from 'lodash-es/cloneDeep'
+import isEqual from 'lodash-es/isEqual'
 import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, ModifiedCard } from '../types/card.ts'
 import { findCard, sortEffectCardsFirst } from './card.ts'
 import { generatePermutations } from './randomization.ts'
-import { count } from './whyIsThisNotInLodash.ts'
 
 export interface ScoreResult {
 	score: number | undefined
@@ -23,6 +23,7 @@ export const scoreHand = (hand: Card[], getManualInputs: (cardId: number) => num
 		return {
 			...card,
 			isBlanked: false,
+			isBlankedByOtherCard: false,
 			isTextBlanked: false,
 			modifiedPower: card.power,
 			modifiedTags: card.tags.slice(),
@@ -88,15 +89,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 	}
 
 	if (index === 0) {
-		let enabledCardCount: number
-		let updatedEnabledCardCount = 7
-		let unblankedHand = hand
-		do {
-			enabledCardCount = updatedEnabledCardCount
-			hand.forEach(card => card.transform?.(unblankedHand, card))
-			unblankedHand = hand.filter(card => !card.isBlanked)
-			updatedEnabledCardCount = count(hand, card => !card.isBlanked)
-		} while (enabledCardCount !== updatedEnabledCardCount)
+		applyTransformsUntilStable(hand)
 	}
 
 	const currentCard = hand[index]
@@ -115,7 +108,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			// Use null-safe access to make Typescript happy. `effect` function will always exist here because it
 			// was checked on the card before cloning.
 			clonedCurrentCard.effect?.(unblankedHand, i)
-			modifiedHand.forEach(card => card.transform?.(unblankedHand, card))
+			applyTransformsUntilStable(modifiedHand)
 			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, index + 1)
 			if (optimalScore === undefined || (typeof score === 'number' && score > optimalScore)) {
 				optimalScore = score
@@ -126,6 +119,32 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 		return { score: optimalScore, hand: optimalHand, isValid: isOptimalScoreValid }
 	} else {
 		return applyEffectsRecursive(hand, index + 1)
+	}
+}
+
+/**
+ * Apply transforms repeatedly until the set of blanked cards stops changing, since one card's transform can blank or
+ * unblank a card that another transform depends on.
+ */
+const applyTransformsUntilStable = (hand: ModifiedCard[]) => {
+	let blankedCards: boolean[]
+	let updatedBlankedCards = hand.map(card => card.isBlanked)
+	do {
+		blankedCards = updatedBlankedCards
+		applyTransforms(
+			hand,
+			hand.filter(card => !card.isBlanked)
+		)
+		updatedBlankedCards = hand.map(card => card.isBlanked)
+	} while (!isEqual(blankedCards, updatedBlankedCards))
+}
+
+const applyTransforms = (hand: ModifiedCard[], unblankedHand: ModifiedCard[]) => {
+	const squirrelGirlActive = unblankedHand.some(card => card.id === 80)
+	for (const card of hand) {
+		if (card.isBlankedByOtherCard || card.isTextBlanked || (squirrelGirlActive && card.type === CARD_TYPE.VILLAIN))
+			continue
+		card.transform?.(unblankedHand, card)
 	}
 }
 

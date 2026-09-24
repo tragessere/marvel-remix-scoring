@@ -57,6 +57,7 @@ export interface Card {
 
 export interface ModifiedCard extends Card {
 	isBlanked: boolean
+	isBlankedByOtherCard: boolean
 	isTextBlanked: boolean
 	modifiedName?: string
 	modifiedType?: CARD_TYPE

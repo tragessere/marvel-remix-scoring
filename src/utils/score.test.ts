@@ -509,6 +509,86 @@ describe('scoreHand', () => {
 					cardList[66]
 				],
 				score: 32
+			},
+			{
+				id: 14,
+				hand: [
+					// Squirrel Girl
+					cardList[80],
+					// Baron Zemo
+					cardList[72],
+					// Magneto
+					cardList[74],
+					// The Leader
+					cardList[71],
+					// Mystique
+					cardList[66],
+					// Kingpin
+					cardList[78],
+					// Kang
+					cardList[62]
+				],
+				score: 82
+			},
+			{
+				id: 15,
+				hand: [
+					// Juggernaut
+					cardList[77],
+					// Kingpin
+					cardList[78],
+					// High Speed Chase
+					cardList[43],
+					// Forge
+					cardList[1],
+					// Heimdall
+					cardList[2],
+					// Lockheed
+					cardList[3],
+					// Jane Foster
+					cardList[4]
+				],
+				score: 34
+			},
+			{
+				id: 16,
+				hand: [
+					// Hidden Lair
+					cardList[52],
+					// Kingpin
+					cardList[78],
+					// Toad
+					cardList[79],
+					// Remote Fortress
+					cardList[53],
+					// High Speed Chase
+					cardList[43],
+					// Forge
+					cardList[1],
+					// Heimdall
+					cardList[2]
+				],
+				score: 52
+			},
+			{
+				id: 17,
+				hand: [
+					// Squirrel Girl
+					cardList[80],
+					// Selene
+					cardList[76],
+					// Kingpin
+					cardList[78],
+					// Kang
+					cardList[62],
+					// Hulk Operations
+					cardList[7],
+					// Thor Odinson
+					cardList[30],
+					// Jane Foster
+					cardList[4]
+				],
+				score: 83
 			}
 		]
 		//#endregion example hands
