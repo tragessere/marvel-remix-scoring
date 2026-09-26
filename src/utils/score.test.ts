@@ -1,5 +1,5 @@
 import { cardList } from '../constants/cardList.ts'
-import { Card } from '../types/card.ts'
+import { Card, TAG } from '../types/card.ts'
 import { scoreHand } from './score.ts'
 
 interface HandTest {
@@ -78,6 +78,52 @@ describe('scoreHand', () => {
 		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(true)
 		expect(result.score).toBe(16)
+	})
+	it('lets MAGIC tags count as any other tag', () => {
+		const hand: Card[] = [
+			// Research Lab (MAGIC, blanked without a TECH card)
+			cardList[131],
+			// Heimdall
+			cardList[2],
+			// Lockheed
+			cardList[3],
+			// Kang
+			cardList[62]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		const researchLab = result.finalHand.find(card => card.id === 131)
+		expect(researchLab?.isBlanked).toBe(false)
+		expect(researchLab?.modifiedTags).toEqual([TAG.TECH])
+	})
+	it('lets Reality Stone change a tag to any other tag', () => {
+		const hand: Card[] = [
+			// Reality Stone
+			cardList[102],
+			// Knowhere (+4 per INTEL)
+			cardList[130],
+			// Heimdall (INTEL)
+			cardList[2],
+			// Lockheed
+			cardList[3]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Reality Stone -8, Knowhere 4 + 2 INTEL * 4, Heimdall 4, Lockheed 5
+		expect(result.score).toBe(13)
+		expect(result.finalHand.flatMap(card => card.modifiedTags).filter(tag => tag === TAG.INTEL).length).toBe(2)
+	})
+	it('lets Rogue copy a MAGIC tag as any other tag', () => {
+		const hand: Card[] = [
+			// Rogue
+			cardList[27],
+			// Doctor Strange
+			cardList[109],
+			// Build Gadgets
+			cardList[58]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Copies magic tag, then one picks tech and the other picks intel
+		expect(result.score).toBe(15)
+		expect(result.finalHand.flatMap(card => card.modifiedTags)).not.toContain(TAG.MAGIC)
 	})
 	it('counts as invalid with no villains after a transformation', () => {
 		const hand: Card[] = [

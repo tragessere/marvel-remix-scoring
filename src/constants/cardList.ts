@@ -1,6 +1,6 @@
 import sumBy from 'lodash-es/sumBy'
-import { Card, CARD_TYPE, MANUAL_INPUT, ModifiedCard, TAG } from '../types/card.ts'
-import { blankCard, findCard, removeTag } from '../utils/card.ts'
+import { Card, CARD_TYPE, MAGIC_REPLACEMENT_TAGS, MANUAL_INPUT, ModifiedCard, TAG } from '../types/card.ts'
+import { blankCard, findCard, magicDuplicateOptionCount, removeTag, tagCopyOptionCount } from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
 
@@ -406,25 +406,31 @@ export const cardList: Readonly<Record<number, Card>> = {
 		effect(hand, index) {
 			let indexCount = index
 			const targetCard = hand.find(card => {
-				if (
-					!card.isBlanked &&
-					card.type === CARD_TYPE.HERO &&
-					card.id !== this.id &&
-					card.modifiedTags.length > 0
-				) {
-					if (indexCount < card.modifiedTags.length) {
+				if (!card.isBlanked && card.type === CARD_TYPE.HERO && card.id !== this.id) {
+					const cardOptionCount = sumBy(card.modifiedTags, tagCopyOptionCount)
+					if (indexCount < cardOptionCount) {
 						return true
 					}
-					indexCount -= card.modifiedTags.length
+					indexCount -= cardOptionCount
 				}
 			}) as ModifiedCard
+			// Each tag is one option, except MAGIC which has an option for every tag it can count as
+			const targetTag = targetCard.modifiedTags.find(tag => {
+				const tagOptionCount = tagCopyOptionCount(tag)
+				if (indexCount < tagOptionCount) {
+					return true
+				}
+				indexCount -= tagOptionCount
+			}) as TAG
 			const self = hand.find(card => card.id === 27) as ModifiedCard
 			self.modifiedPower = targetCard.modifiedPower
-			self.modifiedTags.push(targetCard.modifiedTags[indexCount])
+			self.modifiedTags.push(targetTag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS[indexCount] : targetTag)
 		},
 		modificationOptions(hand) {
 			return sumBy(hand, card =>
-				card.type === CARD_TYPE.HERO && card.id !== this.id && !card.isBlanked ? card.modifiedTags.length : 0
+				card.type === CARD_TYPE.HERO && card.id !== this.id && !card.isBlanked
+					? sumBy(card.modifiedTags, tagCopyOptionCount)
+					: 0
 			)
 		},
 		score(cards) {
@@ -1736,6 +1742,33 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: -9,
 		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
 		negativeValue: -9,
+		effect(hand, i) {
+			// Each card has an option for every combination of tags its duplicated MAGIC tags can count as
+			let indexCount = i
+			const selectedCard = hand.find(card => {
+				if (card.id !== this.id && card.modifiedTags.length > 0) {
+					const cardOptionCount = magicDuplicateOptionCount(card)
+					if (indexCount < cardOptionCount) {
+						return true
+					}
+					indexCount -= cardOptionCount
+				}
+			}) as ModifiedCard
+			const duplicatedTags = selectedCard.modifiedTags.map(tag => {
+				if (tag !== TAG.MAGIC) {
+					return tag
+				}
+				const replacementTag = MAGIC_REPLACEMENT_TAGS[indexCount % MAGIC_REPLACEMENT_TAGS.length]
+				indexCount = Math.trunc(indexCount / MAGIC_REPLACEMENT_TAGS.length)
+				return replacementTag
+			})
+			selectedCard.modifiedTags.push(...duplicatedTags)
+		},
+		modificationOptions(hand) {
+			return sumBy(hand, card =>
+				card.id !== this.id && card.modifiedTags.length > 0 ? magicDuplicateOptionCount(card) : 0
+			)
+		},
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1748,6 +1781,27 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: -8,
 		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
 		negativeValue: -8,
+		effect(hand, i) {
+			// The chosen tag becomes MAGIC, which can then count as any other tag. Each option is a unique tag on a
+			// card paired with the tag it will count as.
+			const tagOptionCount = MAGIC_REPLACEMENT_TAGS.length
+			let indexCount = i
+			const targetCard = hand.find(card => {
+				const cardOptionCount = new Set(card.modifiedTags).size * tagOptionCount
+				if (indexCount < cardOptionCount) {
+					return true
+				}
+				indexCount -= cardOptionCount
+			}) as ModifiedCard
+
+			const targetTag = Array.from(new Set(targetCard.modifiedTags))[Math.trunc(indexCount / tagOptionCount)]
+			removeTag(targetCard, targetTag)
+			targetCard.modifiedTags.push(MAGIC_REPLACEMENT_TAGS[indexCount % tagOptionCount])
+		},
+		modificationOptions(hand) {
+			// No need to try changing the same tag type on a card more than once
+			return sumBy(hand, card => new Set(card.modifiedTags).size) * MAGIC_REPLACEMENT_TAGS.length
+		},
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1854,6 +1908,14 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 1,
 		tags: [TAG.MAGIC, TAG.FLIGHT],
+		effect(hand, i) {
+			const self = findCard(hand, this.id)
+			removeTag(self, TAG.MAGIC)
+			self.modifiedTags.push(MAGIC_REPLACEMENT_TAGS[i])
+		},
+		modificationOptions() {
+			return MAGIC_REPLACEMENT_TAGS.length
+		},
 		score() {
 			return this.power
 		}
@@ -2115,8 +2177,19 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.LOCATION,
 		power: 4,
 		tags: [TAG.MAGIC],
+		effect(hand, i) {
+			const self = findCard(hand, this.id)
+			removeTag(self, TAG.MAGIC)
+			self.modifiedTags.push(MAGIC_REPLACEMENT_TAGS[i])
+		},
+		modificationOptions() {
+			return MAGIC_REPLACEMENT_TAGS.length
+		},
 		transform(hand, self) {
-			self.isBlanked = !hand.some(card => card.modifiedTags.some(tag => tag === TAG.TECH))
+			// Don't blank self until it's effect has run, which gives it the chance to pick tech if it needs to.
+			self.isBlanked =
+				!self.modifiedTags.includes(TAG.MAGIC) &&
+				!hand.some(card => card.modifiedTags.some(tag => tag === TAG.TECH))
 		},
 		score() {
 			return this.power

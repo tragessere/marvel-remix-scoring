@@ -33,6 +33,11 @@ export enum TAG {
 	WORTHY
 }
 
+/** Tags that a MAGIC tag can count as */
+export const MAGIC_REPLACEMENT_TAGS = Object.values(TAG).filter(
+	(tag): tag is TAG => typeof tag === 'number' && tag !== TAG.MAGIC
+)
+
 /** How a manual input is entered and stored. Toggles are stored as 0 or 1. */
 export enum MANUAL_INPUT {
 	CARD,

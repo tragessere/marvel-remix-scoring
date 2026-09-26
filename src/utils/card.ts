@@ -1,5 +1,6 @@
-import { Card, ModifiedCard, TAG } from '../types/card.ts'
+import { Card, MAGIC_REPLACEMENT_TAGS, ModifiedCard, TAG } from '../types/card.ts'
 
+/** Sort cards with a built-in MAGIC tag first, then other cards with effects, then everything else */
 export const sortEffectCardsFirst = (a: Card, b: Card) => {
 	if (!!a.effect === !!b.effect) {
 		return 0
@@ -18,6 +19,13 @@ export const blankCard = (card: ModifiedCard) => {
 	card.isBlanked = true
 	card.isBlankedByOtherCard = true
 }
+
+/** Number of ways a copied tag can be added. A copied MAGIC tag can count as any other tag. */
+export const tagCopyOptionCount = (tag: TAG) => (tag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS.length : 1)
+
+/** Number of ways all tags on a card can be duplicated, with each duplicated MAGIC tag counting as any other tag */
+export const magicDuplicateOptionCount = (card: ModifiedCard) =>
+	card.modifiedTags.reduce((total, tag) => total * tagCopyOptionCount(tag), 1)
 
 export const removeTag = (card: ModifiedCard, tag: TAG, count: number = 1) => {
 	let deletedCount = 0
