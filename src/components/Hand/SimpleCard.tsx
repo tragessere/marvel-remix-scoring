@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
 import { CARD_SELECT_MODE, ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
-import { CARD_TYPE } from '../../types/card.ts'
+import { CARD_TYPE, MANUAL_INPUT } from '../../types/card.ts'
 import { findCard, mapCardTags } from '../../utils/card.ts'
 import { CardText } from './CardText.tsx'
 import { ChosenCard } from './ChosenCard.tsx'
+import { ManualCount } from './ManualCount.tsx'
+import { ManualToggle } from './ManualToggle.tsx'
 import { TagIcon } from './TagIcon.tsx'
 
 export interface SimpleCardProps {
@@ -76,6 +78,16 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 							buttonLabel="Choose a card"
 							shouldAddFullCardToHand
 						/>
+					</div>
+				)}
+				{card.manualInput === MANUAL_INPUT.COUNT && (
+					<div className="chosen-card-container">
+						<ManualCount sourceCardId={card.id} label={t(`${card.id}.input-label`)} />
+					</div>
+				)}
+				{card.manualInput === MANUAL_INPUT.TOGGLE && (
+					<div className="chosen-card-container">
+						<ManualToggle sourceCardId={card.id} label={t(`${card.id}.input-label`)} />
 					</div>
 				)}
 			</div>

@@ -122,6 +122,18 @@ h2 {
 			font-weight: normal;
 			white-space: nowrap;
 		}
+
+		& .manual-input {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			position: relative;
+			z-index: 5;
+
+			& input[type='number'] {
+				width: 4rem;
+			}
+		}
 	}
 
 	& button.active-card-use {
