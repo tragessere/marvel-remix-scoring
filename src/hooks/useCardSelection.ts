@@ -4,6 +4,7 @@ import { CARD_SELECT_MODE, CardSelectionModeContext } from '../contexts/ContextL
 import { QueryParams } from '../types/route.ts'
 import {
 	clearManualInput,
+	ManualInput,
 	ManualInputs,
 	parseManualInputs,
 	serializeManualInputs
@@ -39,14 +40,20 @@ export const useCardSelection = () => {
 	 *
 	 * @param cardId Card the value belongs to
 	 * @param value Entered value, or `undefined` to clear it back to unanswered
+	 * @param secondaryValue Optional second value for inputs that need one
 	 */
-	const setManualInput = (cardId: number, value: number | undefined) => {
+	const setManualInput = (cardId: number, value: number | undefined, secondaryValue?: number) => {
 		// Ignore values for cards that aren't in the hand
 		if (!selectedCardIds.includes(cardId)) return
 
 		setSearchParams(searchParams => {
-			const updatedInputs =
-				value === undefined ? clearManualInput(manualInputs, cardId) : { ...manualInputs, [cardId]: value }
+			let updatedInputs: ManualInputs
+			if (value === undefined) {
+				updatedInputs = clearManualInput(manualInputs, cardId)
+			} else {
+				const entry: ManualInput = secondaryValue === undefined ? { value } : { value, secondaryValue }
+				updatedInputs = { ...manualInputs, [cardId]: entry }
+			}
 
 			writeManualInputs(searchParams, updatedInputs)
 			return searchParams
@@ -58,12 +65,12 @@ export const useCardSelection = () => {
 	 *
 	 * @param cardId Card the value belongs to
 	 */
-	const getManualInput = (cardId: number) => manualInputs[cardId] as number | undefined
+	const getManualInput = (cardId: number) => manualInputs[cardId] as ManualInput | undefined
 
 	const removeCard = (cardId: number) => {
 		if (!selectedCardIds.includes(cardId)) return
 
-		if (cardId === 73) {
+		if (cardId === 73 || cardId === 104) {
 			setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
 		}
 

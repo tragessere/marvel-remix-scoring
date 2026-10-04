@@ -3,7 +3,8 @@ import { ScoreResult } from '../utils/score.ts'
 
 export enum CARD_SELECT_MODE {
 	DEFAULT,
-	LOKI_DRAW
+	LOKI_DRAW,
+	MIND_STONE_CHOICE
 }
 
 export interface ActiveCardSelection {

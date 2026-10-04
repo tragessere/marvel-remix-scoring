@@ -51,7 +51,10 @@ export interface Card {
 	power: number
 	tags: TAG[]
 	transformedTags?: TAG[]
+	transformedPower?: number
+	/** Largest positive '+' value on the card for Mantis */
 	bonusValue?: number
+	/** Largest negative value on the card for Annihilus */
 	negativeValue?: number
 	effect?: (hand: ModifiedCard[], index: number) => void
 	modificationOptions?: (hand: ModifiedCard[]) => number
@@ -70,4 +73,5 @@ export interface ModifiedCard extends Card {
 	modifiedTags: TAG[]
 	isTransformed?: boolean
 	manualInputValue?: number
+	manualInputSecondaryValue?: number
 }

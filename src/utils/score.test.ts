@@ -1,5 +1,6 @@
 import { cardList } from '../constants/cardList.ts'
 import { Card, TAG } from '../types/card.ts'
+import { ManualInput } from './manualInput.ts'
 import { scoreHand } from './score.ts'
 
 interface HandTest {
@@ -9,7 +10,12 @@ interface HandTest {
 }
 
 const emptyManualInput = () => undefined
-const createManualInputGetter = (manualEntries: Record<number, number>) => (cardId: number) => manualEntries[cardId]
+const createManualInputGetter =
+	(manualEntries: Record<number, number | ManualInput>) =>
+	(cardId: number): ManualInput | undefined => {
+		const entry = manualEntries[cardId]
+		return typeof entry === 'number' ? { value: entry } : entry
+	}
 
 describe('scoreHand', () => {
 	it('returns invalid score without 7 cards', () => {
@@ -291,6 +297,76 @@ describe('scoreHand', () => {
 			getter = createManualInputGetter({ 147: 1 })
 			const result3 = scoreHand(hand, getter)
 			expect(result3.score).toBe(67)
+		})
+		it('Counts the card chosen with the Mind Stone as part of the hand', () => {
+			const hand: Card[] = [
+				// Baron Zemo
+				cardList[72],
+				// Forge
+				cardList[1],
+				// Mind Stone
+				cardList[104]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(18)
+			expect(result.finalHand).toHaveLength(3)
+
+			// Thor Odinson: power 4, and a hero for Baron Zemo to subtract
+			let getter = createManualInputGetter({ 104: { value: 30, secondaryValue: 0 } })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(19)
+			expect(result2.finalHand).toHaveLength(4)
+
+			// God of Thunder: power 12, using the opponent's transform state even without Mjolnir or allies
+			getter = createManualInputGetter({ 104: { value: 30, secondaryValue: 1 } })
+			const result3 = scoreHand(hand, getter)
+			expect(result3.score).toBe(27)
+			const thor = result3.finalHand.find(card => card.id === 30)
+			expect(thor?.isTransformed).toBe(true)
+			expect(thor?.modifiedTags).toEqual(cardList[30].transformedTags)
+
+			// Hulk: power 13, without needing another GAMMA card
+			getter = createManualInputGetter({ 104: { value: 29, secondaryValue: 1 } })
+			const result4 = scoreHand(hand, getter)
+			expect(result4.score).toBe(28)
+		})
+		it('Ignores Mind Stone choices that are not an opponent hero or ally', () => {
+			const hand: Card[] = [
+				// Baron Zemo
+				cardList[72],
+				// Forge
+				cardList[1],
+				// Mind Stone
+				cardList[104]
+			]
+			// Forge is already in the hand
+			let getter = createManualInputGetter({ 104: 1 })
+			let result = scoreHand(hand, getter)
+			expect(result.score).toBe(18)
+			expect(result.finalHand).toHaveLength(3)
+
+			// Loki is a villain
+			getter = createManualInputGetter({ 104: 73 })
+			result = scoreHand(hand, getter)
+			expect(result.score).toBe(18)
+			expect(result.finalHand).toHaveLength(3)
+		})
+		it('Does not count the Mind Stone card when the Mind Stone is blanked', () => {
+			const hand: Card[] = [
+				// Magneto
+				cardList[74],
+				// Forge
+				cardList[1],
+				// Mind Stone
+				cardList[104]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+
+			// Thor Odinson
+			const getter = createManualInputGetter({ 104: { value: 30, secondaryValue: 1 } })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(result.score)
+			expect(result2.finalHand.find(card => card.id === 30)?.isBlanked).toBe(true)
 		})
 	})
 	describe('returns the correct scores', () => {

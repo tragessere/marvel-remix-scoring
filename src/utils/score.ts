@@ -1,9 +1,13 @@
 import cloneDeep from 'lodash-es/cloneDeep'
 import isEqual from 'lodash-es/isEqual'
 import sumBy from 'lodash-es/sumBy'
+import { cardList } from '../constants/cardList.ts'
 import { Card, CARD_TYPE, ModifiedCard } from '../types/card.ts'
-import { findCard, sortEffectCardsFirst } from './card.ts'
+import { findCard, isMindStoneTarget, sortEffectCardsFirst } from './card.ts'
+import { ManualInput } from './manualInput.ts'
 import { generatePermutations } from './randomization.ts'
+
+const MIND_STONE_ID = 104
 
 export interface ScoreResult {
 	score: number | undefined
@@ -18,8 +22,9 @@ export interface ScoreResult {
  * @param hand Array of cards in the player's hand
  * @param getManualInputs Board values entered by the user for cards that can't be scored from the hand alone
  */
-export const scoreHand = (hand: Card[], getManualInputs: (cardId: number) => number | undefined): ScoreResult => {
+export const scoreHand = (hand: Card[], getManualInputs: (cardId: number) => ManualInput | undefined): ScoreResult => {
 	const initialHand: ModifiedCard[] = hand.map(card => {
+		const manualInput = getManualInputs(card.id)
 		return {
 			...card,
 			isBlanked: false,
@@ -27,9 +32,15 @@ export const scoreHand = (hand: Card[], getManualInputs: (cardId: number) => num
 			isTextBlanked: false,
 			modifiedPower: card.power,
 			modifiedTags: card.tags.slice(),
-			manualInputValue: getManualInputs(card.id)
+			manualInputValue: manualInput?.value,
+			manualInputSecondaryValue: manualInput?.secondaryValue
 		}
 	})
+
+	const borrowedCard = createBorrowedCard(initialHand)
+	if (borrowedCard) {
+		initialHand.push(borrowedCard)
+	}
 
 	initialHand.sort(sortEffectCardsFirst)
 	const modifyCardCount = initialHand.filter(card => !!card.effect).length
@@ -61,6 +72,33 @@ export const scoreHand = (hand: Card[], getManualInputs: (cardId: number) => num
 		score: maxScore,
 		finalHand: optimalHand,
 		isValid: optimalHandIsValid
+	}
+}
+
+/**
+ * Add an extra card to the hand, independently handling its transform state.
+ */
+const createBorrowedCard = (hand: ModifiedCard[]): ModifiedCard | undefined => {
+	const mindStone = hand.find(card => card.id === MIND_STONE_ID)
+	const borrowedId = mindStone?.manualInputValue
+	if (borrowedId === undefined) return undefined
+
+	const card = cardList[borrowedId] as Card | undefined
+	if (!card || !isMindStoneTarget(card) || hand.some(c => c.id === borrowedId)) return undefined
+
+	const isTransformed = !!card.transformedTags && mindStone?.manualInputSecondaryValue === 1
+	const power = isTransformed ? (card.transformedPower ?? card.power) : card.power
+	const tags = isTransformed && card.transformedTags ? card.transformedTags : card.tags
+	return {
+		...card,
+		power,
+		transform: undefined,
+		isBlanked: false,
+		isBlankedByOtherCard: false,
+		isTextBlanked: false,
+		modifiedPower: power,
+		modifiedTags: tags.slice(),
+		isTransformed
 	}
 }
 
@@ -131,6 +169,7 @@ const applyTransformsUntilStable = (hand: ModifiedCard[]) => {
 	let updatedBlankedCards = hand.map(card => card.isBlanked)
 	do {
 		blankedCards = updatedBlankedCards
+		syncMindStoneCard(hand)
 		applyTransforms(
 			hand,
 			hand.filter(card => !card.isBlanked)
@@ -159,4 +198,16 @@ const containsRequiredCards = (hand: ModifiedCard[]): boolean => {
 		{ containsVillain: false, containsHeroOrAlly: false }
 	)
 	return containsVillain && containsHeroOrAlly
+}
+
+/** A borrowed card only counts while the Mind Stone that borrowed it is active */
+const syncMindStoneCard = (hand: ModifiedCard[]) => {
+	const mindStone = hand.find(card => card.id === MIND_STONE_ID)
+	if (!mindStone) return
+
+	const borrowedId = mindStone.manualInputValue
+	const borrowedCard = hand.find(card => card.id === borrowedId)
+	if (!borrowedCard) return
+
+	borrowedCard.isBlanked = borrowedCard.isBlankedByOtherCard || mindStone.isBlanked || mindStone.isTextBlanked
 }

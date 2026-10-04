@@ -1,12 +1,12 @@
 import { FunctionComponent, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
-import { ScoreContext } from '../../contexts/ContextList.tsx'
+import { CARD_SELECT_MODE, ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
 import { CARD_TYPE } from '../../types/card.ts'
 import { findCard, mapCardTags } from '../../utils/card.ts'
 import { CardText } from './CardText.tsx'
-import { LokiDrawnCard } from './LokiDrawnCard.tsx'
+import { ChosenCard } from './ChosenCard.tsx'
 import { TagIcon } from './TagIcon.tsx'
 
 export interface SimpleCardProps {
@@ -58,9 +58,24 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 					{i18n.exists(`card-info:${card.id}.text`) && <CardText i18nKey={`card-info:${card.id}.text`} />}
 				</>
 				{card.id === 73 && (
-					<div className="loki-draw">
+					<div className="chosen-card-container">
 						<span>Drawn Card:</span>
-						<LokiDrawnCard />
+						<ChosenCard
+							sourceCardId={73}
+							selectMode={CARD_SELECT_MODE.LOKI_DRAW}
+							buttonLabel="Draw a card"
+						/>
+					</div>
+				)}
+				{card.id === 104 && (
+					<div className="chosen-card-container">
+						<span>Opponent's Card:</span>
+						<ChosenCard
+							sourceCardId={104}
+							selectMode={CARD_SELECT_MODE.MIND_STONE_CHOICE}
+							buttonLabel="Choose a card"
+							shouldAddFullCardToHand
+						/>
 					</div>
 				)}
 			</div>

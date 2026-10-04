@@ -7,13 +7,16 @@ import './header.css'
 
 export const Header: FunctionComponent = () => {
 	const { t } = useTranslation('common', { keyPrefix: 'header' })
-	const { lokiCardId, selectedCardIds, resetSelection } = useCardSelection()
+	const { selectedCardIds, getManualInput, resetSelection } = useCardSelection()
 	const selectedCardCount = selectedCardIds.length
 
 	const result = useContext(ScoreContext)
 
 	const isFinishedAndInvalid =
-		!result.isValid && selectedCardCount === 7 && (!!lokiCardId || !selectedCardIds.includes(73))
+		!result.isValid &&
+		selectedCardCount === 7 &&
+		(getManualInput(73) !== undefined || !selectedCardIds.includes(73)) &&
+		(getManualInput(104) !== undefined || !selectedCardIds.includes(104))
 
 	return (
 		<div className="header">

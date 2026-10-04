@@ -481,6 +481,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 1,
 		tags: [TAG.TECH, TAG.GAMMA],
 		transformedTags: [TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH, TAG.GAMMA],
+		transformedPower: 13,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(
@@ -514,6 +515,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 4,
 		tags: [TAG.STRENGTH, TAG.ASGARD, TAG.WORTHY],
 		transformedTags: [TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE, TAG.ASGARD, TAG.WORTHY],
+		transformedPower: 12,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const hasMjolnir = hand.some(card => card.id === 17 && !card.isBlanked)
@@ -546,6 +548,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 3,
 		tags: [TAG.TECH, TAG.RANGE],
 		transformedTags: [TAG.TECH, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
+		transformedPower: 8,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = sumBy(hand, card => count(card.modifiedTags, t => t === TAG.INTEL)) > 1
@@ -576,6 +579,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 3,
 		tags: [TAG.INTEL, TAG.RANGE, TAG.MUTANT],
 		transformedTags: [TAG.INTEL, TAG.RANGE, TAG.RANGE, TAG.FLIGHT, TAG.MUTANT],
+		transformedPower: 9,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform =
@@ -1826,6 +1830,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: -5,
 		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
 		negativeValue: -5,
+		manualInput: MANUAL_INPUT.CARD,
 		score(hand) {
 			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
 			return hasAdamWarlock ? 0 : this.power
@@ -1864,6 +1869,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 2,
 		tags: [TAG.FLIGHT],
 		transformedTags: [TAG.SPACE, TAG.KREE, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
+		transformedPower: 8,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(card =>
@@ -1874,14 +1880,14 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedPower = 8
+				self.power = 8
 				self.modifiedTags.push(TAG.SPACE)
 				self.modifiedTags.push(TAG.KREE)
 				self.modifiedTags.push(TAG.STRENGTH)
 				self.modifiedTags.push(TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedPower = 2
+				self.power = 2
 				removeTag(self, TAG.SPACE)
 				removeTag(self, TAG.KREE)
 				removeTag(self, TAG.STRENGTH)

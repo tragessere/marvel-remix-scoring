@@ -18,7 +18,7 @@ h2 {
 	}
 
 	&.blanked,
-	& .loki-card.blanked {
+	& .chosen-card.blanked {
 		opacity: 65%;
 		filter: brightness(1.2) grayscale(0.85);
 
@@ -92,16 +92,35 @@ h2 {
 		border-radius: 0 0 4px 4px;
 	}
 
-	& .loki-draw {
+	& .chosen-card-container {
 		font-weight: bold;
 		padding-top: 0.2rem;
 
-		& .loki-card {
+		& .chosen-card {
 			display: inline-flex;
+			flex-direction: column;
+			vertical-align: middle;
 			margin: 0.5rem;
 			border-radius: 5px;
 			border: 1px solid #222;
-			padding: 0.3rem 1rem;
+			overflow: hidden;
+			background-color: white;
+
+			& .card-top-border {
+				padding: 0.3rem 1rem;
+				border-radius: 0;
+			}
+
+			& .tag-list {
+				align-self: flex-start;
+				margin: 0;
+				font-weight: normal;
+			}
+		}
+
+		& .transform-toggle {
+			font-weight: normal;
+			white-space: nowrap;
 		}
 	}
 
