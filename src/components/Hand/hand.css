@@ -1,5 +1,6 @@
 h2 {
 	margin-top: 0;
+	margin-bottom: 0.25rem;
 }
 
 .simple-card {
@@ -245,4 +246,32 @@ h2 {
 			}
 		}
 	}
+}
+
+.settings {
+	margin-bottom: 2rem;
+
+
+	& .deck-select {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.4rem;
+		margin: 1rem 0 0;
+		padding: 0;
+		border: none;
+
+		& legend {
+			font-weight: bold;
+			margin-bottom: 0.4rem;
+		}
+
+		& label {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			cursor: pointer;
+		}
+	}
+
 }

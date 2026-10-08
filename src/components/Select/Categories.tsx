@@ -1,15 +1,19 @@
 import { groupBy } from 'lodash-es'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
+import { DeckSelectionContext } from '../../contexts/ContextList.tsx'
 import { CARD_TYPE } from '../../types/card.ts'
+import { isCardInDecks } from '../../utils/card.ts'
 import { SelectCardCategory } from './CardCategory.tsx'
 
 import './select.css'
 
 export const SelectCategories: FunctionComponent = () => {
 	const { t, i18n } = useTranslation('card-info', { keyPrefix: 'category' })
-	const cardGroups = groupBy(cardList, 'type')
+	const { selectedDecks } = useContext(DeckSelectionContext)
+	const deckCards = Object.values(cardList).filter(card => isCardInDecks(card, selectedDecks))
+	const cardGroups = groupBy(deckCards, 'type')
 	const collator = new Intl.Collator(i18n.language)
 	// Create list of categories using the keys of the CARD_TYPE enum
 	const categories = Object.keys(cardGroups)

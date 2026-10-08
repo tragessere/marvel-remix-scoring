@@ -75,3 +75,11 @@ export interface ModifiedCard extends Card {
 	manualInputValue?: number
 	manualInputSecondaryValue?: number
 }
+
+export enum DECK {
+	REMIX,
+	COSMOS
+}
+
+/** Every deck value, without the reverse-mapped names numeric enums include */
+export const ALL_DECKS = Object.values(DECK).filter((value): value is DECK => typeof value === 'number')

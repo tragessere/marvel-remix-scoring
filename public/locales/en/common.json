@@ -3,6 +3,14 @@
 		"reset": "reset"
 	},
 	"disclaimer": "This is an unofficial site and is not affiliated in any way with WizKids or The Walt Disney Company.",
+	"settings": {
+		"header": "Settings",
+		"select-decks": {
+			"header": "Select Decks",
+			"remix": "Marvel: Remix",
+			"cosmos": "Marvel: Remix the Cosmos"
+		}
+	},
 	"select-cards": {
 		"header": "Select Cards"
 	},

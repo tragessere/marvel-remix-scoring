@@ -1,4 +1,4 @@
-import { Card, CARD_TYPE, MAGIC_REPLACEMENT_TAGS, ModifiedCard, TAG } from '../types/card.ts'
+import { Card, CARD_TYPE, DECK, MAGIC_REPLACEMENT_TAGS, ModifiedCard, TAG } from '../types/card.ts'
 
 /** Sort cards with a built-in MAGIC tag first, then other cards with effects, then everything else */
 export const sortEffectCardsFirst = (a: Card, b: Card) => {
@@ -60,4 +60,18 @@ export const mapCardTags = (card: ModifiedCard) => {
 	}
 
 	return [tags, addedTags] as const
+}
+
+const COSMOS_DECK_ID_START = 81
+
+/** The deck a card was printed in. Squirrel Girl counts as Marvel Remix, though she can be played with either deck. */
+export const getCardDeck = (card: Card) => (card.id >= COSMOS_DECK_ID_START ? DECK.COSMOS : DECK.REMIX)
+
+/** Whether a card belongs to any of the given decks */
+export const isCardInDecks = (card: Card, decks: DECK[]) => {
+	// Always include Squirrel Girl
+	if (card.id === 80) {
+		return decks.length > 0
+	}
+	return decks.includes(getCardDeck(card))
 }
