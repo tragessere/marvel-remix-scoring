@@ -905,8 +905,9 @@ export const cardList: Readonly<Record<number, Card>> = {
 			})
 			selectedCombination.forEach((mutantIndex, comboIndex) => {
 				const mutant = mutants[mutantIndex]
-				const tagIndex = indexCount % selectedCardModulos[comboIndex]
-				mutant.modifiedTags.push(mutant.modifiedTags[tagIndex])
+				const uniqueTags = [...new Set(mutant.modifiedTags)]
+				const tagIndex = Math.floor(indexCount / selectedCardModulos[comboIndex]) % uniqueTags.length
+				mutant.modifiedTags.push(uniqueTags[tagIndex])
 			})
 		},
 		modificationOptions(hand) {

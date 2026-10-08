@@ -420,6 +420,26 @@ describe('scoreHand', () => {
 					cardList[4]
 				],
 				score: 83
+			},
+			{
+				id: 18,
+				hand: [
+					// Sentinels
+					cardList[67],
+					// Xavier Mansion
+					cardList[54],
+					// Madripoor
+					cardList[50],
+					// Cyclops
+					cardList[20],
+					// Professor X
+					cardList[25],
+					// Shadowcat
+					cardList[21],
+					// Cerebro
+					cardList[18]
+				],
+				score: 84
 			}
 		]
 		//#endregion example hands
