@@ -381,7 +381,7 @@
 	},
 	"89": {
 		"name": "Uatu, The Watcher",
-		"text": "To keep or recruit <name>Uatu, The Watcher</name>, you must correctly name three non-<cosmic /> cards, and which other player holds each card. If you are correct, you may keep this card. Otherwise place it in the discard area and end your turn."
+		"text": "To keep or recruit <name>Uatu, The Watcher</name>, you must correctly name three non-<cosmic /> cards, and which other player holds each card."
 	},
 	"90": {
 		"name": "Unexpected Strength",
@@ -438,19 +438,19 @@
 	},
 	"103": {
 		"name": "Space Stone",
-		"text": "Shuffle all non-<cosmic /> cards from the discard area and place them onto the bottom of their deck, then replace them with an equal number of cards from the top of the Remix deck. Then take another turn."
+		"text": "Replace all non-<cosmic /> cards from the discard area. Then take another turn."
 	},
 	"104": {
 		"name": "Mind Stone",
-		"text": "ENDGAME: You may choose one unblanked <hero /> or <ally /> in an opponent's hand and count it as an additional card in your hand. If it can transform, use the state the opponent is using."
+		"text": "You may choose one unblanked <hero /> or <ally /> in an opponent's hand and count it as an additional card in your hand. If it can transform, use the state the opponent is using."
 	},
 	"105": {
 		"name": "Soul Stone",
-		"text": "Discard a <hero /> or <ally /> from your hand and remove it from the game. Draw six cards from the Remix deck, keep one non-<cosmic /> card, and remove the other five from the game."
+		"text": "Discard a <hero /> or <ally /> from your hand. Draw six cards from the Remix deck, keep one non-<cosmic /> card."
 	},
 	"106": {
 		"name": "Time Stone",
-		"text": "Name a tag. Reveal cards from either deck until you reveal a card with that tag or twelve cards. Place the last card in the discard area. Put the others on the bottom of the deck. Then take another turn."
+		"text": "Name a tag. Reveal cards from either deck until you reveal a card with that tag or twelve cards. Place the last card in the discard area."
 	},
 	"107": {
 		"name": "Carol Danvers",
@@ -605,11 +605,11 @@
 	},
 	"146": {
 		"name": "Travel Through Time",
-		"text": "Choose 0-4 non-<cosmic /> cards from the discard area and remove them from the game, then replace them with an equal number of cards from the bottom of the Remix deck. Then take another turn."
+		"text": "Choose 0-4 non-<cosmic /> cards from the discard area and remove them from the game."
 	},
 	"147": {
 		"name": "Galactus",
-		"text": "If <name>Galactus</name> is in play, any player with fewer than seven different tags on <hero>Heroes</hero>, <ally>Allies</ally>, and <equipment /> loses 30 points, and the player or players with the most different tags on these cards gains 15 points. <name>Galactus</name> counts as an extra card in all players' hands.",
+		"text": "Any player with fewer than seven different tags on <hero>Heroes</hero>, <ally>Allies</ally>, and <equipment /> loses 30 points, and the player or players with the most different tags on these cards gains 15 points.",
 		"input-label": "Most different tags?"
 	},
 	"148": {
@@ -634,7 +634,7 @@
 	},
 	"152": {
 		"name": "Thanos",
-		"text": "Instead of taking a normal turn, you may reveal this card and steal an <infinity_stone /> from another player. That player may immediately take an extra turn. After they do so, activate the <infinity_stone /> you stole if it has an ability. <score>+10</score> for each <infinity_stone />."
+		"text": "<score>+10</score> for each <infinity_stone />."
 	},
 	"153": {
 		"name": "Invading Armada",
@@ -666,7 +666,7 @@
 	},
 	"160": {
 		"name": "Annihilus",
-		"text": "Choose another card in your hand that contains a negative number anywhere on the card. Add the absolute value of that number (the same number without the negative sign) to <name>Annihilus</name>."
+		"text": "Choose another card in your hand that contains a negative number anywhere on the card. Add the absolute value of that number to <name>Annihilus</name>."
 	},
 	"161": {
 		"name": "Carnage",
@@ -701,6 +701,6 @@
 	},
 	"168": {
 		"name": "Grandmaster",
-		"text": "When <name>Grandmaster</name> is drawn, reveal it, and all players may simultaneously reveal any two non-<villain /> cards from their hands. The player with the highest total strength of the two cards may keep this card. If there is a tie, keep revealing cards until the tie is broken. Then take another turn."
+		"text": "The player with the highest total strength of the two cards may keep this card."
 	}
 }
