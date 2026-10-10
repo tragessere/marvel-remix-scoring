@@ -1,6 +1,6 @@
 import { cardList } from '../constants/cardList.ts'
 import { Card, DECK, TAG } from '../types/card.ts'
-import { getBaseHandSize } from './card.ts'
+import { countIntelAndGuardianTags, getBaseHandSize } from './card.ts'
 import { ManualInput } from './manualInput.ts'
 import { scoreHand } from './score.ts'
 
@@ -117,6 +117,20 @@ describe('scoreHand', () => {
 		// Reality Stone -8, Knowhere 4 + 2 INTEL * 4, Heimdall 4, Lockheed 5
 		expect(result.score).toBe(13)
 		expect(result.finalHand.flatMap(card => card.modifiedTags).filter(tag => tag === TAG.INTEL).length).toBe(2)
+	})
+	it('prefers fewer INTEL and GUARDIAN tags when scores tie', () => {
+		const hand: Card[] = [
+			// Reality Stone
+			cardList[102],
+			// Heimdall (INTEL)
+			cardList[2],
+			// Lockheed
+			cardList[3]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Reality Stone -8, Heimdall 4, Lockheed 5. Changing Heimdall's INTEL doesn't change the score.
+		expect(result.score).toBe(1)
+		expect(countIntelAndGuardianTags(result.finalHand)).toBe(0)
 	})
 	it('lets Rogue copy a MAGIC tag as any other tag', () => {
 		const hand: Card[] = [

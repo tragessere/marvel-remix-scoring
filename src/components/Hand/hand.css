@@ -9,8 +9,8 @@ h2 {
 	border: 1px solid #222;
 	cursor: pointer;
 
-	/* header is first child, then the first card is the second child */
-	&:nth-child(2) {
+	/* header is first child, then the tag count, then the first card */
+	.tag-count + & {
 		margin-top: 0;
 	}
 
@@ -248,9 +248,23 @@ h2 {
 	}
 }
 
+.tag-count {
+	margin-top: -0.5rem;
+	margin-bottom: 0.5rem;
+
+	& .tag {
+		font-size: 1.15rem;
+	}
+
+	& .tag-count-total {
+		font-weight: bold;
+		font-size: 1.15rem;
+		margin-left: 0.25rem;
+	}
+}
+
 .settings {
 	margin-bottom: 2rem;
-
 
 	& .deck-select {
 		display: flex;
@@ -273,5 +287,4 @@ h2 {
 			cursor: pointer;
 		}
 	}
-
 }

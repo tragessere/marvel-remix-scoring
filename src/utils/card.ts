@@ -1,4 +1,6 @@
+import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, DECK, MAGIC_REPLACEMENT_TAGS, ModifiedCard, TAG } from '../types/card.ts'
+import { count } from './whyIsThisNotInLodash.ts'
 
 /** Sort cards with a built-in MAGIC tag first, then other cards with effects, then everything else */
 export const sortEffectCardsFirst = (a: Card, b: Card) => {
@@ -17,6 +19,10 @@ export const findCard = <T extends Card>(hand: T[], id: number) => {
 
 /** Whether the Mind Stone can count this card from an opponent's hand */
 export const isMindStoneTarget = (card: Card) => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY
+
+/** Number of INTEL and GUARDIAN tags in the hand */
+export const countIntelAndGuardianTags = (hand: ModifiedCard[]) =>
+	sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL || tag === TAG.GUARDIAN))
 
 export const blankCard = (card: ModifiedCard) => {
 	card.isBlanked = true

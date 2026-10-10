@@ -3,7 +3,14 @@ import isEqual from 'lodash-es/isEqual'
 import sumBy from 'lodash-es/sumBy'
 import { cardList } from '../constants/cardList.ts'
 import { Card, CARD_TYPE, DECK, ModifiedCard } from '../types/card.ts'
-import { findCard, getBaseHandSize, getMaxHandSize, isMindStoneTarget, sortEffectCardsFirst } from './card.ts'
+import {
+	countIntelAndGuardianTags,
+	findCard,
+	getBaseHandSize,
+	getMaxHandSize,
+	isMindStoneTarget,
+	sortEffectCardsFirst
+} from './card.ts'
 import { ManualInput } from './manualInput.ts'
 import { generatePermutations } from './randomization.ts'
 
@@ -66,8 +73,8 @@ export const scoreHand = (
 		try {
 			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, 0)
 			// Save cards as optimal hand for the first result so we can guarantee having updated cards.
-			// Otherwise only update the hand when we successfully get a score and it's higher than the previous one
-			if (optimalHand.length === 0 || (score !== undefined && (maxScore === undefined || score > maxScore))) {
+			// Otherwise only update the hand when we successfully get a score that beats the previous one
+			if (optimalHand.length === 0 || isPreferredResult(score, resultHand, maxScore, optimalHand)) {
 				maxScore = score
 				optimalHand = resultHand
 				optimalHandIsValid = isValid
@@ -110,6 +117,20 @@ const createBorrowedCard = (hand: ModifiedCard[]): ModifiedCard | undefined => {
 		modifiedTags: tags.slice(),
 		isTransformed
 	}
+}
+
+/**
+ * Whether a result beats the current best.
+ */
+const isPreferredResult = (
+	score: number | undefined,
+	hand: ModifiedCard[],
+	bestScore: number | undefined,
+	bestHand: ModifiedCard[]
+) => {
+	if (score === undefined) return false
+	if (bestScore === undefined || score > bestScore) return true
+	return score === bestScore && countIntelAndGuardianTags(hand) < countIntelAndGuardianTags(bestHand)
 }
 
 interface Result {
@@ -158,7 +179,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			clonedCurrentCard.effect?.(unblankedHand, i)
 			applyTransformsUntilStable(modifiedHand)
 			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, index + 1)
-			if (optimalScore === undefined || (typeof score === 'number' && score > optimalScore)) {
+			if (optimalScore === undefined || isPreferredResult(score, resultHand, optimalScore, optimalHand)) {
 				optimalScore = score
 				optimalHand = resultHand
 				isOptimalScoreValid = isValid

@@ -16,6 +16,7 @@
 	},
 	"selected-cards": {
 		"header": "Selected Cards",
-		"empty-prompt": "Use the sidebar to select the cards in your hand"
+		"empty-prompt": "Use the sidebar to select the cards in your hand",
+		"intel-guardian-count": "Total <intel /> and <guardian /> tags:"
 	}
 }
