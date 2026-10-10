@@ -4,14 +4,14 @@ h2 {
 }
 
 .simple-card {
-	margin: 0.5rem 0;
+	margin-bottom: 0.5rem;
 	border-radius: 5px;
 	border: 1px solid #222;
 	cursor: pointer;
 
-	/* header is first child, then the tag count, then the first card */
-	.tag-count + & {
-		margin-top: 0;
+	/* Only add top margins on cards after the first */
+	& ~ .simple-card {
+		margin: 0.5rem 0;
 	}
 
 	&:focus {
