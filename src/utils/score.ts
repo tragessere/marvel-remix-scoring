@@ -2,8 +2,8 @@ import cloneDeep from 'lodash-es/cloneDeep'
 import isEqual from 'lodash-es/isEqual'
 import sumBy from 'lodash-es/sumBy'
 import { cardList } from '../constants/cardList.ts'
-import { Card, CARD_TYPE, ModifiedCard } from '../types/card.ts'
-import { findCard, isMindStoneTarget, sortEffectCardsFirst } from './card.ts'
+import { Card, CARD_TYPE, DECK, ModifiedCard } from '../types/card.ts'
+import { findCard, getBaseHandSize, getMaxHandSize, isMindStoneTarget, sortEffectCardsFirst } from './card.ts'
 import { ManualInput } from './manualInput.ts'
 import { generatePermutations } from './randomization.ts'
 
@@ -13,6 +13,7 @@ export interface ScoreResult {
 	score: number | undefined
 	finalHand: ModifiedCard[]
 	isValid: boolean
+	maxHandSize: number
 }
 
 /**
@@ -21,8 +22,16 @@ export interface ScoreResult {
  *
  * @param hand Array of cards in the player's hand
  * @param getManualInputs Board values entered by the user for cards that can't be scored from the hand alone
+ * @param baseHandSize Hand size for the decks in play, before Cosmic cards raise the limit
  */
-export const scoreHand = (hand: Card[], getManualInputs: (cardId: number) => ManualInput | undefined): ScoreResult => {
+export const scoreHand = (
+	hand: Card[],
+	getManualInputs: (cardId: number) => ManualInput | undefined,
+	baseHandSize: number = getBaseHandSize([DECK.REMIX])
+): ScoreResult => {
+	const maxHandSize = getMaxHandSize(hand, baseHandSize)
+	const isFullHand = hand.length === maxHandSize
+
 	const initialHand: ModifiedCard[] = hand.map(card => {
 		const manualInput = getManualInputs(card.id)
 		return {
@@ -71,7 +80,8 @@ export const scoreHand = (hand: Card[], getManualInputs: (cardId: number) => Man
 	return {
 		score: maxScore,
 		finalHand: optimalHand,
-		isValid: optimalHandIsValid
+		isValid: isFullHand && optimalHandIsValid,
+		maxHandSize
 	}
 }
 

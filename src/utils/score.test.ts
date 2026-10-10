@@ -1,5 +1,6 @@
 import { cardList } from '../constants/cardList.ts'
-import { Card, TAG } from '../types/card.ts'
+import { Card, DECK, TAG } from '../types/card.ts'
+import { getBaseHandSize } from './card.ts'
 import { ManualInput } from './manualInput.ts'
 import { scoreHand } from './score.ts'
 
@@ -151,6 +152,48 @@ describe('scoreHand', () => {
 		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(false)
 		expect(result.score).toBe(42)
+	})
+	describe('handles hand size', () => {
+		// Valid 7 card hand without any Cosmic cards
+		const fullHand: Card[] = [
+			// Magus (transforms)
+			cardList[148],
+			// Doctor Doom
+			cardList[151],
+			// Exploding Ship
+			cardList[126],
+			// Asteroid Field
+			cardList[127],
+			// Baxter Building
+			cardList[129],
+			// Knowhere
+			cardList[130],
+			// Citadel at the End of Time
+			cardList[134]
+		]
+		it('lets each Cosmic card raise the max hand size', () => {
+			// Cosmic ally
+			const result = scoreHand(fullHand.concat(cardList[88]), emptyManualInput)
+			expect(result.maxHandSize).toBe(8)
+			expect(result.isValid).toBe(true)
+		})
+		it('counts as invalid with too many cards', () => {
+			const result = scoreHand(fullHand.concat(cardList[81]), emptyManualInput)
+			expect(result.maxHandSize).toBe(7)
+			expect(result.isValid).toBe(false)
+		})
+		it('allows 8 cards when playing with both decks', () => {
+			const baseHandSize = getBaseHandSize([DECK.REMIX, DECK.COSMOS])
+			expect(baseHandSize).toBe(8)
+			expect(scoreHand(fullHand, emptyManualInput, baseHandSize).isValid).toBe(false)
+			const result = scoreHand(fullHand.concat(cardList[81]), emptyManualInput, baseHandSize)
+			expect(result.maxHandSize).toBe(8)
+			expect(result.isValid).toBe(true)
+		})
+		it('allows 7 cards when playing with one deck', () => {
+			expect(getBaseHandSize([DECK.REMIX])).toBe(7)
+			expect(getBaseHandSize([DECK.COSMOS])).toBe(7)
+		})
 	})
 	describe('handles manual input', () => {
 		it('subtracts points for Loki draw', () => {

@@ -11,8 +11,8 @@ import './App.css'
 function App() {
 	return (
 		<CardSelectionModeProvider>
-			<ScoreProvider>
-				<DeckSelectionProvider>
+			<DeckSelectionProvider>
+				<ScoreProvider>
 					<Header />
 					<div className="content">
 						<SelectColumn />
@@ -21,8 +21,8 @@ function App() {
 						</main>
 					</div>
 					<Footer />
-				</DeckSelectionProvider>
-			</ScoreProvider>
+				</ScoreProvider>
+			</DeckSelectionProvider>
 		</CardSelectionModeProvider>
 	)
 }

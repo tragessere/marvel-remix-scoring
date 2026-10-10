@@ -14,7 +14,7 @@ export const Header: FunctionComponent = () => {
 
 	const isFinishedAndInvalid =
 		!result.isValid &&
-		selectedCardCount === 7 &&
+		selectedCardCount === result.maxHandSize &&
 		(getManualInput(73) !== undefined || !selectedCardIds.includes(73)) &&
 		(getManualInput(104) !== undefined || !selectedCardIds.includes(104))
 
@@ -22,7 +22,9 @@ export const Header: FunctionComponent = () => {
 		<div className="header">
 			<h1>Marvel Remix</h1>
 			<div className="right-side">
-				<span className="card-count">{selectedCardCount}/7</span>
+				<span className="card-count">
+					{selectedCardCount}/{result.maxHandSize}
+				</span>
 				<span className={`score${isFinishedAndInvalid ? ' invalid' : ''}`}>
 					{result.score === undefined ? '-' : result.score}
 				</span>

@@ -67,6 +67,16 @@ const COSMOS_DECK_ID_START = 81
 /** The deck a card was printed in. Squirrel Girl counts as Marvel Remix, though she can be played with either deck. */
 export const getCardDeck = (card: Card) => (card.id >= COSMOS_DECK_ID_START ? DECK.COSMOS : DECK.REMIX)
 
+const DEFAULT_HAND_SIZE = 7
+const COMBINED_DECKS_HAND_SIZE = 8
+
+/** Hand size before any card effects. Playing with both decks combined allows an extra card. */
+export const getBaseHandSize = (decks: DECK[]) => (decks.length === 2 ? COMBINED_DECKS_HAND_SIZE : DEFAULT_HAND_SIZE)
+
+/** Cosmic cards don't count against the hand limit, so each one raises the max hand size by one */
+export const getMaxHandSize = (hand: Card[], baseHandSize: number) =>
+	baseHandSize + hand.filter(card => card.tags.includes(TAG.COSMIC)).length
+
 /** Whether a card belongs to any of the given decks */
 export const isCardInDecks = (card: Card, decks: DECK[]) => {
 	// Always include Squirrel Girl

@@ -1,8 +1,8 @@
 import { FunctionComponent, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CARD_SELECT_MODE, CardSelectionModeContext } from '../../contexts/ContextList.tsx'
+import { CARD_SELECT_MODE, CardSelectionModeContext, ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
-import { Card, CARD_TYPE } from '../../types/card.ts'
+import { Card, CARD_TYPE, TAG } from '../../types/card.ts'
 import { isMindStoneTarget } from '../../utils/card.ts'
 
 interface SelectCardProps {
@@ -13,10 +13,12 @@ export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
 	const { t } = useTranslation('card-info')
 	const { selectedCardIds, addCard, removeCard, setManualInput } = useCardSelection()
 	const { cardSelectMode, setCardSelectMode } = useContext(CardSelectionModeContext)
+	const { maxHandSize } = useContext(ScoreContext)
 
 	const category = CARD_TYPE[card.type].toLowerCase()
 	const includesCard = selectedCardIds.includes(card.id)
-	const canAddCard = selectedCardIds.length < 7
+	// A Cosmic card doesn't count against the hand limit, so it can always be added
+	const canAddCard = selectedCardIds.length < maxHandSize || card.tags.includes(TAG.COSMIC)
 	// Mind Stone can only take a hero or ally from an opponent
 	const isDisabled = cardSelectMode === CARD_SELECT_MODE.MIND_STONE_CHOICE && !isMindStoneTarget(card)
 
