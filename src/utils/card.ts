@@ -20,6 +20,19 @@ export const findCard = <T extends Card>(hand: T[], id: number) => {
 /** Whether the Mind Stone can count this card from an opponent's hand */
 export const isMindStoneTarget = (card: Card) => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY
 
+/** Number of different tags on heroes, allies, and equipment in the hand, which Galactus scores on */
+export const countGalactusTags = (hand: ModifiedCard[]) => {
+	const tagTypes = new Set<TAG>()
+	for (const card of hand) {
+		if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.EQUIPMENT) {
+			for (const tag of card.modifiedTags) {
+				tagTypes.add(tag)
+			}
+		}
+	}
+	return tagTypes.size
+}
+
 /** Number of INTEL and GUARDIAN tags in the hand */
 export const countIntelAndGuardianTags = (hand: ModifiedCard[]) =>
 	sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL || tag === TAG.GUARDIAN))

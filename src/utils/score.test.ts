@@ -1,6 +1,6 @@
 import { cardList } from '../constants/cardList.ts'
 import { Card, DECK, TAG } from '../types/card.ts'
-import { countIntelAndGuardianTags, getBaseHandSize } from './card.ts'
+import { countGalactusTags, countIntelAndGuardianTags, getBaseHandSize } from './card.ts'
 import { ManualInput } from './manualInput.ts'
 import { scoreHand } from './score.ts'
 
@@ -131,6 +131,21 @@ describe('scoreHand', () => {
 		// Reality Stone -8, Heimdall 4, Lockheed 5. Changing Heimdall's INTEL doesn't change the score.
 		expect(result.score).toBe(1)
 		expect(countIntelAndGuardianTags(result.finalHand)).toBe(0)
+	})
+	it('prefers more different tags over fewer INTEL and GUARDIAN tags when scores tie with Galactus', () => {
+		const hand: Card[] = [
+			// Galactus
+			cardList[147],
+			// Reality Stone
+			cardList[102],
+			// Black Widow (INTEL, AGILITY, AGILITY)
+			cardList[36]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Galactus -30, Reality Stone -8, Black Widow 6. Changing a duplicate AGILITY adds a tag but keeps the INTEL.
+		expect(result.score).toBe(-32)
+		expect(countGalactusTags(result.finalHand)).toBe(5)
+		expect(countIntelAndGuardianTags(result.finalHand)).toBe(1)
 	})
 	it('lets Rogue copy a MAGIC tag as any other tag', () => {
 		const hand: Card[] = [

@@ -3,6 +3,7 @@ import sumBy from 'lodash-es/sumBy'
 import { cardList } from '../constants/cardList.ts'
 import { Card, CARD_TYPE, DECK, ModifiedCard } from '../types/card.ts'
 import {
+	countGalactusTags,
 	countIntelAndGuardianTags,
 	findCard,
 	getBaseHandSize,
@@ -14,6 +15,7 @@ import { ManualInput } from './manualInput.ts'
 import { generatePermutations } from './randomization.ts'
 
 const MIND_STONE_ID = 104
+const GALACTUS_ID = 147
 
 export interface ScoreResult {
 	score: number | undefined
@@ -119,7 +121,7 @@ const createBorrowedCard = (hand: ModifiedCard[]): ModifiedCard | undefined => {
 }
 
 /**
- * Whether a result beats the current best.
+ * Whether a result beats the current best. Tiebreakers on various tag counts.
  */
 const isPreferredResult = (
 	score: number | undefined,
@@ -127,9 +129,24 @@ const isPreferredResult = (
 	bestScore: number | undefined,
 	bestHand: ModifiedCard[]
 ) => {
+	// invalid hand
 	if (score === undefined) return false
+	// prefer higher scores
 	if (bestScore === undefined || score > bestScore) return true
-	return score === bestScore && countIntelAndGuardianTags(hand) < countIntelAndGuardianTags(bestHand)
+	// false for lower scores, otherwise continue to tiebreakers
+	if (score !== bestScore) return false
+
+	// Prefer higher number of different tags if Galactus is in hand
+	const differentTagsDiff = countGalactusValue(hand) - countGalactusValue(bestHand)
+	if (differentTagsDiff !== 0) return differentTagsDiff > 0
+	// Prefer fewer INTEL and GUARDIAN tags to avoid helping other players
+	return countIntelAndGuardianTags(hand) < countIntelAndGuardianTags(bestHand)
+}
+
+/** Number of different tags counted by Galactus, or 0 if Galactus isn't active in the hand */
+const countGalactusValue = (hand: ModifiedCard[]) => {
+	const galactusActive = hand.some(card => card.id === GALACTUS_ID && !card.isBlanked && !card.isTextBlanked)
+	return galactusActive ? countGalactusTags(hand) : 0
 }
 
 interface Result {

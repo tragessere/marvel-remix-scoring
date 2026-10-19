@@ -1,6 +1,13 @@
 import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, MAGIC_REPLACEMENT_TAGS, MANUAL_INPUT, ModifiedCard, TAG } from '../types/card.ts'
-import { blankCard, findCard, magicDuplicateOptionCount, removeTag, tagCopyOptionCount } from '../utils/card.ts'
+import {
+	blankCard,
+	countGalactusTags,
+	findCard,
+	magicDuplicateOptionCount,
+	removeTag,
+	tagCopyOptionCount
+} from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
 
@@ -2425,17 +2432,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		// Whether this player has, or ties for, the most different tags at the table
 		manualInput: MANUAL_INPUT.TOGGLE,
 		score(hand) {
-			const tagTypes = new Set<TAG>()
-			for (const card of hand) {
-				if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.EQUIPMENT) {
-					for (const tag of card.modifiedTags) {
-						tagTypes.add(tag)
-					}
-				}
-			}
-
 			// Both halves can apply at once, leaving a player on the most tags but still short of seven at -15
-			return this.power - (tagTypes.size < 7 ? 30 : 0) + (this.manualInputValue ? 15 : 0)
+			return this.power - (countGalactusTags(hand) < 7 ? 30 : 0) + (this.manualInputValue ? 15 : 0)
 		}
 	},
 	148: {
