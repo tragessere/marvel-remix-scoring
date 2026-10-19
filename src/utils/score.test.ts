@@ -779,6 +779,24 @@ describe('scoreHand', () => {
 			})
 		}
 	})
+	it('works with Magic tags', () => {
+		const result = scoreHand(
+			[
+				// Ms. Marvel
+				cardList[111],
+				// Doctor Strange
+				cardList[109],
+				// Power Stone
+				cardList[101],
+				// Reality Stone
+				cardList[102],
+				// Gorr
+				cardList[154]
+			],
+			emptyManualInput
+		)
+		expect(result.score).toBe(24)
+	})
 
 	// it('runs a test hand', () => {
 	// 	const result = scoreHand([

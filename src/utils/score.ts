@@ -1,4 +1,3 @@
-import cloneDeep from 'lodash-es/cloneDeep'
 import isEqual from 'lodash-es/isEqual'
 import sumBy from 'lodash-es/sumBy'
 import { cardList } from '../constants/cardList.ts'
@@ -69,7 +68,7 @@ export const scoreHand = (
 	let optimalHandIsValid = false
 	for (const order of orderCombinations) {
 		const orderedHand = order.map(index => modifyCards[index]).concat(countCards)
-		const modifiedHand = cloneDeep(orderedHand)
+		const modifiedHand = cloneHand(orderedHand)
 		try {
 			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, 0)
 			// Save cards as optimal hand for the first result so we can guarantee having updated cards.
@@ -171,7 +170,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 		let optimalScore = undefined
 		let isOptimalScoreValid = false
 		for (let i = 0; i < optionCount; i++) {
-			const modifiedHand = cloneDeep(hand)
+			const modifiedHand = cloneHand(hand)
 			const clonedCurrentCard = findCard(modifiedHand, currentCard.id)
 			const unblankedHand = modifiedHand.filter(card => !card.isBlanked)
 			// Use null-safe access to make Typescript happy. `effect` function will always exist here because it
@@ -242,3 +241,9 @@ const syncMindStoneCard = (hand: ModifiedCard[]) => {
 
 	borrowedCard.isBlanked = borrowedCard.isBlankedByOtherCard || mindStone.isBlanked || mindStone.isTextBlanked
 }
+
+/**
+ * Clone hand into a new object. Uses a shallow copy of all properties except modifiedTags.
+ */
+const cloneHand = (hand: ModifiedCard[]): ModifiedCard[] =>
+	hand.map(card => ({ ...card, modifiedTags: card.modifiedTags.slice() }))
