@@ -147,6 +147,48 @@ describe('scoreHand', () => {
 		expect(countGalactusTags(result.finalHand)).toBe(5)
 		expect(countIntelAndGuardianTags(result.finalHand)).toBe(1)
 	})
+	describe('Galactus tag options', () => {
+		const hand: Card[] = [
+			// Galactus
+			cardList[147],
+			// Reality Stone
+			cardList[102],
+			// Birnin Zana (+7 for each WAKANDA)
+			cardList[49],
+			// Black Widow (INTEL, AGILITY, AGILITY)
+			cardList[36],
+			// Dora Milaje (INTEL, AGILITY, WAKANDA)
+			cardList[6]
+		]
+		// Changing a duplicate AGILITY to a new tag keeps 6 different tags, but changing it to WAKANDA scores 7 more
+
+		it('offers keeping more tags or scoring more points', () => {
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.galactusOptions).toEqual([
+				{ tagCount: 6, score: -19 },
+				{ tagCount: 5, score: -12 }
+			])
+		})
+		it('defaults to the highest score', () => {
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(-12)
+			expect(countGalactusTags(result.finalHand)).toBe(5)
+		})
+		it('keeps the chosen number of tags', () => {
+			const result = scoreHand(hand, createManualInputGetter({ 147: { value: 0, secondaryValue: 6 } }))
+			expect(result.score).toBe(-19)
+			expect(countGalactusTags(result.finalHand)).toBe(6)
+		})
+		it('keeps the most tags available when the chosen number cannot be reached', () => {
+			const result = scoreHand(hand, createManualInputGetter({ 147: { value: 0, secondaryValue: 9 } }))
+			expect(result.score).toBe(-19)
+			expect(countGalactusTags(result.finalHand)).toBe(6)
+		})
+		it('has no options without Galactus', () => {
+			const result = scoreHand(hand.slice(1), emptyManualInput)
+			expect(result.galactusOptions).toEqual([])
+		})
+	})
 	it('lets Rogue copy a MAGIC tag as any other tag', () => {
 		const hand: Card[] = [
 			// Rogue

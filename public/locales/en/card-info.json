@@ -610,7 +610,9 @@
 	"147": {
 		"name": "Galactus",
 		"text": "Any player with fewer than seven different tags on <hero>Heroes</hero>, <ally>Allies</ally>, and <equipment /> loses 30 points, and the player or players with the most different tags on these cards gains 15 points.",
-		"input-label": "Most different tags?"
+		"input-label": "Most different tags?",
+		"tag-target-label": "Keep tags:",
+		"tag-target-option": "{{tagCount}} tags ({{score}} points)"
 	},
 	"148": {
 		"name": "Magus",

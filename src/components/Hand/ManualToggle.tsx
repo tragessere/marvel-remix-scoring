@@ -21,7 +21,7 @@ export const ManualToggle: FunctionComponent<ManualToggleProps> = ({ sourceCardI
 				type="checkbox"
 				checked={manualInput?.value === 1}
 				onChange={event => {
-					setManualInput(sourceCardId, event.target.checked ? 1 : 0)
+					setManualInput(sourceCardId, event.target.checked ? 1 : 0, manualInput?.secondaryValue)
 				}}
 			/>
 			{label}

@@ -7,6 +7,7 @@ import { CARD_TYPE, MANUAL_INPUT } from '../../types/card.ts'
 import { findCard, mapCardTags } from '../../utils/card.ts'
 import { CardText } from './CardText.tsx'
 import { ChosenCard } from './ChosenCard.tsx'
+import { GalactusTagTarget } from './GalactusTagTarget.tsx'
 import { ManualCount } from './ManualCount.tsx'
 import { ManualToggle } from './ManualToggle.tsx'
 import { TagIcon } from './TagIcon.tsx'
@@ -90,6 +91,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 						<ManualToggle sourceCardId={card.id} label={t(`${card.id}.input-label`)} />
 					</div>
 				)}
+				{card.id === 147 && <GalactusTagTarget />}
 			</div>
 		</div>
 	)

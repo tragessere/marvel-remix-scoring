@@ -17,11 +17,19 @@ import { generatePermutations } from './randomization.ts'
 const MIND_STONE_ID = 104
 const GALACTUS_ID = 147
 
+/** A number of different tags Galactus can count, and the best score that keeps at least that many */
+export interface GalactusOption {
+	tagCount: number
+	score: number
+}
+
 export interface ScoreResult {
 	score: number | undefined
 	finalHand: ModifiedCard[]
 	isValid: boolean
 	maxHandSize: number
+	/** Trade-offs between keeping more tags for Galactus and scoring more points, from most tags to highest score */
+	galactusOptions: GalactusOption[]
 }
 
 /**
@@ -65,32 +73,60 @@ export const scoreHand = (
 	const countCards = initialHand.slice(modifyCardCount)
 	const orderCombinations = generatePermutations(modifyCardCount)
 
-	let maxScore = undefined
-	let optimalHand: ModifiedCard[] = []
-	let optimalHandIsValid = false
+	const results: ResultsByTagCount = new Map()
 	for (const order of orderCombinations) {
 		const orderedHand = order.map(index => modifyCards[index]).concat(countCards)
 		const modifiedHand = cloneHand(orderedHand)
 		try {
-			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, 0)
-			// Save cards as optimal hand for the first result so we can guarantee having updated cards.
-			// Otherwise only update the hand when we successfully get a score that beats the previous one
-			if (optimalHand.length === 0 || isPreferredResult(score, resultHand, maxScore, optimalHand)) {
-				maxScore = score
-				optimalHand = resultHand
-				optimalHandIsValid = isValid
-			}
+			mergeResults(results, applyEffectsRecursive(modifiedHand, 0))
 		} catch {
 			/* invalid order of operation, skip hand */
 		}
 	}
 
+	const galactus = initialHand.find(card => card.id === GALACTUS_ID)
+	const galactusOptions = getGalactusOptions(results)
+	const optimalResult = selectResult(results, galactusOptions, galactus?.manualInputSecondaryValue)
+
 	return {
-		score: maxScore,
-		finalHand: optimalHand,
-		isValid: isFullHand && optimalHandIsValid,
-		maxHandSize
+		score: optimalResult?.score,
+		finalHand: optimalResult?.hand ?? [],
+		isValid: isFullHand && !!optimalResult?.isValid,
+		maxHandSize,
+		galactusOptions: galactus ? galactusOptions : []
 	}
+}
+
+/**
+ * Options worth choosing between for Galactus. Keeping fewer tags is only an option if it scores more than keeping
+ * any higher number of tags.
+ */
+const getGalactusOptions = (results: ResultsByTagCount): GalactusOption[] => {
+	const options: GalactusOption[] = []
+	const resultsByMostTags = Array.from(results.entries()).sort(([a], [b]) => b - a)
+	for (const [tagCount, { score }] of resultsByMostTags) {
+		if (score === undefined) continue
+		if (options.length === 0 || score > options[options.length - 1].score) {
+			options.push({ tagCount, score })
+		}
+	}
+	return options
+}
+
+/**
+ * Pick the result to show. Uses the highest score unless the player chose a number of tags to keep for Galactus.
+ *
+ * @param results Mapping from each tag count to the best scoring hand for that tag count.
+ * @param options collection of tag counts and their respective scores.
+ * @param targetTagCount Fewest different tags to keep. Falls back to the most tags available if it can't be reached.
+ */
+const selectResult = (results: ResultsByTagCount, options: GalactusOption[], targetTagCount: number | undefined) => {
+	const option =
+		targetTagCount === undefined
+			? options.at(-1)
+			: (options.findLast(option => option.tagCount >= targetTagCount) ?? options[0])
+	// With no scored option, fall back to any result so we can guarantee having updated cards
+	return option ? results.get(option.tagCount) : results.values().next().value
 }
 
 /**
@@ -121,7 +157,7 @@ const createBorrowedCard = (hand: ModifiedCard[]): ModifiedCard | undefined => {
 }
 
 /**
- * Whether a result beats the current best. Tiebreakers on various tag counts.
+ * Whether a result beats the current best with the same Galactus tag count. Tiebreakers on various tag counts.
  */
 const isPreferredResult = (
 	score: number | undefined,
@@ -136,17 +172,8 @@ const isPreferredResult = (
 	// false for lower scores, otherwise continue to tiebreakers
 	if (score !== bestScore) return false
 
-	// Prefer higher number of different tags if Galactus is in hand
-	const differentTagsDiff = countGalactusValue(hand) - countGalactusValue(bestHand)
-	if (differentTagsDiff !== 0) return differentTagsDiff > 0
 	// Prefer fewer INTEL and GUARDIAN tags to avoid helping other players
 	return countIntelAndGuardianTags(hand) < countIntelAndGuardianTags(bestHand)
-}
-
-/** Number of different tags counted by Galactus, or 0 if Galactus isn't active in the hand */
-const countGalactusValue = (hand: ModifiedCard[]) => {
-	const galactusActive = hand.some(card => card.id === GALACTUS_ID && !card.isBlanked && !card.isTextBlanked)
-	return galactusActive ? countGalactusTags(hand) : 0
 }
 
 interface Result {
@@ -155,7 +182,32 @@ interface Result {
 	isValid: boolean
 }
 
-const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
+/**
+ * Best result for each number of different tags counted by Galactus. Without Galactus in the hand, every result
+ * shares the key 0. Ties between different tag counts are settled by `getGalactusOptions`, which prefers more tags.
+ */
+type ResultsByTagCount = Map<number, Result>
+
+const getGalactusKey = (hand: ModifiedCard[]) =>
+	hand.some(card => card.id === GALACTUS_ID) ? countGalactusTags(hand) : 0
+
+const addResult = (results: ResultsByTagCount, result: Result) => {
+	const key = getGalactusKey(result.hand)
+	const best = results.get(key)
+	// Save the first result so we can guarantee having updated cards. Otherwise only update the hand when we
+	// successfully get a score that beats the previous one
+	if (!best || isPreferredResult(result.score, result.hand, best.score, best.hand)) {
+		results.set(key, result)
+	}
+}
+
+const mergeResults = (results: ResultsByTagCount, newResults: ResultsByTagCount) => {
+	for (const result of newResults.values()) {
+		addResult(results, result)
+	}
+}
+
+const applyEffectsRecursive = (hand: ModifiedCard[], index: number): ResultsByTagCount => {
 	if (index === hand.length) {
 		const unblankedHand = hand.filter(card => !card.isBlanked)
 		for (const card of hand) {
@@ -166,11 +218,12 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 				card.modifiedPower = card.score(unblankedHand)
 			}
 		}
-		return {
+		const result = {
 			score: sumBy(hand, card => card.modifiedPower),
 			hand,
 			isValid: containsRequiredCards(hand)
 		}
+		return new Map([[getGalactusKey(hand), result]])
 	}
 
 	if (index === 0) {
@@ -183,9 +236,7 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 		if (!optionCount) {
 			return applyEffectsRecursive(hand, index + 1)
 		}
-		let optimalHand: ModifiedCard[] = []
-		let optimalScore = undefined
-		let isOptimalScoreValid = false
+		const results: ResultsByTagCount = new Map()
 		for (let i = 0; i < optionCount; i++) {
 			const modifiedHand = cloneHand(hand)
 			const clonedCurrentCard = findCard(modifiedHand, currentCard.id)
@@ -194,14 +245,9 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): Result => {
 			// was checked on the card before cloning.
 			clonedCurrentCard.effect?.(unblankedHand, i)
 			applyTransformsUntilStable(modifiedHand)
-			const { score, hand: resultHand, isValid } = applyEffectsRecursive(modifiedHand, index + 1)
-			if (optimalScore === undefined || isPreferredResult(score, resultHand, optimalScore, optimalHand)) {
-				optimalScore = score
-				optimalHand = resultHand
-				isOptimalScoreValid = isValid
-			}
+			mergeResults(results, applyEffectsRecursive(modifiedHand, index + 1))
 		}
-		return { score: optimalScore, hand: optimalHand, isValid: isOptimalScoreValid }
+		return results
 	} else {
 		return applyEffectsRecursive(hand, index + 1)
 	}
