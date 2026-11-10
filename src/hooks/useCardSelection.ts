@@ -4,11 +4,18 @@ import { CARD_SELECT_MODE, CardSelectionModeContext } from '../contexts/ContextL
 import { QueryParams } from '../types/route.ts'
 import {
 	clearManualInput,
+	clearSecondaryValue,
 	ManualInput,
 	ManualInputs,
 	parseManualInputs,
 	serializeManualInputs
 } from '../utils/manualInput.ts'
+
+/**
+ * Clear the number of tags chosen for Galactus to keep, since the options it was picked from change with the hand.
+ * Keeps the "most different tags" answer.
+ */
+const clearGalactusTagTarget = (inputs: ManualInputs) => clearSecondaryValue(inputs, 147)
 
 const writeManualInputs = (searchParams: URLSearchParams, inputs: ManualInputs) => {
 	const serialized = serializeManualInputs(inputs)
@@ -31,6 +38,7 @@ export const useCardSelection = () => {
 
 		setSearchParams(searchParams => {
 			searchParams.set(QueryParams.SELECTED_CARDS, selectedCardIds.concat(cardId).toString())
+			writeManualInputs(searchParams, clearGalactusTagTarget(manualInputs))
 			return searchParams
 		})
 	}
@@ -78,7 +86,7 @@ export const useCardSelection = () => {
 			searchParams.set(QueryParams.SELECTED_CARDS, selectedCardIds.filter(id => id !== cardId).toString())
 
 			// Drop any manual values entered for the removed card
-			writeManualInputs(searchParams, clearManualInput(manualInputs, cardId))
+			writeManualInputs(searchParams, clearGalactusTagTarget(clearManualInput(manualInputs, cardId)))
 
 			return searchParams
 		})

@@ -48,3 +48,10 @@ export const clearManualInput = (inputs: ManualInputs, cardId: number): ManualIn
 		}
 		return remaining
 	}, {})
+
+/** Clear only the secondary value entered for one card, keeping its main value. */
+export const clearSecondaryValue = (inputs: ManualInputs, cardId: number): ManualInputs => {
+	const input = inputs[cardId] as ManualInput | undefined
+	if (input?.secondaryValue === undefined) return inputs
+	return { ...inputs, [cardId]: { value: input.value } }
+}

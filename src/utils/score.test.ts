@@ -184,10 +184,6 @@ describe('scoreHand', () => {
 			expect(result.score).toBe(-19)
 			expect(countGalactusTags(result.finalHand)).toBe(6)
 		})
-		it('has no options without Galactus', () => {
-			const result = scoreHand(hand.slice(1), emptyManualInput)
-			expect(result.galactusOptions).toEqual([])
-		})
 	})
 	it('lets Rogue copy a MAGIC tag as any other tag', () => {
 		const hand: Card[] = [

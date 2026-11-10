@@ -1,4 +1,4 @@
-import { parseManualInputs, serializeManualInputs } from './manualInput.ts'
+import { clearSecondaryValue, parseManualInputs, serializeManualInputs } from './manualInput.ts'
 
 describe('parseManualInputs', () => {
 	it('reads entries from the query parameter', () => {
@@ -38,5 +38,17 @@ describe('serializeManualInputs', () => {
 	})
 	it('returns an empty string when nothing has been entered', () => {
 		expect(serializeManualInputs({})).toBe('')
+	})
+})
+
+describe('clearSecondaryValue', () => {
+	it('keeps the main value', () => {
+		const inputs = { 123: { value: 4 }, 147: { value: 1, secondaryValue: 7 } }
+		expect(clearSecondaryValue(inputs, 147)).toEqual({ 123: { value: 4 }, 147: { value: 1 } })
+	})
+	it('leaves inputs unchanged without a secondary value', () => {
+		const inputs = { 147: { value: 1 } }
+		expect(clearSecondaryValue(inputs, 147)).toBe(inputs)
+		expect(clearSecondaryValue(inputs, 104)).toBe(inputs)
 	})
 })
