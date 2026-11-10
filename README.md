@@ -1,6 +1,6 @@
 # Marvel Remix Scoring
 
-This is an unofficial application for scoring the [Marvel Remix](https://wizkids.com/marvel-remix/) card game. It is inspired by the similar scoring app for Fantasy Realms, the [Fantasy Realms App of Scoring](https://fantasy-realms.github.io/index.html)
+This is an unofficial application for scoring the [Marvel: Remix](https://wizkids.com/marvel-remix/) and [Marvel: Remix the Cosmos](https://shop.wizkids.com/products/marvel-remix-the-cosmos) card games. It is inspired by the similar scoring app for Fantasy Realms, the [Fantasy Realms App of Scoring](https://fantasy-realms.github.io/index.html)
 
 All images and characters used are property of WizKids or The Walt Disney Company.
 
