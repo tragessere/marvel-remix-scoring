@@ -61,7 +61,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 					{i18n.exists(`card-info:${card.id}.text`) && <CardText i18nKey={`card-info:${card.id}.text`} />}
 				</>
 				{card.id === 73 && (
-					<div className="chosen-card-container">
+					<div className="manual-input-container">
 						<span>Drawn Card:</span>
 						<ChosenCard
 							sourceCardId={73}
@@ -71,7 +71,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 					</div>
 				)}
 				{card.id === 104 && (
-					<div className="chosen-card-container">
+					<div className="manual-input-container">
 						<span>Opponent's Card:</span>
 						<ChosenCard
 							sourceCardId={104}
@@ -82,12 +82,12 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 					</div>
 				)}
 				{card.manualInput === MANUAL_INPUT.COUNT && (
-					<div className="chosen-card-container">
+					<div className="manual-input-container">
 						<ManualCount sourceCardId={card.id} label={t(`${card.id}.input-label`)} />
 					</div>
 				)}
 				{card.manualInput === MANUAL_INPUT.TOGGLE && (
-					<div className="chosen-card-container">
+					<div className="manual-input-container">
 						<ManualToggle sourceCardId={card.id} label={t(`${card.id}.input-label`)} />
 					</div>
 				)}
