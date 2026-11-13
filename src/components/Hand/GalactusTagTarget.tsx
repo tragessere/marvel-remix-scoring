@@ -6,14 +6,22 @@ import { countGalactusTags } from '../../utils/card.ts'
 
 const GALACTUS_ID = 147
 
-/** Choose between keeping more different tags for Galactus and scoring more points */
+/** Show how many different tags count for Galactus, or choose between keeping more tags and scoring more points */
 export const GalactusTagTarget: FunctionComponent = () => {
 	const { t } = useTranslation('card-info')
 	const { getManualInput, setManualInput } = useCardSelection()
 	const { finalHand, galactusOptions } = useContext(ScoreContext)
 	const manualInput = getManualInput(GALACTUS_ID)
 
-	if (galactusOptions.length < 2) return null
+	const tagCount = countGalactusTags(finalHand)
+
+	if (galactusOptions.length < 2) {
+		return (
+			<div className="manual-input-container">
+				<span className="manual-input">{t(`${GALACTUS_ID}.tag-count`, { tagCount })}</span>
+			</div>
+		)
+	}
 
 	return (
 		<div className="manual-input-container">
@@ -24,7 +32,7 @@ export const GalactusTagTarget: FunctionComponent = () => {
 				}}>
 				{t(`${GALACTUS_ID}.tag-target-label`)}
 				<select
-					value={countGalactusTags(finalHand)}
+					value={tagCount}
 					onChange={event => {
 						// Keep the "most different tags" answer, which shares this card's manual input
 						setManualInput(GALACTUS_ID, manualInput?.value ?? 0, Number(event.target.value))
