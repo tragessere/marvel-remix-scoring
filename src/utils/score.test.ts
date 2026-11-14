@@ -440,27 +440,6 @@ describe('scoreHand', () => {
 			const result4 = scoreHand(hand, getter)
 			expect(result4.score).toBe(28)
 		})
-		it('Ignores Mind Stone choices that are not an opponent hero or ally', () => {
-			const hand: Card[] = [
-				// Baron Zemo
-				cardList[72],
-				// Forge
-				cardList[1],
-				// Mind Stone
-				cardList[104]
-			]
-			// Forge is already in the hand
-			let getter = createManualInputGetter({ 104: 1 })
-			let result = scoreHand(hand, getter)
-			expect(result.score).toBe(18)
-			expect(result.finalHand).toHaveLength(3)
-
-			// Loki is a villain
-			getter = createManualInputGetter({ 104: 73 })
-			result = scoreHand(hand, getter)
-			expect(result.score).toBe(18)
-			expect(result.finalHand).toHaveLength(3)
-		})
 		it('Does not count the Mind Stone card when the Mind Stone is blanked', () => {
 			const hand: Card[] = [
 				// Magneto
@@ -477,6 +456,21 @@ describe('scoreHand', () => {
 			const result2 = scoreHand(hand, getter)
 			expect(result2.score).toBe(result.score)
 			expect(result2.finalHand.find(card => card.id === 30)?.isBlanked).toBe(true)
+		})
+		it('Applies blanking rules on the Mind Stone card', () => {
+			const hand: Card[] = [
+				// Baron Zemo
+				cardList[72],
+				// Forge
+				cardList[1],
+				// Mind Stone
+				cardList[104]
+			]
+			// Nova Corps, with no other SPACE card in the hand
+			const getter = createManualInputGetter({ 104: 87 })
+			const result = scoreHand(hand, getter)
+			expect(result.score).toBe(18)
+			expect(result.finalHand.find(card => card.id === 87)?.isBlanked).toBe(true)
 		})
 	})
 	it('works with Magic tags', () => {

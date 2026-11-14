@@ -17,6 +17,17 @@ import {
  */
 const clearGalactusTagTarget = (inputs: ManualInputs) => clearSecondaryValue(inputs, 147)
 
+/**
+ * If a newly added card was already selected for Loki or Mind Stone, clear that selection so it isn't
+ * in the hand twice.
+ */
+const clearCardChoices = (inputs: ManualInputs, cardId: number) =>
+	[73, 104].reduce(
+		(remaining, id) =>
+			(remaining[id] as ManualInput | undefined)?.value === cardId ? clearManualInput(remaining, id) : remaining,
+		inputs
+	)
+
 const writeManualInputs = (searchParams: URLSearchParams, inputs: ManualInputs) => {
 	const serialized = serializeManualInputs(inputs)
 	if (serialized) {
@@ -38,7 +49,7 @@ export const useCardSelection = () => {
 
 		setSearchParams(searchParams => {
 			searchParams.set(QueryParams.SELECTED_CARDS, selectedCardIds.concat(cardId).toString())
-			writeManualInputs(searchParams, clearGalactusTagTarget(manualInputs))
+			writeManualInputs(searchParams, clearGalactusTagTarget(clearCardChoices(manualInputs, cardId)))
 			return searchParams
 		})
 	}

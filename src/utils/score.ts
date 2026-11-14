@@ -8,7 +8,6 @@ import {
 	findCard,
 	getBaseHandSize,
 	getMaxHandSize,
-	isMindStoneTarget,
 	sortEffectCardsFirst
 } from './card.ts'
 import { ManualInput } from './manualInput.ts'
@@ -130,7 +129,8 @@ const selectResult = (results: ResultsByTagCount, options: GalactusOption[], tar
 }
 
 /**
- * Add an extra card to the hand, independently handling its transform state.
+ * Add an extra card to the hand. A card that can transform uses the transform state the player picked instead of its
+ * own transform, but other cards keep theirs for rules like Nova Corps blanking itself.
  */
 const createBorrowedCard = (hand: ModifiedCard[]): ModifiedCard | undefined => {
 	const mindStone = hand.find(card => card.id === MIND_STONE_ID)
@@ -138,7 +138,7 @@ const createBorrowedCard = (hand: ModifiedCard[]): ModifiedCard | undefined => {
 	if (borrowedId === undefined) return undefined
 
 	const card = cardList[borrowedId] as Card | undefined
-	if (!card || !isMindStoneTarget(card) || hand.some(c => c.id === borrowedId)) return undefined
+	if (!card) return undefined
 
 	const isTransformed = !!card.transformedTags && mindStone?.manualInputSecondaryValue === 1
 	const power = isTransformed ? (card.transformedPower ?? card.power) : card.power
@@ -146,7 +146,7 @@ const createBorrowedCard = (hand: ModifiedCard[]): ModifiedCard | undefined => {
 	return {
 		...card,
 		power,
-		transform: undefined,
+		transform: card.transformedTags ? undefined : card.transform,
 		isBlanked: false,
 		isBlankedByOtherCard: false,
 		isTextBlanked: false,
@@ -280,9 +280,13 @@ const applyTransformsUntilStable = (hand: ModifiedCard[]) => {
 
 const applyTransforms = (hand: ModifiedCard[], unblankedHand: ModifiedCard[]) => {
 	const squirrelGirlActive = unblankedHand.some(card => card.id === 80)
+	const borrowedId = hand.find(card => card.id === MIND_STONE_ID)?.manualInputValue
 	for (const card of hand) {
 		if (card.isBlankedByOtherCard || card.isTextBlanked || (squirrelGirlActive && card.type === CARD_TYPE.VILLAIN))
 			continue
+		// `syncMindStoneCard` blanks the borrowed card while the Mind Stone is inactive. Don't let its own transform
+		// unblank it.
+		if (card.id === borrowedId && card.isBlanked) continue
 		card.transform?.(unblankedHand, card)
 	}
 }

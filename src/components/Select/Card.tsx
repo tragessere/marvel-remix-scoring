@@ -19,15 +19,21 @@ export const SelectCard: FunctionComponent<SelectCardProps> = ({ card }) => {
 	const includesCard = selectedCardIds.includes(card.id)
 	// A Cosmic card doesn't count against the hand limit, so it can always be added
 	const canAddCard = selectedCardIds.length < maxHandSize || card.tags.includes(TAG.COSMIC)
-	// Mind Stone can only take a hero or ally from an opponent
-	const isDisabled = cardSelectMode === CARD_SELECT_MODE.MIND_STONE_CHOICE && !isMindStoneTarget(card)
+	const isChoosingCard =
+		cardSelectMode === CARD_SELECT_MODE.LOKI_DRAW || cardSelectMode === CARD_SELECT_MODE.MIND_STONE_CHOICE
+	const isDisabled =
+		isChoosingCard &&
+		(includesCard ||
+			(cardSelectMode === CARD_SELECT_MODE.LOKI_DRAW && card.type === CARD_TYPE.VILLAIN) ||
+			(cardSelectMode === CARD_SELECT_MODE.MIND_STONE_CHOICE && !isMindStoneTarget(card)))
 
 	const onClick = () => {
+		if (isDisabled) return
+
 		if (cardSelectMode == CARD_SELECT_MODE.LOKI_DRAW) {
 			setManualInput(73, card.id)
 			setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
 		} else if (cardSelectMode == CARD_SELECT_MODE.MIND_STONE_CHOICE) {
-			if (isDisabled) return
 			// Transformable cards start untransformed until the player says otherwise
 			setManualInput(104, card.id, card.transformedTags ? 0 : undefined)
 			setCardSelectMode(CARD_SELECT_MODE.DEFAULT)
