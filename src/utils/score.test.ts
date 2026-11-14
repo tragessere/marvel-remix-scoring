@@ -84,7 +84,7 @@ describe('scoreHand', () => {
 		]
 		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(true)
-		expect(result.score).toBe(16)
+		expect(result.score).toBe(20)
 	})
 	it('lets MAGIC tags count as any other tag', () => {
 		const hand: Card[] = [
@@ -218,7 +218,7 @@ describe('scoreHand', () => {
 		]
 		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(false)
-		expect(result.score).toBe(42)
+		expect(result.score).toBe(46)
 	})
 	describe('handles hand size', () => {
 		// Valid 7 card hand without any Cosmic cards
@@ -478,6 +478,24 @@ describe('scoreHand', () => {
 			expect(result2.score).toBe(result.score)
 			expect(result2.finalHand.find(card => card.id === 30)?.isBlanked).toBe(true)
 		})
+	})
+	it('works with Magic tags', () => {
+		const result = scoreHand(
+			[
+				// Ms. Marvel
+				cardList[111],
+				// Doctor Strange
+				cardList[109],
+				// Power Stone
+				cardList[101],
+				// Reality Stone
+				cardList[102],
+				// Gorr
+				cardList[154]
+			],
+			emptyManualInput
+		)
+		expect(result.score).toBe(24)
 	})
 	describe('returns the correct scores', () => {
 		//#region example hands
@@ -821,6 +839,100 @@ describe('scoreHand', () => {
 					cardList[4]
 				],
 				score: 83
+			},
+			{
+				id: 18,
+				hand: [
+					// Infinity Gauntlet
+					cardList[95],
+					// Power Stone
+					cardList[101],
+					// Soul Stone
+					cardList[105]
+				],
+				score: 26
+			},
+			{
+				id: 19,
+				hand: [
+					// The Matriarch
+					cardList[163],
+					// Carol Danvers
+					cardList[107],
+					// Reality Stone
+					cardList[102]
+				],
+				score: 14
+			},
+			{
+				id: 20,
+				hand: [
+					// Ego
+					cardList[137],
+					// Annihilus
+					cardList[160],
+					// Carnage
+					cardList[161],
+					// Thanos
+					cardList[152],
+					// Ms. Marvel
+					cardList[111]
+				],
+				score: 35
+			},
+			{
+				id: 21,
+				hand: [
+					// Magus
+					cardList[148],
+					// Citadel at the End of Time
+					cardList[134],
+					// Nebula
+					cardList[150],
+					// Nick Fury, Jr.
+					cardList[82],
+					// Eddie Brock
+					cardList[83]
+				],
+				score: 46
+			},
+			{
+				id: 22,
+				hand: [
+					// Venom
+					cardList[149],
+					// Eddie Brock
+					cardList[83],
+					// Supreme Intelligence
+					cardList[155]
+				],
+				score: 35
+			},
+			{
+				id: 23,
+				hand: [
+					// Toxin
+					cardList[165],
+					// Knull
+					cardList[159],
+					// Venom
+					cardList[149],
+					// Ms. Marvel
+					cardList[111]
+				],
+				score: 52
+			},
+			{
+				id: 24,
+				hand: [
+					// Venom
+					cardList[149],
+					// Nova Corps
+					cardList[87],
+					// Ms. Marvel
+					cardList[111]
+				],
+				score: 25
 			}
 		]
 		//#endregion example hands
@@ -831,24 +943,6 @@ describe('scoreHand', () => {
 				expect(result.score).toBe(score)
 			})
 		}
-	})
-	it('works with Magic tags', () => {
-		const result = scoreHand(
-			[
-				// Ms. Marvel
-				cardList[111],
-				// Doctor Strange
-				cardList[109],
-				// Power Stone
-				cardList[101],
-				// Reality Stone
-				cardList[102],
-				// Gorr
-				cardList[154]
-			],
-			emptyManualInput
-		)
-		expect(result.score).toBe(24)
 	})
 
 	// it('runs a test hand', () => {

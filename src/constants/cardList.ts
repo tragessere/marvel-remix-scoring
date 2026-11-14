@@ -1,3 +1,4 @@
+import isEqual from 'lodash-es/isEqual'
 import sumBy from 'lodash-es/sumBy'
 import { Card, CARD_TYPE, MAGIC_REPLACEMENT_TAGS, MANUAL_INPUT, ModifiedCard, TAG } from '../types/card.ts'
 import {
@@ -6,7 +7,8 @@ import {
 	findCard,
 	magicDuplicateOptionCount,
 	removeTag,
-	tagCopyOptionCount
+	tagCopyOptionCount,
+	uniqueTags
 } from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
@@ -414,7 +416,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 			let indexCount = index
 			const targetCard = hand.find(card => {
 				if (!card.isBlanked && card.type === CARD_TYPE.HERO && card.id !== this.id) {
-					const cardOptionCount = sumBy(card.modifiedTags, tagCopyOptionCount)
+					const cardOptionCount = sumBy(uniqueTags(card), tagCopyOptionCount)
 					if (indexCount < cardOptionCount) {
 						return true
 					}
@@ -422,7 +424,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 				}
 			}) as ModifiedCard
 			// Each tag is one option, except MAGIC which has an option for every tag it can count as
-			const targetTag = targetCard.modifiedTags.find(tag => {
+			const targetTag = uniqueTags(targetCard).find(tag => {
 				const tagOptionCount = tagCopyOptionCount(tag)
 				if (indexCount < tagOptionCount) {
 					return true
@@ -436,7 +438,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		modificationOptions(hand) {
 			return sumBy(hand, card =>
 				card.type === CARD_TYPE.HERO && card.id !== this.id && !card.isBlanked
-					? sumBy(card.modifiedTags, tagCopyOptionCount)
+					? sumBy(uniqueTags(card), tagCopyOptionCount)
 					: 0
 			)
 		},
@@ -1560,7 +1562,13 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 7,
 		tags: [TAG.SPACE, TAG.TECH, TAG.FLIGHT],
 		transform(hand, self) {
-			self.isBlanked = !hand.some(card => card.id !== 87 && card.modifiedTags.includes(TAG.SPACE))
+			// Venom transforms with an ALLY and can copy SPACE from Nova Corps, which would keep it from being blanked.
+			// Don't blank self until Venom's effect has run, like Research Lab waits for its own effect.
+			const isVenomCopyPending = hand.some(
+				card => card.id === 149 && card.isTransformed && !card.isEffectResolved
+			)
+			self.isBlanked =
+				!isVenomCopyPending && !hand.some(card => card.id !== 87 && card.modifiedTags.includes(TAG.SPACE))
 		},
 		score() {
 			return this.power
@@ -1674,7 +1682,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 0,
 		tags: [],
 		score(hand) {
-			const infinityStoneCount = count(hand, card => card.modifiedTags.includes(TAG.INFINITY_STONE))
+			const infinityStoneCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INFINITY_STONE))
 			return this.power + infinityStoneCount * 13
 		}
 	},
@@ -1879,8 +1887,9 @@ export const cardList: Readonly<Record<number, Card>> = {
 		transformedPower: 8,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
-			const shouldTransform = hand.some(card =>
-				card.modifiedTags.some(tag => tag === TAG.COSMIC || tag === TAG.KREE)
+			// Avoid counting her own tags after transforming to keep her transformed.
+			const shouldTransform = hand.some(
+				card => card.id !== this.id && card.modifiedTags.some(tag => tag === TAG.COSMIC || tag === TAG.KREE)
 			)
 
 			if (isTransformed === shouldTransform) return
@@ -2274,6 +2283,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.LOCATION,
 		power: -6,
 		tags: [TAG.COSMIC, TAG.SPACE],
+		negativeValue: -6,
 		score() {
 			return this.power
 		}
@@ -2443,6 +2453,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 7,
 		tags: [TAG.TIME],
 		transformedTags: [TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT],
+		transformedPower: 11,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(card => card.id !== self.id && card.modifiedTags.includes(TAG.TIME))
@@ -2452,13 +2463,13 @@ export const cardList: Readonly<Record<number, Card>> = {
 			if (shouldTransform) {
 				self.isTransformed = true
 				self.type = CARD_TYPE.HERO
-				self.modifiedPower = 11
+				self.power = 11
 				self.modifiedTags.push(TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT)
 				removeTag(self, TAG.TIME)
 			} else {
 				self.isTransformed = false
 				self.type = CARD_TYPE.VILLAIN
-				self.modifiedPower = 7
+				self.power = 7
 				self.modifiedTags.push(TAG.TIME)
 				removeTag(self, TAG.SPACE)
 				removeTag(self, TAG.STRENGTH)
@@ -2476,6 +2487,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 8,
 		tags: [TAG.SYMBIOTE],
 		transformedTags: [TAG.SYMBIOTE, TAG.STRENGTH],
+		transformedPower: 13,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(card => card.type === CARD_TYPE.ALLY)
@@ -2485,14 +2497,45 @@ export const cardList: Readonly<Record<number, Card>> = {
 			if (shouldTransform) {
 				self.isTransformed = true
 				self.type = CARD_TYPE.HERO
-				self.modifiedPower = 13
+				self.power = 13
 				self.modifiedTags.push(TAG.STRENGTH)
 			} else {
+				// A tag copied while transformed can't be kept after changing back, so reject this order of effects
+				if (!isEqual(self.modifiedTags, this.transformedTags)) {
+					throw new Error('Venom has extra tags from its transformed effect')
+				}
+
 				self.isTransformed = false
 				self.type = CARD_TYPE.VILLAIN
-				self.modifiedPower = 8
+				self.power = 8
 				removeTag(self, TAG.STRENGTH)
 			}
+		},
+		effect(hand, index) {
+			let indexCount = index
+			const targetCard = hand.find(card => {
+				if (card.type === CARD_TYPE.ALLY) {
+					const cardOptionCount = sumBy(uniqueTags(card), tagCopyOptionCount)
+					if (indexCount < cardOptionCount) {
+						return true
+					}
+					indexCount -= cardOptionCount
+				}
+			}) as ModifiedCard
+			const targetTag = uniqueTags(targetCard).find(tag => {
+				const tagOptionCount = tagCopyOptionCount(tag)
+				if (indexCount < tagOptionCount) {
+					return true
+				}
+				indexCount -= tagOptionCount
+			}) as TAG
+			const self = findCard(hand, this.id)
+			self.modifiedTags.push(targetTag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS[indexCount] : targetTag)
+		},
+		modificationOptions(hand) {
+			const self = findCard(hand, this.id)
+			if (!self.isTransformed) return 0
+			return sumBy(hand, card => (card.type === CARD_TYPE.ALLY ? sumBy(uniqueTags(card), tagCopyOptionCount) : 0))
 		},
 		score() {
 			return this.power
@@ -2507,8 +2550,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		transformedTags: [TAG.GUARDIAN, TAG.TECH, TAG.STRENGTH],
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
-			const hasGuardian = hand.some(card => card.modifiedTags.includes(TAG.GUARDIAN))
-			const hasIntel = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL)) > 2
+			const hasGuardian = hand.some(card => card.id !== this.id && card.modifiedTags.includes(TAG.GUARDIAN))
+			const hasIntel = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL)) >= 2
 			const shouldTransform = hasGuardian || hasIntel
 
 			if (isTransformed === shouldTransform) return
@@ -2552,6 +2595,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 10,
 		tags: [TAG.BOSS],
+		bonusValue: 10,
 		score(hand) {
 			const infinityStoneCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INFINITY_STONE))
 			return this.power + infinityStoneCount * 10
@@ -2732,6 +2776,33 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 6,
 		tags: [TAG.SYMBIOTE],
+		effect(hand, index) {
+			let indexCount = index
+			const targetCard = hand.find(card => {
+				if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.VILLAIN) {
+					const cardOptionCount = sumBy(uniqueTags(card), tagCopyOptionCount)
+					if (indexCount < cardOptionCount) {
+						return true
+					}
+					indexCount -= cardOptionCount
+				}
+			}) as ModifiedCard
+			const targetTag = uniqueTags(targetCard).find(tag => {
+				const tagOptionCount = tagCopyOptionCount(tag)
+				if (indexCount < tagOptionCount) {
+					return true
+				}
+				indexCount -= tagOptionCount
+			}) as TAG
+			targetCard.modifiedTags.push(targetTag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS[indexCount] : targetTag)
+		},
+		modificationOptions(hand) {
+			return sumBy(hand, card =>
+				card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.VILLAIN
+					? sumBy(uniqueTags(card), tagCopyOptionCount)
+					: 0
+			)
+		},
 		score() {
 			return this.power
 		}

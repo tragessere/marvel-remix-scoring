@@ -231,6 +231,8 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): ResultsByTa
 	}
 
 	const currentCard = hand[index]
+	// Set before cloning so every option's hand sees this card's effect as resolved when transforms run after it
+	currentCard.isEffectResolved = true
 	if (!currentCard.isBlanked && !currentCard.isTextBlanked && currentCard.modificationOptions && currentCard.effect) {
 		const optionCount = currentCard.modificationOptions(hand.filter(card => !card.isBlanked))
 		if (!optionCount) {
@@ -241,10 +243,15 @@ const applyEffectsRecursive = (hand: ModifiedCard[], index: number): ResultsByTa
 			const modifiedHand = cloneHand(hand)
 			const clonedCurrentCard = findCard(modifiedHand, currentCard.id)
 			const unblankedHand = modifiedHand.filter(card => !card.isBlanked)
-			// Use null-safe access to make Typescript happy. `effect` function will always exist here because it
-			// was checked on the card before cloning.
-			clonedCurrentCard.effect?.(unblankedHand, i)
-			applyTransformsUntilStable(modifiedHand)
+			try {
+				// Use null-safe access to make Typescript happy. `effect` function will always exist here because it
+				// was checked on the card before cloning.
+				clonedCurrentCard.effect?.(unblankedHand, i)
+				applyTransformsUntilStable(modifiedHand)
+			} catch {
+				// This option leaves the hand in an invalid state, skip it without discarding the other options
+				continue
+			}
 			mergeResults(results, applyEffectsRecursive(modifiedHand, index + 1))
 		}
 		return results

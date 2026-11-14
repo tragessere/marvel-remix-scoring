@@ -42,6 +42,9 @@ export const blankCard = (card: ModifiedCard) => {
 	card.isBlankedByOtherCard = true
 }
 
+/** Different tags on a card, since doubling or copying the same tag type again gives the same result */
+export const uniqueTags = (card: ModifiedCard) => Array.from(new Set(card.modifiedTags))
+
 /** Number of ways a copied tag can be added. A copied MAGIC tag can count as any other tag. */
 export const tagCopyOptionCount = (tag: TAG) => (tag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS.length : 1)
 

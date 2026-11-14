@@ -72,6 +72,8 @@ export interface ModifiedCard extends Card {
 	modifiedPower: number
 	modifiedTags: TAG[]
 	isTransformed?: boolean
+	/** Whether scoring has reached this card in the effect order, so its effect has run or been skipped */
+	isEffectResolved?: boolean
 	manualInputValue?: number
 	manualInputSecondaryValue?: number
 }
