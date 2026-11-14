@@ -37,7 +37,7 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 				removeCard(cardId)
 			}}>
 			<div className={`card-top-border bg-color-${category}${scoredCard.isTransformed ? ' transformed' : ''}`}>
-				<span className="base-power">{scoredCard.isBlanked ? '-' : card.power}</span>
+				<span className="base-power">{scoredCard.isBlanked ? '-' : scoredCard.power}</span>
 				<span className="name outline">{t(cardNameAccessor)}</span>
 				{result.score !== undefined && <span className="final-score outline">{scoredCard.modifiedPower}</span>}
 			</div>
