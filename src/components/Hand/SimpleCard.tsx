@@ -1,12 +1,15 @@
 import { FunctionComponent, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cardList } from '../../constants/cardList.ts'
-import { ScoreContext } from '../../contexts/ContextList.tsx'
+import { CARD_SELECT_MODE, ScoreContext } from '../../contexts/ContextList.tsx'
 import { useCardSelection } from '../../hooks/useCardSelection.ts'
-import { CARD_TYPE } from '../../types/card.ts'
+import { CARD_TYPE, MANUAL_INPUT } from '../../types/card.ts'
 import { findCard, mapCardTags } from '../../utils/card.ts'
 import { CardText } from './CardText.tsx'
-import { LokiDrawnCard } from './LokiDrawnCard.tsx'
+import { ChosenCard } from './ChosenCard.tsx'
+import { GalactusTagTarget } from './GalactusTagTarget.tsx'
+import { ManualCount } from './ManualCount.tsx'
+import { ManualToggle } from './ManualToggle.tsx'
 import { TagIcon } from './TagIcon.tsx'
 
 export interface SimpleCardProps {
@@ -23,6 +26,8 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 	const scoredCard = findCard(result.finalHand, cardId)
 	const [tags, addedTags] = mapCardTags(scoredCard)
 
+	const cardNameAccessor = scoredCard.isTransformed ? `${card.id}.modified-name` : `${card.id}.name`
+
 	return (
 		<div
 			className={`simple-card${scoredCard.isBlanked ? ' blanked' : scoredCard.isTextBlanked ? ' text-blanked' : ''} ${category}`}
@@ -32,8 +37,8 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 				removeCard(cardId)
 			}}>
 			<div className={`card-top-border bg-color-${category}${scoredCard.isTransformed ? ' transformed' : ''}`}>
-				<span className="base-power">{scoredCard.isBlanked ? '-' : card.power}</span>
-				<span className="name outline">{scoredCard.modifiedName || t(`${card.id}.name`)}</span>
+				<span className="base-power">{scoredCard.isBlanked ? '-' : scoredCard.power}</span>
+				<span className="name outline">{t(cardNameAccessor)}</span>
 				{result.score !== undefined && <span className="final-score outline">{scoredCard.modifiedPower}</span>}
 			</div>
 			<div className="card-content">
@@ -56,11 +61,37 @@ export const SimpleCard: FunctionComponent<SimpleCardProps> = ({ cardId }) => {
 					{i18n.exists(`card-info:${card.id}.text`) && <CardText i18nKey={`card-info:${card.id}.text`} />}
 				</>
 				{card.id === 73 && (
-					<div className="loki-draw">
+					<div className="manual-input-container">
 						<span>Drawn Card:</span>
-						<LokiDrawnCard />
+						<ChosenCard
+							sourceCardId={73}
+							selectMode={CARD_SELECT_MODE.LOKI_DRAW}
+							buttonLabel="Draw a card"
+						/>
 					</div>
 				)}
+				{card.id === 104 && (
+					<div className="manual-input-container">
+						<span>Opponent's Card:</span>
+						<ChosenCard
+							sourceCardId={104}
+							selectMode={CARD_SELECT_MODE.MIND_STONE_CHOICE}
+							buttonLabel="Choose a card"
+							shouldAddFullCardToHand
+						/>
+					</div>
+				)}
+				{card.manualInput === MANUAL_INPUT.COUNT && (
+					<div className="manual-input-container">
+						<ManualCount sourceCardId={card.id} label={t(`${card.id}.input-label`)} />
+					</div>
+				)}
+				{card.manualInput === MANUAL_INPUT.TOGGLE && (
+					<div className="manual-input-container">
+						<ManualToggle sourceCardId={card.id} label={t(`${card.id}.input-label`)} />
+					</div>
+				)}
+				{card.id === 147 && <GalactusTagTarget />}
 			</div>
 		</div>
 	)

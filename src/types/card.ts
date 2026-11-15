@@ -12,16 +12,37 @@ export enum TAG {
 	AGILITY,
 	ASGARD,
 	BOSS,
+	COSMIC,
+	FANTASTIC_FOUR,
 	FLIGHT,
 	GAMMA,
+	GUARDIAN,
+	INFINITY_STONE,
 	INTEL,
+	KREE,
+	MAGIC,
 	MUTANT,
 	RANGE,
 	STRENGTH,
+	SPACE,
+	SYMBIOTE,
 	TECH,
+	TIME,
 	URBAN,
 	WAKANDA,
 	WORTHY
+}
+
+/** Tags that a MAGIC tag can count as */
+export const MAGIC_REPLACEMENT_TAGS = Object.values(TAG).filter(
+	(tag): tag is TAG => typeof tag === 'number' && tag !== TAG.MAGIC
+)
+
+/** How a manual input is entered and stored. Toggles are stored as 0 or 1. */
+export enum MANUAL_INPUT {
+	CARD,
+	TOGGLE,
+	COUNT
 }
 
 export interface Card {
@@ -30,9 +51,15 @@ export interface Card {
 	power: number
 	tags: TAG[]
 	transformedTags?: TAG[]
+	transformedPower?: number
+	/** Largest positive '+' value on the card for Mantis */
+	bonusValue?: number
+	/** Largest negative value on the card for Annihilus */
+	negativeValue?: number
 	effect?: (hand: ModifiedCard[], index: number) => void
 	modificationOptions?: (hand: ModifiedCard[]) => number
-	score: (hand: ModifiedCard[]) => number
+	manualInput?: MANUAL_INPUT
+	score: (this: ModifiedCard, hand: ModifiedCard[]) => number
 	transform?: (hand: ModifiedCard[], currentCard: ModifiedCard) => void
 }
 
@@ -41,7 +68,20 @@ export interface ModifiedCard extends Card {
 	isBlankedByOtherCard: boolean
 	isTextBlanked: boolean
 	modifiedName?: string
+	modifiedType?: CARD_TYPE
 	modifiedPower: number
 	modifiedTags: TAG[]
 	isTransformed?: boolean
+	/** Whether scoring has reached this card in the effect order, so its effect has run or been skipped */
+	isEffectResolved?: boolean
+	manualInputValue?: number
+	manualInputSecondaryValue?: number
 }
+
+export enum DECK {
+	REMIX,
+	COSMOS
+}
+
+/** Every deck value, without the reverse-mapped names numeric enums include */
+export const ALL_DECKS = Object.values(DECK).filter((value): value is DECK => typeof value === 'number')

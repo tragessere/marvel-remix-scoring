@@ -1,11 +1,20 @@
-import i18n from 'i18next'
+import isEqual from 'lodash-es/isEqual'
 import sumBy from 'lodash-es/sumBy'
-import { Card, CARD_TYPE, ModifiedCard, TAG } from '../types/card.ts'
-import { blankCard, findCard, removeTag } from '../utils/card.ts'
+import { Card, CARD_TYPE, MAGIC_REPLACEMENT_TAGS, MANUAL_INPUT, ModifiedCard, TAG } from '../types/card.ts'
+import {
+	blankCard,
+	countGalactusTags,
+	findCard,
+	magicDuplicateOptionCount,
+	removeTag,
+	tagCopyOptionCount,
+	uniqueTags
+} from '../utils/card.ts'
 import { generateCombinations } from '../utils/randomization.ts'
 import { count } from '../utils/whyIsThisNotInLodash.ts'
 
 export const cardList: Readonly<Record<number, Card>> = {
+	//#region Marvel Remix
 	//#region Ally
 	1: {
 		// Forge
@@ -13,6 +22,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 4,
 		tags: [TAG.TECH, TAG.MUTANT],
+		bonusValue: 4,
 		score(hand) {
 			const equipmentCount = count(hand, card => card.type === CARD_TYPE.EQUIPMENT)
 			return this.power + equipmentCount * 4
@@ -24,6 +34,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 4,
 		tags: [TAG.INTEL, TAG.ASGARD],
+		bonusValue: 6,
 		score(hand) {
 			const containsBifrost = hand.some(card => card.id === 42)
 			return this.power + (containsBifrost ? 6 : 0)
@@ -35,6 +46,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 5,
 		tags: [TAG.FLIGHT, TAG.RANGE],
+		bonusValue: 7,
 		score(hand) {
 			const containsShadowcat = hand.some(card => card.id === 21)
 			return this.power + (containsShadowcat ? 7 : 0)
@@ -46,6 +58,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.ALLY,
 		power: 5,
 		tags: [TAG.TECH, TAG.WORTHY],
+		bonusValue: 8,
 		score(hand) {
 			const containsThor = hand.some(card => card.id === 30)
 			return this.power + (containsThor ? 8 : 0)
@@ -159,6 +172,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.CONDITION,
 		power: 18,
 		tags: [TAG.STRENGTH, TAG.GAMMA],
+		negativeValue: -3,
 		score(hand) {
 			let heroOrAllyCount = count(hand, card => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY)
 			const urbanCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.URBAN))
@@ -280,6 +294,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.WORTHY],
+		bonusValue: 4,
 		score(hand) {
 			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO && card.id !== 19)
 			const hasShield = hand.some(card => card.id === 16)
@@ -292,6 +307,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.RANGE, TAG.MUTANT],
+		bonusValue: 3,
 		score(hand) {
 			const mutantCount = sumBy(hand, card =>
 				card.id !== 20 ? count(card.modifiedTags, t => t === TAG.MUTANT) : 0
@@ -305,6 +321,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.TECH, TAG.MUTANT],
+		bonusValue: 4,
 		score(hand) {
 			const hasLocation = hand.some(card => card.type === CARD_TYPE.LOCATION)
 			return this.power + (hasLocation ? 4 : 0)
@@ -316,6 +333,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 5,
 		tags: [TAG.STRENGTH, TAG.AGILITY],
+		bonusValue: 5,
 		effect(hand) {
 			const hasMatchingLocation = hand.some(
 				c => c.type === CARD_TYPE.LOCATION && c.modifiedTags.includes(TAG.URBAN)
@@ -341,6 +359,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.STRENGTH, TAG.GAMMA],
+		bonusValue: 5,
 		score(hand) {
 			const gammaCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, t => t === TAG.GAMMA) : 0
@@ -354,6 +373,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.WAKANDA],
+		bonusValue: 5,
 		score(hand) {
 			const wakandaCount = sumBy(hand, card =>
 				card.id !== this.id ? count(card.modifiedTags, t => t === TAG.WAKANDA) : 0
@@ -367,6 +387,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 3,
 		tags: [TAG.INTEL, TAG.MUTANT],
+		bonusValue: 6,
 		score(hand) {
 			const hasCerebro = hand.some(card => card.id === 18)
 			const hasMansion = hand.some(card => card.id === 54)
@@ -379,6 +400,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.HERO,
 		power: 4,
 		tags: [TAG.AGILITY, TAG.MUTANT],
+		bonusValue: 6,
 		score(hand) {
 			const hasMatchingVillain = hand.some(c => c.type === CARD_TYPE.VILLAIN && c.modifiedTags.includes(TAG.BOSS))
 			return this.power + (hasMatchingVillain ? 6 : 0)
@@ -393,25 +415,31 @@ export const cardList: Readonly<Record<number, Card>> = {
 		effect(hand, index) {
 			let indexCount = index
 			const targetCard = hand.find(card => {
-				if (
-					!card.isBlanked &&
-					card.type === CARD_TYPE.HERO &&
-					card.id !== this.id &&
-					card.modifiedTags.length > 0
-				) {
-					if (indexCount < card.modifiedTags.length) {
+				if (!card.isBlanked && card.type === CARD_TYPE.HERO && card.id !== this.id) {
+					const cardOptionCount = sumBy(uniqueTags(card), tagCopyOptionCount)
+					if (indexCount < cardOptionCount) {
 						return true
 					}
-					indexCount -= card.modifiedTags.length
+					indexCount -= cardOptionCount
 				}
 			}) as ModifiedCard
+			// Each tag is one option, except MAGIC which has an option for every tag it can count as
+			const targetTag = uniqueTags(targetCard).find(tag => {
+				const tagOptionCount = tagCopyOptionCount(tag)
+				if (indexCount < tagOptionCount) {
+					return true
+				}
+				indexCount -= tagOptionCount
+			}) as TAG
 			const self = hand.find(card => card.id === 27) as ModifiedCard
 			self.modifiedPower = targetCard.modifiedPower
-			self.modifiedTags.push(targetCard.modifiedTags[indexCount])
+			self.modifiedTags.push(targetTag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS[indexCount] : targetTag)
 		},
 		modificationOptions(hand) {
 			return sumBy(hand, card =>
-				card.type === CARD_TYPE.HERO && card.id !== this.id && !card.isBlanked ? card.modifiedTags.length : 0
+				card.type === CARD_TYPE.HERO && card.id !== this.id && !card.isBlanked
+					? sumBy(uniqueTags(card), tagCopyOptionCount)
+					: 0
 			)
 		},
 		score(cards) {
@@ -462,6 +490,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 1,
 		tags: [TAG.TECH, TAG.GAMMA],
 		transformedTags: [TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH, TAG.GAMMA],
+		transformedPower: 13,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = hand.some(
@@ -474,20 +503,18 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
-				self.modifiedPower = 13
+				self.power = 13
 				removeTag(self, TAG.TECH)
 				self.modifiedTags.push(TAG.STRENGTH, TAG.STRENGTH, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
-				self.modifiedPower = 1
+				self.power = 1
 				removeTag(self, TAG.STRENGTH, 3)
 				self.modifiedTags.push(TAG.TECH)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	30: {
@@ -497,6 +524,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 4,
 		tags: [TAG.STRENGTH, TAG.ASGARD, TAG.WORTHY],
 		transformedTags: [TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE, TAG.ASGARD, TAG.WORTHY],
+		transformedPower: 12,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const hasMjolnir = hand.some(card => card.id === 17 && !card.isBlanked)
@@ -509,19 +537,17 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
-				self.modifiedPower = 12
+				self.power = 12
 				self.modifiedTags.push(TAG.FLIGHT, TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
-				self.modifiedPower = 4
+				self.power = 4
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	31: {
@@ -531,6 +557,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 3,
 		tags: [TAG.TECH, TAG.RANGE],
 		transformedTags: [TAG.TECH, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
+		transformedPower: 8,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform = sumBy(hand, card => count(card.modifiedTags, t => t === TAG.INTEL)) > 1
@@ -541,19 +568,17 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
-				self.modifiedPower = 8
+				self.power = 8
 				self.modifiedTags.push(TAG.FLIGHT, TAG.STRENGTH)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
-				self.modifiedPower = 3
+				self.power = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.STRENGTH)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	32: {
@@ -563,6 +588,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		power: 3,
 		tags: [TAG.INTEL, TAG.RANGE, TAG.MUTANT],
 		transformedTags: [TAG.INTEL, TAG.RANGE, TAG.RANGE, TAG.FLIGHT, TAG.MUTANT],
+		transformedPower: 9,
 		transform(hand, self) {
 			const isTransformed = !!self.isTransformed
 			const shouldTransform =
@@ -576,20 +602,18 @@ export const cardList: Readonly<Record<number, Card>> = {
 
 			if (shouldTransform) {
 				self.isTransformed = true
-				self.modifiedName = i18n.t(`card-info:${this.id}.modified-name`)
-				self.modifiedPower = 9
+				self.power = 9
 				self.modifiedTags.push(TAG.FLIGHT)
 				self.modifiedTags.push(TAG.RANGE)
 			} else {
 				self.isTransformed = false
-				self.modifiedName = i18n.t(`card-info:${this.id}.name`)
-				self.modifiedPower = 3
+				self.power = 3
 				removeTag(self, TAG.FLIGHT)
 				removeTag(self, TAG.RANGE)
 			}
 		},
-		score(hand) {
-			return findCard(hand, this.id).modifiedPower
+		score() {
+			return this.power
 		}
 	},
 	33: {
@@ -1083,6 +1107,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -10,
 		tags: [],
+		bonusValue: 5,
+		negativeValue: -10,
 		score(hand) {
 			const tagTypes = new Set<TAG>()
 			for (const card of hand) {
@@ -1099,6 +1125,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 8,
 		tags: [],
+		bonusValue: -5,
+		negativeValue: -5,
 		score(hand) {
 			const { hasMatchingLocation, maneuverCount } = hand.reduce(
 				(status, card) => {
@@ -1122,6 +1150,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -7,
 		tags: [],
+		bonusValue: 7,
+		negativeValue: -7,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.FLIGHT || tag === TAG.RANGE)
@@ -1135,6 +1165,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: -9,
 		tags: [TAG.WAKANDA],
+		bonusValue: 9,
+		negativeValue: -9,
 		score(hand) {
 			const wakandaCount = sumBy(hand, card =>
 				card.id === this.id ? 0 : count(card.modifiedTags, tag => tag === TAG.WAKANDA)
@@ -1148,6 +1180,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.MUTANT],
+		negativeValue: -20,
 		score(hand) {
 			const cardTagCount: number[] = []
 			let intelCount = 0
@@ -1168,6 +1201,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
 		tags: [],
+		negativeValue: -20,
 		score(hand) {
 			const mutantCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.MUTANT))
 			return this.power + (mutantCount > 1 ? 0 : -20)
@@ -1179,6 +1213,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 13,
 		tags: [TAG.GAMMA],
+		negativeValue: -20,
 		score(hand) {
 			const strengthCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.STRENGTH))
 			return this.power + (strengthCount > 1 ? 0 : -20)
@@ -1190,6 +1225,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 14,
 		tags: [TAG.BOSS],
+		negativeValue: -20,
 		score(hand) {
 			const techCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.TECH))
 			return this.power + (techCount > 1 ? 0 : -20)
@@ -1201,6 +1237,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 18,
 		tags: [TAG.ASGARD],
+		negativeValue: -20,
 		score(hand) {
 			const asgardCount = sumBy(hand, card =>
 				card.id === this.id ? 0 : count(card.modifiedTags, tag => tag === TAG.ASGARD)
@@ -1214,6 +1251,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 12,
 		tags: [TAG.GAMMA, TAG.BOSS],
+		bonusValue: -3,
+		negativeValue: -3,
 		score(hand) {
 			const matchingTagCount = sumBy(hand, card =>
 				count(card.modifiedTags, tag => tag === TAG.STRENGTH || (card.id !== this.id && tag === TAG.GAMMA))
@@ -1227,6 +1266,8 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
 		tags: [TAG.BOSS],
+		bonusValue: -3,
+		negativeValue: -3,
 		score(hand) {
 			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
 			return this.power - heroCount * 3
@@ -1238,8 +1279,10 @@ export const cardList: Readonly<Record<number, Card>> = {
 		type: CARD_TYPE.VILLAIN,
 		power: 15,
 		tags: [TAG.ASGARD],
+		manualInput: MANUAL_INPUT.CARD,
 		score() {
-			return this.power
+			const penaltyCardPower = this.manualInputValue ? cardList[this.manualInputValue].power : 0
+			return this.power - penaltyCardPower
 		}
 	},
 	74: {
@@ -1308,8 +1351,7 @@ export const cardList: Readonly<Record<number, Card>> = {
 			const selectedCard = heroesAndAllies[index]
 			blankCard(selectedCard)
 			const self = findCard(hand, this.id)
-			// Use modified power to include hero transformations. Check for Rogue card who's modifiedPower can also change, but base power counts as 0.
-			self.modifiedPower = this.power - (selectedCard.id === 27 ? 0 : selectedCard.modifiedPower)
+			self.modifiedPower = this.power - selectedCard.power
 		},
 		modificationOptions(hand) {
 			const selfIndex = hand.findIndex(card => card.id === this.id)
@@ -1433,6 +1475,1375 @@ export const cardList: Readonly<Record<number, Card>> = {
 		score() {
 			return this.power
 		}
-	}
+	},
 	//#endregion Promo
+	//#endregion Marvel Remix
+
+	//#region Marvel Remix - The Cosmos
+	//#region Ally
+	81: {
+		// Mantis
+		id: 81,
+		type: CARD_TYPE.ALLY,
+		power: 2,
+		tags: [TAG.GUARDIAN, TAG.INTEL],
+		score(hand) {
+			const highestBonus = Math.max(
+				...hand
+					.filter(card => card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.HERO)
+					.map(card => card.bonusValue || 0)
+			)
+			return this.power + highestBonus
+		}
+	},
+	82: {
+		// Nick Fury, Jr.
+		id: 82,
+		type: CARD_TYPE.ALLY,
+		power: 3,
+		tags: [TAG.TECH, TAG.INTEL, TAG.RANGE],
+		bonusValue: 3,
+		score(hand) {
+			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
+			return this.power + heroCount * 3
+		}
+	},
+	83: {
+		// Eddie Brock
+		id: 83,
+		type: CARD_TYPE.ALLY,
+		power: 3,
+		tags: [TAG.INTEL],
+		bonusValue: 12,
+		score(hand) {
+			const hasSymbiote = hand.some(card => card.modifiedTags.includes(TAG.SYMBIOTE))
+			return this.power + (hasSymbiote ? 12 : 0)
+		}
+	},
+	84: {
+		// Intergalactic Kingdom of Wakanda
+		id: 84,
+		type: CARD_TYPE.ALLY,
+		power: 5,
+		tags: [TAG.WAKANDA, TAG.SPACE, TAG.TECH],
+		score() {
+			return this.power
+		}
+	},
+	85: {
+		// Cosmo
+		id: 85,
+		type: CARD_TYPE.ALLY,
+		power: 5,
+		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.RANGE],
+		bonusValue: 5,
+		score(hand) {
+			const hasOtherGuardian = hand.some(card => card.id !== this.id && card.modifiedTags.includes(TAG.GUARDIAN))
+			return this.power + (hasOtherGuardian ? 5 : 0)
+		}
+	},
+	86: {
+		// Timekeepers
+		id: 86,
+		type: CARD_TYPE.ALLY,
+		power: 7,
+		tags: [TAG.TIME, TAG.INTEL, TAG.RANGE],
+		bonusValue: 7,
+		score(hand) {
+			const timeTagCount = sumBy(hand, card =>
+				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.TIME) : 0
+			)
+			return this.power + timeTagCount * 7
+		}
+	},
+	87: {
+		// Nova Corps
+		id: 87,
+		type: CARD_TYPE.ALLY,
+		power: 7,
+		tags: [TAG.SPACE, TAG.TECH, TAG.FLIGHT],
+		transform(hand, self) {
+			// Venom transforms with an ALLY and can copy SPACE from Nova Corps, which would keep it from being blanked.
+			// Don't blank self until Venom's effect has run, like Research Lab waits for its own effect.
+			const isVenomCopyPending = hand.some(
+				card => card.id === 149 && card.isTransformed && !card.isEffectResolved
+			)
+			self.isBlanked =
+				!isVenomCopyPending && !hand.some(card => card.id !== 87 && card.modifiedTags.includes(TAG.SPACE))
+		},
+		score() {
+			return this.power
+		}
+	},
+	88: {
+		// In-Betweener
+		id: 88,
+		type: CARD_TYPE.ALLY,
+		power: 7,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		negativeValue: -15,
+		score(hand) {
+			const higherCount = count(hand, card => card.power > this.power)
+			const lowerCount = count(hand, card => card.power < this.power)
+			return this.power + (higherCount >= 3 && lowerCount >= 3 ? 0 : -15)
+		}
+	},
+	89: {
+		// Uatu, The Watcher
+		id: 89,
+		type: CARD_TYPE.ALLY,
+		power: 10,
+		tags: [TAG.COSMIC, TAG.SPACE, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Ally
+	//#region Condition
+	90: {
+		// Unexpected Strength
+		id: 90,
+		type: CARD_TYPE.CONDITION,
+		power: 19,
+		tags: [],
+		transform(hand, self) {
+			const allyCount = count(hand, card => card.type === CARD_TYPE.ALLY)
+			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
+			self.isBlanked = allyCount <= heroCount
+		},
+		score() {
+			return this.power
+		}
+	},
+	91: {
+		// Cosmically Attuned
+		id: 91,
+		type: CARD_TYPE.CONDITION,
+		power: 15,
+		tags: [TAG.TIME],
+		transform(hand, self) {
+			const hasIntel = hand.some(card => card.modifiedTags.includes(TAG.INTEL))
+			const hasCosmic = hand.some(card => card.modifiedTags.includes(TAG.COSMIC))
+			self.isBlanked = !(hasIntel && hasCosmic)
+		},
+		score() {
+			return this.power
+		}
+	},
+	92: {
+		// Rediscovered Artifact
+		id: 92,
+		type: CARD_TYPE.CONDITION,
+		power: 16,
+		tags: [],
+		transform(hand, self) {
+			const hasIntel = hand.some(card => card.modifiedTags.includes(TAG.INTEL))
+			const hasEquipment = hand.some(card => card.type === CARD_TYPE.EQUIPMENT)
+			self.isBlanked = !(hasIntel && hasEquipment)
+		},
+		score() {
+			return this.power
+		}
+	},
+	93: {
+		// Crimelord
+		id: 93,
+		type: CARD_TYPE.CONDITION,
+		power: 17,
+		tags: [],
+		transform(hand, self) {
+			const hasUrban = hand.some(card => card.modifiedTags.includes(TAG.URBAN))
+			const hasBoss = hand.some(card => card.modifiedTags.includes(TAG.BOSS))
+			self.isBlanked = !(hasUrban && hasBoss)
+		},
+		score() {
+			return this.power
+		}
+	},
+	94: {
+		// Exiled
+		id: 94,
+		type: CARD_TYPE.CONDITION,
+		power: 18,
+		tags: [],
+		transform(hand, self) {
+			const spaceCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.SPACE))
+			self.isBlanked = spaceCount < 3
+		},
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Condition
+	//#region Equipment
+	95: {
+		// Infinity Gauntlet
+		id: 95,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 0,
+		tags: [],
+		score(hand) {
+			const infinityStoneCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INFINITY_STONE))
+			return this.power + infinityStoneCount * 13
+		}
+	},
+	96: {
+		// All-Black the Necrosword
+		id: 96,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 0,
+		tags: [TAG.SYMBIOTE, TAG.STRENGTH],
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(card.modifiedTags, tag => tag === TAG.COSMIC || tag === TAG.ASGARD)
+			)
+			return this.power + matchingTagCount * 5
+		}
+	},
+	97: {
+		// The Milano
+		id: 97,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 0,
+		tags: [TAG.SPACE, TAG.FLIGHT, TAG.RANGE],
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(card.modifiedTags, tag => tag === TAG.GUARDIAN || tag === TAG.TECH || tag === TAG.AGILITY)
+			)
+			return this.power + matchingTagCount * 3
+		}
+	},
+	98: {
+		// Forever Crystal
+		id: 98,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 6,
+		tags: [TAG.TIME],
+		score(hand) {
+			const kreeCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.KREE))
+			return this.power + kreeCount * 6
+		}
+	},
+	99: {
+		// Quantum Bands
+		id: 99,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 8,
+		tags: [TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
+		transform(hand, self) {
+			self.isBlanked = !hand.some(card => card.modifiedTags.includes(TAG.TECH))
+		},
+		score() {
+			return this.power
+		}
+	},
+	100: {
+		// Stormbreaker
+		id: 100,
+		type: CARD_TYPE.EQUIPMENT,
+		power: 9,
+		tags: [TAG.ASGARD, TAG.STRENGTH, TAG.FLIGHT],
+		transform(hand, self) {
+			// The card doesn't specify 'other', but it seems clearly intended to need another card
+			self.isBlanked = !hand.some(
+				card =>
+					card.id !== this.id &&
+					(card.modifiedTags.includes(TAG.STRENGTH) || card.modifiedTags.includes(TAG.WORTHY))
+			)
+		},
+		score() {
+			return this.power
+		}
+	},
+	101: {
+		// Power Stone
+		id: 101,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -9,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -9,
+		effect(hand, i) {
+			// Each card has an option for every combination of tags its duplicated MAGIC tags can count as
+			let indexCount = i
+			const selectedCard = hand.find(card => {
+				if (card.id !== this.id && card.modifiedTags.length > 0) {
+					const cardOptionCount = magicDuplicateOptionCount(card)
+					if (indexCount < cardOptionCount) {
+						return true
+					}
+					indexCount -= cardOptionCount
+				}
+			}) as ModifiedCard
+			const duplicatedTags = selectedCard.modifiedTags.map(tag => {
+				if (tag !== TAG.MAGIC) {
+					return tag
+				}
+				const replacementTag = MAGIC_REPLACEMENT_TAGS[indexCount % MAGIC_REPLACEMENT_TAGS.length]
+				indexCount = Math.trunc(indexCount / MAGIC_REPLACEMENT_TAGS.length)
+				return replacementTag
+			})
+			selectedCard.modifiedTags.push(...duplicatedTags)
+		},
+		modificationOptions(hand) {
+			return sumBy(hand, card =>
+				card.id !== this.id && card.modifiedTags.length > 0 ? magicDuplicateOptionCount(card) : 0
+			)
+		},
+		score(hand) {
+			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
+			return hasAdamWarlock ? 0 : this.power
+		}
+	},
+	102: {
+		// Reality Stone
+		id: 102,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -8,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -8,
+		effect(hand, i) {
+			// The chosen tag becomes MAGIC, which can then count as any other tag. Each option is a unique tag on a
+			// card paired with the tag it will count as.
+			const tagOptionCount = MAGIC_REPLACEMENT_TAGS.length
+			let indexCount = i
+			const targetCard = hand.find(card => {
+				const cardOptionCount = new Set(card.modifiedTags).size * tagOptionCount
+				if (indexCount < cardOptionCount) {
+					return true
+				}
+				indexCount -= cardOptionCount
+			}) as ModifiedCard
+
+			const targetTag = Array.from(new Set(targetCard.modifiedTags))[Math.trunc(indexCount / tagOptionCount)]
+			removeTag(targetCard, targetTag)
+			targetCard.modifiedTags.push(MAGIC_REPLACEMENT_TAGS[indexCount % tagOptionCount])
+		},
+		modificationOptions(hand) {
+			// No need to try changing the same tag type on a card more than once
+			return sumBy(hand, card => new Set(card.modifiedTags).size) * MAGIC_REPLACEMENT_TAGS.length
+		},
+		score(hand) {
+			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
+			return hasAdamWarlock ? 0 : this.power
+		}
+	},
+	103: {
+		// Space Stone
+		id: 103,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -7,
+		tags: [TAG.COSMIC, TAG.SPACE, TAG.INFINITY_STONE],
+		negativeValue: -7,
+		score(hand) {
+			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
+			return hasAdamWarlock ? 0 : this.power
+		}
+	},
+	104: {
+		// Mind Stone
+		id: 104,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -5,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -5,
+		manualInput: MANUAL_INPUT.CARD,
+		score(hand) {
+			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
+			return hasAdamWarlock ? 0 : this.power
+		}
+	},
+	105: {
+		// Soul Stone
+		id: 105,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -4,
+		tags: [TAG.COSMIC, TAG.INFINITY_STONE],
+		negativeValue: -4,
+		score(hand) {
+			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
+			return hasAdamWarlock ? 0 : this.power
+		}
+	},
+	106: {
+		// Time Stone
+		id: 106,
+		type: CARD_TYPE.EQUIPMENT,
+		power: -6,
+		tags: [TAG.COSMIC, TAG.TIME, TAG.INFINITY_STONE],
+		negativeValue: -6,
+		score(hand) {
+			const hasAdamWarlock = hand.some(card => card.id === 148 && card.isTransformed)
+			return hasAdamWarlock ? 0 : this.power
+		}
+	},
+	//#endregion Equipment
+	//#region Hero
+	107: {
+		// Carol Danvers
+		id: 107,
+		type: CARD_TYPE.HERO,
+		power: 2,
+		tags: [TAG.FLIGHT],
+		transformedTags: [TAG.SPACE, TAG.KREE, TAG.STRENGTH, TAG.FLIGHT, TAG.RANGE],
+		transformedPower: 8,
+		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
+			// Avoid counting her own tags after transforming to keep her transformed.
+			const shouldTransform = hand.some(
+				card => card.id !== this.id && card.modifiedTags.some(tag => tag === TAG.COSMIC || tag === TAG.KREE)
+			)
+
+			if (isTransformed === shouldTransform) return
+
+			if (shouldTransform) {
+				self.isTransformed = true
+				self.power = 8
+				self.modifiedTags.push(TAG.SPACE)
+				self.modifiedTags.push(TAG.KREE)
+				self.modifiedTags.push(TAG.STRENGTH)
+				self.modifiedTags.push(TAG.RANGE)
+			} else {
+				self.isTransformed = false
+				self.power = 2
+				removeTag(self, TAG.SPACE)
+				removeTag(self, TAG.KREE)
+				removeTag(self, TAG.STRENGTH)
+				removeTag(self, TAG.RANGE)
+			}
+		},
+		score() {
+			return this.power
+		}
+	},
+	108: {
+		// Silver Surfer
+		id: 108,
+		type: CARD_TYPE.HERO,
+		power: 7,
+		tags: [TAG.FLIGHT, TAG.RANGE, TAG.SPACE],
+		score() {
+			return this.power
+		}
+	},
+	109: {
+		// Doctor Strange
+		id: 109,
+		type: CARD_TYPE.HERO,
+		power: 1,
+		tags: [TAG.MAGIC, TAG.FLIGHT],
+		effect(hand, i) {
+			const self = findCard(hand, this.id)
+			removeTag(self, TAG.MAGIC)
+			self.modifiedTags.push(MAGIC_REPLACEMENT_TAGS[i])
+		},
+		modificationOptions() {
+			return MAGIC_REPLACEMENT_TAGS.length
+		},
+		score() {
+			return this.power
+		}
+	},
+	110: {
+		// Mr. Fantastic
+		id: 110,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.FANTASTIC_FOUR, TAG.TECH, TAG.AGILITY],
+		bonusValue: 4,
+		score(hand) {
+			const fantastic4Count = sumBy(hand, card =>
+				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.FANTASTIC_FOUR) : 0
+			)
+			return this.power + fantastic4Count * 4
+		}
+	},
+	111: {
+		// Ms. Marvel
+		id: 111,
+		type: CARD_TYPE.HERO,
+		power: 5,
+		tags: [TAG.KREE, TAG.STRENGTH, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	112: {
+		// Human Torch
+		id: 112,
+		type: CARD_TYPE.HERO,
+		power: 5,
+		tags: [TAG.FANTASTIC_FOUR, TAG.AGILITY, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	113: {
+		// Groot
+		id: 113,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.GUARDIAN, TAG.STRENGTH, TAG.STRENGTH],
+		bonusValue: 3,
+		score(hand) {
+			const containsRocketRacoon = hand.some(card => card.id === 120)
+			return this.power + (containsRocketRacoon ? 3 : 0)
+		}
+	},
+	114: {
+		// Nova
+		id: 114,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.SPACE, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	115: {
+		// The Thing
+		id: 115,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.FANTASTIC_FOUR, TAG.STRENGTH, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	116: {
+		// She-Hulk, Attorney
+		id: 116,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.GAMMA, TAG.INTEL, TAG.STRENGTH, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	117: {
+		// Kitty Pryde
+		id: 117,
+		type: CARD_TYPE.HERO,
+		power: 4,
+		tags: [TAG.GUARDIAN, TAG.MUTANT, TAG.TECH],
+		bonusValue: 4,
+		score(hand) {
+			const hasLocation = hand.some(card => card.type === CARD_TYPE.LOCATION)
+			return this.power + (hasLocation ? 4 : 0)
+		}
+	},
+	118: {
+		// Star-Lord
+		id: 118,
+		type: CARD_TYPE.HERO,
+		power: 5,
+		tags: [TAG.GUARDIAN, TAG.RANGE],
+		bonusValue: 4,
+		score(hand) {
+			const guardianCount = sumBy(hand, card =>
+				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.GUARDIAN) : 0
+			)
+			return this.power + guardianCount * 4
+		}
+	},
+	119: {
+		// Drax
+		id: 119,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.GUARDIAN, TAG.STRENGTH, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	120: {
+		// Rocket Racoon
+		id: 120,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.GUARDIAN, TAG.TECH, TAG.RANGE],
+		bonusValue: 2,
+		score(hand) {
+			const containsGroot = hand.some(card => card.id === 113)
+			return this.power + (containsGroot ? 2 : 0)
+		}
+	},
+	121: {
+		// Spectrum
+		id: 121,
+		type: CARD_TYPE.HERO,
+		power: 7,
+		tags: [TAG.AGILITY, TAG.FLIGHT, TAG.RANGE],
+		score() {
+			return this.power
+		}
+	},
+	122: {
+		// Invisible Woman
+		id: 122,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.FANTASTIC_FOUR, TAG.INTEL, TAG.AGILITY],
+		bonusValue: 3,
+		score(hand) {
+			const zeroPowerCardCount = count(hand, card => card.power === 0)
+			return this.power + zeroPowerCardCount * 3
+		}
+	},
+	123: {
+		// Moondragon
+		id: 123,
+		type: CARD_TYPE.HERO,
+		power: 0,
+		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.FLIGHT, TAG.RANGE],
+		bonusValue: 3,
+		// Intel and Guardian tags in the hands of the players to the left and right
+		manualInput: MANUAL_INPUT.COUNT,
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				card.id !== this.id ? count(card.modifiedTags, tag => tag === TAG.INTEL || tag === TAG.GUARDIAN) : 0
+			)
+			return this.power + (matchingTagCount + (this.manualInputValue ?? 0)) * 3
+		}
+	},
+	124: {
+		// Gamora
+		id: 124,
+		type: CARD_TYPE.HERO,
+		power: 6,
+		tags: [TAG.GUARDIAN, TAG.INTEL, TAG.AGILITY],
+		score() {
+			return this.power
+		}
+	},
+	125: {
+		// Beta Ray Bill
+		id: 125,
+		type: CARD_TYPE.HERO,
+		power: 8,
+		tags: [TAG.ASGARD, TAG.WORTHY, TAG.STRENGTH],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Hero
+	//#region Location
+	126: {
+		// Exploding Ship
+		id: 126,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.SPACE],
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(card.modifiedTags, tag => tag === TAG.FLIGHT || tag === TAG.TECH)
+			)
+			return this.power + matchingTagCount * 4
+		}
+	},
+	127: {
+		// Asteroid Field
+		id: 127,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.SPACE],
+		score(hand) {
+			// [rangeCount, agilityCount]
+			const matchingTagCounts = hand.reduce(
+				(counts, card) => {
+					counts[0] += count(card.modifiedTags, tag => tag === TAG.RANGE)
+					counts[1] += count(card.modifiedTags, tag => tag === TAG.AGILITY)
+					return counts
+				},
+				[0, 0]
+			)
+
+			return this.power + Math.min(...matchingTagCounts) * 8
+		}
+	},
+	128: {
+		// Sakaar - Planet Hulk
+		id: 128,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.URBAN, TAG.GAMMA],
+		// Heroes in the discard area
+		manualInput: MANUAL_INPUT.COUNT,
+		score() {
+			return this.power + (this.manualInputValue ?? 0) * 5
+		}
+	},
+	129: {
+		// Baxter Building
+		id: 129,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.URBAN, TAG.TECH, TAG.INTEL],
+		score(hand) {
+			const fantastic4Count = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.FANTASTIC_FOUR))
+			return this.power + fantastic4Count * 8
+		}
+	},
+	130: {
+		// Knowhere
+		id: 130,
+		type: CARD_TYPE.LOCATION,
+		power: 4,
+		tags: [TAG.SPACE, TAG.URBAN],
+		score(hand) {
+			const intelCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL))
+			return this.power + intelCount * 4
+		}
+	},
+	131: {
+		// Research Lab
+		id: 131,
+		type: CARD_TYPE.LOCATION,
+		power: 4,
+		tags: [TAG.MAGIC],
+		effect(hand, i) {
+			const self = findCard(hand, this.id)
+			removeTag(self, TAG.MAGIC)
+			self.modifiedTags.push(MAGIC_REPLACEMENT_TAGS[i])
+		},
+		modificationOptions() {
+			return MAGIC_REPLACEMENT_TAGS.length
+		},
+		transform(hand, self) {
+			// Don't blank self until it's effect has run, which gives it the chance to pick tech if it needs to.
+			self.isBlanked =
+				!self.modifiedTags.includes(TAG.MAGIC) &&
+				!hand.some(card => card.modifiedTags.some(tag => tag === TAG.TECH))
+		},
+		score() {
+			return this.power
+		}
+	},
+	132: {
+		// Latveria
+		id: 132,
+		type: CARD_TYPE.LOCATION,
+		power: 4,
+		tags: [TAG.URBAN, TAG.TECH],
+		score(hand) {
+			const hasBonusCard = hand.some(card => card.modifiedTags.includes(TAG.FANTASTIC_FOUR) || card.id === 151)
+			return this.power + (hasBonusCard ? 12 : 0)
+		}
+	},
+	133: {
+		// The Peak (VII)
+		id: 133,
+		type: CARD_TYPE.LOCATION,
+		power: 5,
+		tags: [TAG.SPACE, TAG.TECH, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	134: {
+		// Citadel at the End of Time
+		id: 134,
+		type: CARD_TYPE.LOCATION,
+		power: 9,
+		tags: [TAG.TIME, TAG.INTEL],
+		score() {
+			return this.power
+		}
+	},
+	135: {
+		// Anti-Alien Riots
+		id: 135,
+		type: CARD_TYPE.LOCATION,
+		power: 14,
+		tags: [TAG.URBAN],
+		transform(hand, self) {
+			const hasSpace = hand.some(card => card.modifiedTags.includes(TAG.SPACE))
+			const hasOtherUrban = hand.some(card => card.id !== 135 && card.modifiedTags.includes(TAG.URBAN))
+			self.isBlanked = !(hasSpace && hasOtherUrban)
+		},
+		score() {
+			return this.power
+		}
+	},
+	136: {
+		// Prison Break
+		id: 136,
+		type: CARD_TYPE.LOCATION,
+		power: 18,
+		tags: [],
+		transform(hand, self) {
+			const requiredTags = [TAG.INTEL, TAG.AGILITY, TAG.FLIGHT]
+			self.isBlanked = !requiredTags.every(tag => hand.some(card => card.modifiedTags.includes(tag)))
+		},
+		score() {
+			return this.power
+		}
+	},
+	137: {
+		// Ego
+		id: 137,
+		type: CARD_TYPE.LOCATION,
+		power: -6,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		negativeValue: -6,
+		score() {
+			return this.power
+		}
+	},
+	138: {
+		// Battleworld
+		id: 138,
+		type: CARD_TYPE.LOCATION,
+		power: 0,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		negativeValue: -20,
+		score(hand) {
+			const heroCount = count(hand, card => card.type === CARD_TYPE.HERO)
+			const villainCount = count(hand, card => card.type === CARD_TYPE.VILLAIN)
+			const pairCount = Math.min(heroCount, villainCount)
+			const unmatchedCount = Math.abs(heroCount - villainCount)
+			return this.power + pairCount * 10 - unmatchedCount * 20
+		}
+	},
+	139: {
+		// Interdimensional Rift
+		id: 139,
+		type: CARD_TYPE.LOCATION,
+		power: 9,
+		tags: [TAG.COSMIC],
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Location
+	//#region Maneuver
+	140: {
+		// Dodge Blasters
+		id: 140,
+		type: CARD_TYPE.MANEUVER,
+		power: 0,
+		tags: [],
+		score(hand) {
+			// [flightCount, agilityCount]
+			const matchingTagCounts = hand.reduce(
+				(counts, card) => {
+					counts[0] += count(card.modifiedTags, tag => tag === TAG.FLIGHT)
+					counts[1] += count(card.modifiedTags, tag => tag === TAG.AGILITY)
+					return counts
+				},
+				[0, 0]
+			)
+
+			return this.power + Math.min(...matchingTagCounts) * 10
+		}
+	},
+	141: {
+		// Into Orbit
+		id: 141,
+		type: CARD_TYPE.MANEUVER,
+		power: 0,
+		tags: [],
+		score(hand) {
+			// [spaceCount, flightCount]
+			const matchingTagCounts = hand.reduce(
+				(counts, card) => {
+					counts[0] += count(card.modifiedTags, tag => tag === TAG.SPACE)
+					counts[1] += count(card.modifiedTags, tag => tag === TAG.FLIGHT)
+					return counts
+				},
+				[0, 0]
+			)
+
+			return this.power + Math.min(...matchingTagCounts) * 9
+		}
+	},
+	142: {
+		// Hurl Asteroids
+		id: 142,
+		type: CARD_TYPE.MANEUVER,
+		power: 0,
+		tags: [],
+		score(hand) {
+			// [strengthCount, spaceCount]
+			const matchingTagCounts = hand.reduce(
+				(counts, card) => {
+					counts[0] += count(card.modifiedTags, tag => tag === TAG.STRENGTH)
+					counts[1] += count(card.modifiedTags, tag => tag === TAG.SPACE)
+					return counts
+				},
+				[0, 0]
+			)
+
+			return this.power + Math.min(...matchingTagCounts) * 9
+		}
+	},
+	143: {
+		// Investigation
+		id: 143,
+		type: CARD_TYPE.MANEUVER,
+		power: 12,
+		tags: [],
+		transform(hand, self) {
+			const hasBoss = hand.some(card => card.modifiedTags.includes(TAG.BOSS))
+			const hasIntel = hand.some(card => card.modifiedTags.includes(TAG.INTEL))
+			self.isBlanked = !(hasBoss && hasIntel)
+		},
+		score() {
+			return this.power
+		}
+	},
+	144: {
+		// Buried in Soldiers
+		id: 144,
+		type: CARD_TYPE.MANEUVER,
+		power: 12,
+		tags: [],
+		transform(hand, self) {
+			const hasBoss = hand.some(card => card.modifiedTags.includes(TAG.BOSS))
+			const hasStrength = hand.some(card => card.modifiedTags.includes(TAG.STRENGTH))
+			self.isBlanked = !(hasBoss && hasStrength)
+		},
+		score() {
+			return this.power
+		}
+	},
+	145: {
+		// Track Minion
+		id: 145,
+		type: CARD_TYPE.MANEUVER,
+		power: 13,
+		tags: [],
+		transform(hand, self) {
+			const hasBoss = hand.some(card => card.modifiedTags.includes(TAG.BOSS))
+			const hasTech = hand.some(card => card.modifiedTags.includes(TAG.TECH))
+			self.isBlanked = !(hasBoss && hasTech)
+		},
+		score() {
+			return this.power
+		}
+	},
+	146: {
+		// Travel Through Time
+		id: 146,
+		type: CARD_TYPE.MANEUVER,
+		power: -4,
+		tags: [TAG.COSMIC, TAG.TIME],
+		negativeValue: -4,
+		score() {
+			return this.power
+		}
+	},
+	//#endregion Maneuver
+	//#region Villain
+	147: {
+		// Galactus
+		id: 147,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [TAG.COSMIC, TAG.SPACE],
+		// Whether this player has, or ties for, the most different tags at the table
+		manualInput: MANUAL_INPUT.TOGGLE,
+		score(hand) {
+			// Both halves can apply at once, leaving a player on the most tags but still short of seven at -15
+			return this.power - (countGalactusTags(hand) < 7 ? 30 : 0) + (this.manualInputValue ? 15 : 0)
+		}
+	},
+	148: {
+		// Magus
+		id: 148,
+		type: CARD_TYPE.VILLAIN,
+		power: 7,
+		tags: [TAG.TIME],
+		transformedTags: [TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT],
+		transformedPower: 11,
+		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
+			const shouldTransform = hand.some(card => card.id !== self.id && card.modifiedTags.includes(TAG.TIME))
+
+			if (isTransformed === shouldTransform) return
+
+			if (shouldTransform) {
+				self.isTransformed = true
+				self.type = CARD_TYPE.HERO
+				self.power = 11
+				self.modifiedTags.push(TAG.SPACE, TAG.STRENGTH, TAG.FLIGHT)
+				removeTag(self, TAG.TIME)
+			} else {
+				self.isTransformed = false
+				self.type = CARD_TYPE.VILLAIN
+				self.power = 7
+				self.modifiedTags.push(TAG.TIME)
+				removeTag(self, TAG.SPACE)
+				removeTag(self, TAG.STRENGTH)
+				removeTag(self, TAG.FLIGHT)
+			}
+		},
+		score() {
+			return this.power
+		}
+	},
+	149: {
+		// Venom
+		id: 149,
+		type: CARD_TYPE.VILLAIN,
+		power: 8,
+		tags: [TAG.SYMBIOTE],
+		transformedTags: [TAG.SYMBIOTE, TAG.STRENGTH],
+		transformedPower: 13,
+		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
+			const shouldTransform = hand.some(card => card.type === CARD_TYPE.ALLY)
+
+			if (isTransformed === shouldTransform) return
+
+			if (shouldTransform) {
+				self.isTransformed = true
+				self.type = CARD_TYPE.HERO
+				self.power = 13
+				self.modifiedTags.push(TAG.STRENGTH)
+			} else {
+				// A tag copied while transformed can't be kept after changing back, so reject this order of effects
+				if (!isEqual(self.modifiedTags, this.transformedTags)) {
+					throw new Error('Venom has extra tags from its transformed effect')
+				}
+
+				self.isTransformed = false
+				self.type = CARD_TYPE.VILLAIN
+				self.power = 8
+				removeTag(self, TAG.STRENGTH)
+			}
+		},
+		effect(hand, index) {
+			let indexCount = index
+			const targetCard = hand.find(card => {
+				if (card.type === CARD_TYPE.ALLY) {
+					const cardOptionCount = sumBy(uniqueTags(card), tagCopyOptionCount)
+					if (indexCount < cardOptionCount) {
+						return true
+					}
+					indexCount -= cardOptionCount
+				}
+			}) as ModifiedCard
+			const targetTag = uniqueTags(targetCard).find(tag => {
+				const tagOptionCount = tagCopyOptionCount(tag)
+				if (indexCount < tagOptionCount) {
+					return true
+				}
+				indexCount -= tagOptionCount
+			}) as TAG
+			const self = findCard(hand, this.id)
+			self.modifiedTags.push(targetTag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS[indexCount] : targetTag)
+		},
+		modificationOptions(hand) {
+			const self = findCard(hand, this.id)
+			if (!self.isTransformed) return 0
+			return sumBy(hand, card => (card.type === CARD_TYPE.ALLY ? sumBy(uniqueTags(card), tagCopyOptionCount) : 0))
+		},
+		score() {
+			return this.power
+		}
+	},
+	150: {
+		// Nebula
+		id: 150,
+		type: CARD_TYPE.VILLAIN,
+		power: 9,
+		tags: [],
+		transformedTags: [TAG.GUARDIAN, TAG.TECH, TAG.STRENGTH],
+		transform(hand, self) {
+			const isTransformed = !!self.isTransformed
+			const hasGuardian = hand.some(card => card.id !== this.id && card.modifiedTags.includes(TAG.GUARDIAN))
+			const hasIntel = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL)) >= 2
+			const shouldTransform = hasGuardian || hasIntel
+
+			if (isTransformed === shouldTransform) return
+
+			if (shouldTransform) {
+				self.isTransformed = true
+				self.type = CARD_TYPE.HERO
+				self.power = 14
+				self.modifiedTags.push(TAG.GUARDIAN)
+				self.modifiedTags.push(TAG.TECH)
+				self.modifiedTags.push(TAG.STRENGTH)
+			} else {
+				self.isTransformed = false
+				self.type = CARD_TYPE.VILLAIN
+				self.power = 9
+				removeTag(self, TAG.GUARDIAN)
+				removeTag(self, TAG.TECH)
+				removeTag(self, TAG.STRENGTH)
+			}
+		},
+		score() {
+			return this.power
+		}
+	},
+	151: {
+		// Doctor Doom
+		id: 151,
+		type: CARD_TYPE.VILLAIN,
+		power: -20,
+		tags: [TAG.BOSS],
+		negativeValue: -20,
+		score(hand) {
+			const requiredTags = [TAG.TECH, TAG.INTEL, TAG.STRENGTH, TAG.RANGE]
+			const hasAllTags = requiredTags.every(tag => hand.some(card => card.modifiedTags.includes(tag)))
+			return this.power + (hasAllTags ? 45 : 0)
+		}
+	},
+	152: {
+		// Thanos
+		id: 152,
+		type: CARD_TYPE.VILLAIN,
+		power: 10,
+		tags: [TAG.BOSS],
+		bonusValue: 10,
+		score(hand) {
+			const infinityStoneCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INFINITY_STONE))
+			return this.power + infinityStoneCount * 10
+		}
+	},
+	153: {
+		// Invading Armada
+		id: 153,
+		type: CARD_TYPE.VILLAIN,
+		power: -10,
+		tags: [TAG.SPACE, TAG.BOSS],
+		bonusValue: 5,
+		negativeValue: -10,
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(
+					card.modifiedTags,
+					tag => tag === TAG.FLIGHT || tag === TAG.RANGE || (card.id !== this.id && tag === TAG.SPACE)
+				)
+			)
+			return this.power + matchingTagCount * 5
+		}
+	},
+	154: {
+		// Gorr
+		id: 154,
+		type: CARD_TYPE.VILLAIN,
+		power: -7,
+		tags: [],
+		bonusValue: 7,
+		negativeValue: -7,
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(card.modifiedTags, tag => tag === TAG.COSMIC || tag === TAG.ASGARD)
+			)
+			return this.power + matchingTagCount * 7
+		}
+	},
+	155: {
+		// Supreme Intelligence
+		id: 155,
+		type: CARD_TYPE.VILLAIN,
+		power: -7,
+		tags: [TAG.KREE, TAG.BOSS],
+		bonusValue: 7,
+		negativeValue: -7,
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(card.modifiedTags, tag => tag === TAG.INTEL || (card.id !== this.id && tag === TAG.KREE))
+			)
+			return this.power + matchingTagCount * 7
+		}
+	},
+	156: {
+		// Emperor N'Jadaka
+		id: 156,
+		type: CARD_TYPE.VILLAIN,
+		power: -6,
+		tags: [TAG.SYMBIOTE, TAG.WAKANDA, TAG.BOSS],
+		bonusValue: 6,
+		negativeValue: -6,
+		score(hand) {
+			const spaceCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.SPACE))
+			return this.power + spaceCount * 6
+		}
+	},
+	157: {
+		// Yon-Rogg
+		id: 157,
+		type: CARD_TYPE.VILLAIN,
+		power: -5,
+		tags: [TAG.KREE],
+		bonusValue: 5,
+		negativeValue: -5,
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(card.modifiedTags, tag => tag === TAG.STRENGTH || tag === TAG.AGILITY)
+			)
+			return this.power + matchingTagCount * 5
+		}
+	},
+	158: {
+		// Ronan the Accuser
+		id: 158,
+		type: CARD_TYPE.VILLAIN,
+		power: -4,
+		tags: [TAG.KREE, TAG.BOSS],
+		bonusValue: 4,
+		negativeValue: -4,
+		score(hand) {
+			const matchingTagCount = sumBy(hand, card =>
+				count(card.modifiedTags, tag => tag === TAG.STRENGTH || tag === TAG.RANGE)
+			)
+			return this.power + matchingTagCount * 4
+		}
+	},
+	159: {
+		// Knull
+		id: 159,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [TAG.BOSS],
+		bonusValue: 11,
+		score(hand) {
+			const symbioteCount = sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.SYMBIOTE))
+			return this.power + symbioteCount * 11
+		}
+	},
+	160: {
+		// Annihilus
+		id: 160,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [],
+		score(hand) {
+			// TODO - does this count Galactus?
+			const largestValue = Math.abs(Math.min(...hand.map(card => card.negativeValue || 0)))
+			return this.power + largestValue
+		}
+	},
+	161: {
+		// Carnage
+		id: 161,
+		type: CARD_TYPE.VILLAIN,
+		power: 10,
+		tags: [TAG.SYMBIOTE],
+		score(hand) {
+			const highestBonus = Math.max(
+				...hand.filter(card => card.type === CARD_TYPE.VILLAIN).map(card => card.bonusValue || 0)
+			)
+			return this.power + highestBonus
+		}
+	},
+	162: {
+		// Immortus
+		id: 162,
+		type: CARD_TYPE.VILLAIN,
+		power: 14,
+		tags: [TAG.TIME],
+		negativeValue: -20,
+		score(hand) {
+			const hasTime = hand.some(card => card.id !== this.id && card.modifiedTags.includes(TAG.TIME))
+			return this.power - (hasTime ? 0 : 20)
+		}
+	},
+	163: {
+		// The Matriarch
+		id: 163,
+		type: CARD_TYPE.VILLAIN,
+		power: 20,
+		tags: [TAG.BOSS],
+		negativeValue: -20,
+		score(hand) {
+			const tagTypes = new Set<TAG>()
+			for (const card of hand) {
+				for (const tag of card.modifiedTags) {
+					tagTypes.add(tag)
+				}
+			}
+			return this.power - (tagTypes.size > 6 ? 20 : 0)
+		}
+	},
+	164: {
+		// The High Evolutionary
+		id: 164,
+		type: CARD_TYPE.VILLAIN,
+		power: 16,
+		tags: [TAG.BOSS],
+		negativeValue: -20,
+		manualInput: MANUAL_INPUT.TOGGLE,
+		score() {
+			return this.power - (this.manualInputValue ? 0 : 20)
+		}
+	},
+	165: {
+		// Toxin
+		id: 165,
+		type: CARD_TYPE.VILLAIN,
+		power: 6,
+		tags: [TAG.SYMBIOTE],
+		effect(hand, index) {
+			let indexCount = index
+			const targetCard = hand.find(card => {
+				if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.VILLAIN) {
+					const cardOptionCount = sumBy(uniqueTags(card), tagCopyOptionCount)
+					if (indexCount < cardOptionCount) {
+						return true
+					}
+					indexCount -= cardOptionCount
+				}
+			}) as ModifiedCard
+			const targetTag = uniqueTags(targetCard).find(tag => {
+				const tagOptionCount = tagCopyOptionCount(tag)
+				if (indexCount < tagOptionCount) {
+					return true
+				}
+				indexCount -= tagOptionCount
+			}) as TAG
+			targetCard.modifiedTags.push(targetTag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS[indexCount] : targetTag)
+		},
+		modificationOptions(hand) {
+			return sumBy(hand, card =>
+				card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.VILLAIN
+					? sumBy(uniqueTags(card), tagCopyOptionCount)
+					: 0
+			)
+		},
+		score() {
+			return this.power
+		}
+	},
+	166: {
+		// Champion
+		id: 166,
+		type: CARD_TYPE.VILLAIN,
+		power: 8,
+		tags: [TAG.COSMIC],
+		score() {
+			return this.power
+		}
+	},
+	167: {
+		// Collector
+		id: 167,
+		type: CARD_TYPE.VILLAIN,
+		power: 0,
+		tags: [TAG.COSMIC],
+		score(hand) {
+			const cardTypes = new Array<number>(Object.keys(CARD_TYPE).length).fill(0)
+			for (const card of hand) {
+				cardTypes[card.type]++
+			}
+			const setSize = Math.min(Math.max(...cardTypes), 7)
+			const typeScores = [0, 0, 3, 5, 10, 20, 35]
+			return this.power + typeScores[setSize - 1]
+		}
+	},
+	168: {
+		// Grandmaster
+		id: 168,
+		type: CARD_TYPE.VILLAIN,
+		power: 9,
+		tags: [TAG.COSMIC],
+		score() {
+			return this.power
+		}
+	}
+	//#endregion Villain
+	//#endregion Marvel Remix - The Cosmos
 }

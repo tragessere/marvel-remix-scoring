@@ -1,5 +1,8 @@
-import { Card, ModifiedCard, TAG } from '../types/card.ts'
+import sumBy from 'lodash-es/sumBy'
+import { Card, CARD_TYPE, DECK, MAGIC_REPLACEMENT_TAGS, ModifiedCard, TAG } from '../types/card.ts'
+import { count } from './whyIsThisNotInLodash.ts'
 
+/** Sort cards with a built-in MAGIC tag first, then other cards with effects, then everything else */
 export const sortEffectCardsFirst = (a: Card, b: Card) => {
 	if (!!a.effect === !!b.effect) {
 		return 0
@@ -14,10 +17,40 @@ export const findCard = <T extends Card>(hand: T[], id: number) => {
 	return hand.find(card => card.id === id) as T
 }
 
+/** Whether the Mind Stone can count this card from an opponent's hand */
+export const isMindStoneTarget = (card: Card) => card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY
+
+/** Number of different tags on heroes, allies, and equipment in the hand, which Galactus scores on */
+export const countGalactusTags = (hand: ModifiedCard[]) => {
+	const tagTypes = new Set<TAG>()
+	for (const card of hand) {
+		if (card.type === CARD_TYPE.HERO || card.type === CARD_TYPE.ALLY || card.type === CARD_TYPE.EQUIPMENT) {
+			for (const tag of card.modifiedTags) {
+				tagTypes.add(tag)
+			}
+		}
+	}
+	return tagTypes.size
+}
+
+/** Number of INTEL and GUARDIAN tags in the hand */
+export const countIntelAndGuardianTags = (hand: ModifiedCard[]) =>
+	sumBy(hand, card => count(card.modifiedTags, tag => tag === TAG.INTEL || tag === TAG.GUARDIAN))
+
 export const blankCard = (card: ModifiedCard) => {
 	card.isBlanked = true
 	card.isBlankedByOtherCard = true
 }
+
+/** Different tags on a card, since doubling or copying the same tag type again gives the same result */
+export const uniqueTags = (card: ModifiedCard) => Array.from(new Set(card.modifiedTags))
+
+/** Number of ways a copied tag can be added. A copied MAGIC tag can count as any other tag. */
+export const tagCopyOptionCount = (tag: TAG) => (tag === TAG.MAGIC ? MAGIC_REPLACEMENT_TAGS.length : 1)
+
+/** Number of ways all tags on a card can be duplicated, with each duplicated MAGIC tag counting as any other tag */
+export const magicDuplicateOptionCount = (card: ModifiedCard) =>
+	card.modifiedTags.reduce((total, tag) => total * tagCopyOptionCount(tag), 1)
 
 export const removeTag = (card: ModifiedCard, tag: TAG, count: number = 1) => {
 	let deletedCount = 0
@@ -49,4 +82,28 @@ export const mapCardTags = (card: ModifiedCard) => {
 	}
 
 	return [tags, addedTags] as const
+}
+
+const COSMOS_DECK_ID_START = 81
+
+/** The deck a card was printed in. Squirrel Girl counts as Marvel Remix, though she can be played with either deck. */
+export const getCardDeck = (card: Card) => (card.id >= COSMOS_DECK_ID_START ? DECK.COSMOS : DECK.REMIX)
+
+const DEFAULT_HAND_SIZE = 7
+const COMBINED_DECKS_HAND_SIZE = 8
+
+/** Hand size before any card effects. Playing with both decks combined allows an extra card. */
+export const getBaseHandSize = (decks: DECK[]) => (decks.length === 2 ? COMBINED_DECKS_HAND_SIZE : DEFAULT_HAND_SIZE)
+
+/** Cosmic cards don't count against the hand limit, so each one raises the max hand size by one */
+export const getMaxHandSize = (hand: Card[], baseHandSize: number) =>
+	baseHandSize + hand.filter(card => card.tags.includes(TAG.COSMIC)).length
+
+/** Whether a card belongs to any of the given decks */
+export const isCardInDecks = (card: Card, decks: DECK[]) => {
+	// Always include Squirrel Girl
+	if (card.id === 80) {
+		return decks.length > 0
+	}
+	return decks.includes(getCardDeck(card))
 }

@@ -1,9 +1,11 @@
 import { createContext } from 'react'
 import { ScoreResult } from '../utils/score.ts'
+import { DECK } from '../types/card.ts'
 
 export enum CARD_SELECT_MODE {
 	DEFAULT,
-	LOKI_DRAW
+	LOKI_DRAW,
+	MIND_STONE_CHOICE
 }
 
 export interface ActiveCardSelection {
@@ -16,3 +18,11 @@ export const CardSelectionModeContext = createContext<ActiveCardSelection>(undef
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const ScoreContext = createContext<ScoreResult>(undefined!)
+
+export interface DeckSelection {
+	selectedDecks: DECK[]
+	toggleDeck: (deck: DECK) => void
+}
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const DeckSelectionContext = createContext<DeckSelection>(undefined!)

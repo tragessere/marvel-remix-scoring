@@ -1,5 +1,7 @@
 import { cardList } from '../constants/cardList.ts'
-import { Card } from '../types/card.ts'
+import { Card, DECK, TAG } from '../types/card.ts'
+import { countGalactusTags, countIntelAndGuardianTags, getBaseHandSize } from './card.ts'
+import { ManualInput } from './manualInput.ts'
 import { scoreHand } from './score.ts'
 
 interface HandTest {
@@ -8,15 +10,23 @@ interface HandTest {
 	score: number
 }
 
+const emptyManualInput = () => undefined
+const createManualInputGetter =
+	(manualEntries: Record<number, number | ManualInput>) =>
+	(cardId: number): ManualInput | undefined => {
+		const entry = manualEntries[cardId]
+		return typeof entry === 'number' ? { value: entry } : entry
+	}
+
 describe('scoreHand', () => {
 	it('returns invalid score without 7 cards', () => {
 		const hand: Card[] = [cardList[1]]
-		const result = scoreHand(hand)
+		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(false)
 	})
 	it('returns invalid score without villain', () => {
 		const hand: Card[] = [cardList[1], cardList[2], cardList[3], cardList[4], cardList[5], cardList[6], cardList[7]]
-		const result = scoreHand(hand)
+		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(false)
 	})
 	it('returns invalid score without hero or ally', () => {
@@ -30,7 +40,7 @@ describe('scoreHand', () => {
 			// villain
 			cardList[62]
 		]
-		const result = scoreHand(hand)
+		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(false)
 		expect(result.finalHand.length).toBe(7)
 	})
@@ -51,32 +61,435 @@ describe('scoreHand', () => {
 			// Vibranium Shield
 			cardList[16]
 		]
-		const result = scoreHand(hand)
+		const result = scoreHand(hand, emptyManualInput)
 		expect(result.isValid).toBe(false)
 		expect(result.finalHand.length).toBe(7)
 	})
-	it('subtracts points for Loki draw', () => {
+	it('counts as valid with a villain transformed to a hero', () => {
 		const hand: Card[] = [
-			// Loki
-			cardList[73],
-			// Thor
-			cardList[30],
-			// Jane Foster
-			cardList[4],
-			// Valkyrie
-			cardList[41],
-			// Mjolnir
-			cardList[17],
-			// Bifrost
-			cardList[42],
-			// Halls of Asgard
-			cardList[51]
+			// Magus (transforms into hero)
+			cardList[148],
+			// Doctor Doom
+			cardList[151],
+			// Exploding Ship
+			cardList[126],
+			// Asteroid Field
+			cardList[127],
+			// Baxter Building
+			cardList[129],
+			// Knowhere
+			cardList[130],
+			// Citadel at the End of Time
+			cardList[134]
 		]
-		const result = scoreHand(hand, 8)
-		expect(result.score).toBe(105)
+		const result = scoreHand(hand, emptyManualInput)
+		expect(result.isValid).toBe(true)
+		expect(result.score).toBe(20)
+	})
+	it('lets MAGIC tags count as any other tag', () => {
+		const hand: Card[] = [
+			// Research Lab (MAGIC, blanked without a TECH card)
+			cardList[131],
+			// Heimdall
+			cardList[2],
+			// Lockheed
+			cardList[3],
+			// Kang
+			cardList[62]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		const researchLab = result.finalHand.find(card => card.id === 131)
+		expect(researchLab?.isBlanked).toBe(false)
+		expect(researchLab?.modifiedTags).toEqual([TAG.TECH])
+	})
+	it('lets Reality Stone change a tag to any other tag', () => {
+		const hand: Card[] = [
+			// Reality Stone
+			cardList[102],
+			// Knowhere (+4 per INTEL)
+			cardList[130],
+			// Heimdall (INTEL)
+			cardList[2],
+			// Lockheed
+			cardList[3]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Reality Stone -8, Knowhere 4 + 2 INTEL * 4, Heimdall 4, Lockheed 5
+		expect(result.score).toBe(13)
+		expect(result.finalHand.flatMap(card => card.modifiedTags).filter(tag => tag === TAG.INTEL).length).toBe(2)
+	})
+	it('prefers fewer INTEL and GUARDIAN tags when scores tie', () => {
+		const hand: Card[] = [
+			// Reality Stone
+			cardList[102],
+			// Heimdall (INTEL)
+			cardList[2],
+			// Lockheed
+			cardList[3]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Reality Stone -8, Heimdall 4, Lockheed 5. Changing Heimdall's INTEL doesn't change the score.
+		expect(result.score).toBe(1)
+		expect(countIntelAndGuardianTags(result.finalHand)).toBe(0)
+	})
+	it('prefers more different tags over fewer INTEL and GUARDIAN tags when scores tie with Galactus', () => {
+		const hand: Card[] = [
+			// Galactus
+			cardList[147],
+			// Reality Stone
+			cardList[102],
+			// Black Widow (INTEL, AGILITY, AGILITY)
+			cardList[36]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Galactus -30, Reality Stone -8, Black Widow 6. Changing a duplicate AGILITY adds a tag but keeps the INTEL.
+		expect(result.score).toBe(-32)
+		expect(countGalactusTags(result.finalHand)).toBe(5)
+		expect(countIntelAndGuardianTags(result.finalHand)).toBe(1)
+	})
+	describe('Galactus tag options', () => {
+		const hand: Card[] = [
+			// Galactus
+			cardList[147],
+			// Reality Stone
+			cardList[102],
+			// Birnin Zana (+7 for each WAKANDA)
+			cardList[49],
+			// Black Widow (INTEL, AGILITY, AGILITY)
+			cardList[36],
+			// Dora Milaje (INTEL, AGILITY, WAKANDA)
+			cardList[6]
+		]
+		// Changing a duplicate AGILITY to a new tag keeps 6 different tags, but changing it to WAKANDA scores 7 more
 
-		const result2 = scoreHand(hand, 12)
-		expect(result2.score).toBe(101)
+		it('offers keeping more tags or scoring more points', () => {
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.galactusOptions).toEqual([
+				{ tagCount: 6, score: -19 },
+				{ tagCount: 5, score: -12 }
+			])
+		})
+		it('defaults to the highest score', () => {
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(-12)
+			expect(countGalactusTags(result.finalHand)).toBe(5)
+		})
+		it('keeps the chosen number of tags', () => {
+			const result = scoreHand(hand, createManualInputGetter({ 147: { value: 0, secondaryValue: 6 } }))
+			expect(result.score).toBe(-19)
+			expect(countGalactusTags(result.finalHand)).toBe(6)
+		})
+		it('keeps the most tags available when the chosen number cannot be reached', () => {
+			const result = scoreHand(hand, createManualInputGetter({ 147: { value: 0, secondaryValue: 9 } }))
+			expect(result.score).toBe(-19)
+			expect(countGalactusTags(result.finalHand)).toBe(6)
+		})
+	})
+	it('lets Rogue copy a MAGIC tag as any other tag', () => {
+		const hand: Card[] = [
+			// Rogue
+			cardList[27],
+			// Doctor Strange
+			cardList[109],
+			// Build Gadgets
+			cardList[58]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		// Copies magic tag, then one picks tech and the other picks intel
+		expect(result.score).toBe(15)
+		expect(result.finalHand.flatMap(card => card.modifiedTags)).not.toContain(TAG.MAGIC)
+	})
+	it('counts as invalid with no villains after a transformation', () => {
+		const hand: Card[] = [
+			// Magus (transforms into hero, leaving no villains)
+			cardList[148],
+			// Carol Danvers
+			cardList[107],
+			// Exploding Ship
+			cardList[126],
+			// Asteroid Field
+			cardList[127],
+			// Baxter Building
+			cardList[129],
+			// Knowhere
+			cardList[130],
+			// Citadel at the End of Time
+			cardList[134]
+		]
+		const result = scoreHand(hand, emptyManualInput)
+		expect(result.isValid).toBe(false)
+		expect(result.score).toBe(46)
+	})
+	describe('handles hand size', () => {
+		// Valid 7 card hand without any Cosmic cards
+		const fullHand: Card[] = [
+			// Magus (transforms)
+			cardList[148],
+			// Doctor Doom
+			cardList[151],
+			// Exploding Ship
+			cardList[126],
+			// Asteroid Field
+			cardList[127],
+			// Baxter Building
+			cardList[129],
+			// Knowhere
+			cardList[130],
+			// Citadel at the End of Time
+			cardList[134]
+		]
+		it('lets each Cosmic card raise the max hand size', () => {
+			// Cosmic ally
+			const result = scoreHand(fullHand.concat(cardList[88]), emptyManualInput)
+			expect(result.maxHandSize).toBe(8)
+			expect(result.isValid).toBe(true)
+		})
+		it('counts as invalid with too many cards', () => {
+			const result = scoreHand(fullHand.concat(cardList[81]), emptyManualInput)
+			expect(result.maxHandSize).toBe(7)
+			expect(result.isValid).toBe(false)
+		})
+		it('allows 8 cards when playing with both decks', () => {
+			const baseHandSize = getBaseHandSize([DECK.REMIX, DECK.COSMOS])
+			expect(baseHandSize).toBe(8)
+			expect(scoreHand(fullHand, emptyManualInput, baseHandSize).isValid).toBe(false)
+			const result = scoreHand(fullHand.concat(cardList[81]), emptyManualInput, baseHandSize)
+			expect(result.maxHandSize).toBe(8)
+			expect(result.isValid).toBe(true)
+		})
+		it('allows 7 cards when playing with one deck', () => {
+			expect(getBaseHandSize([DECK.REMIX])).toBe(7)
+			expect(getBaseHandSize([DECK.COSMOS])).toBe(7)
+		})
+	})
+	describe('handles manual input', () => {
+		it('subtracts points for Loki draw', () => {
+			const hand: Card[] = [
+				// Loki
+				cardList[73],
+				// Thor
+				cardList[30],
+				// Jane Foster
+				cardList[4],
+				// Valkyrie
+				cardList[41],
+				// Mjolnir
+				cardList[17],
+				// Bifrost
+				cardList[42],
+				// Halls of Asgard
+				cardList[51]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(113)
+
+			// Forge: power 4
+			let getter = createManualInputGetter({ 73: 1 })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(109)
+
+			// Lockheed: power 5
+			getter = createManualInputGetter({ 73: 3 })
+			const result3 = scoreHand(hand, getter)
+			expect(result3.score).toBe(108)
+		})
+		it('Adds points for Moondragon entered tag count', () => {
+			const hand: Card[] = [
+				// Moondragon
+				cardList[123],
+				// Cosmo
+				cardList[85],
+				// Rediscovered Artifact
+				cardList[92],
+				// The Milano
+				cardList[97],
+				// Knowhere
+				cardList[130],
+				// Nebula
+				cardList[150],
+				// Thanos
+				cardList[152]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(83)
+
+			let getter = createManualInputGetter({ 123: 0 })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(83)
+
+			getter = createManualInputGetter({ 123: 1 })
+			const result3 = scoreHand(hand, getter)
+			expect(result3.score).toBe(86)
+		})
+		it('Adds points for Sakaar - Planet Hulk entered HERO count', () => {
+			const hand: Card[] = [
+				// Sakaar - Planet Hulk
+				cardList[128],
+				// Spectrum
+				cardList[121],
+				// Gamora
+				cardList[124],
+				// Ms. Marvel
+				cardList[111],
+				// Asteroid Field
+				cardList[127],
+				// Knowhere
+				cardList[130],
+				// Supreme Intelligence
+				cardList[155]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(41)
+
+			let getter = createManualInputGetter({ 128: 0 })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(41)
+
+			getter = createManualInputGetter({ 128: 1 })
+			const result3 = scoreHand(hand, getter)
+			expect(result3.score).toBe(46)
+		})
+		it('Adds points for High Evolutionary if criteria is indicated to have passed', () => {
+			const hand: Card[] = [
+				// The High Evolutionary
+				cardList[164],
+				// Mantis
+				cardList[81],
+				// Nick Fury, Jr.
+				cardList[82],
+				// Eddie Brock
+				cardList[83],
+				// Cosmo
+				cardList[85],
+				// Timekeepers
+				cardList[86],
+				// Emperor N'Jadaka
+				cardList[156]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(39)
+
+			let getter = createManualInputGetter({ 164: 0 })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(39)
+
+			getter = createManualInputGetter({ 164: 1 })
+			const result3 = scoreHand(hand, getter)
+			expect(result3.score).toBe(59)
+		})
+		it('Adds points for Galactus if criteria is indicated to have passed', () => {
+			// Hand has 8 cards, Galactus is an extra
+			const hand: Card[] = [
+				// Galactus
+				cardList[147],
+				// Nick Fury, Jr.
+				cardList[82],
+				// Cosmo
+				cardList[85],
+				// Cosmically Attuned
+				cardList[91],
+				// Quantum Bands
+				cardList[99],
+				// Asteroid Field
+				cardList[127],
+				// Knowhere
+				cardList[130],
+				// The Peak (VII)
+				cardList[133]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(52)
+
+			let getter = createManualInputGetter({ 147: 0 })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(52)
+
+			getter = createManualInputGetter({ 147: 1 })
+			const result3 = scoreHand(hand, getter)
+			expect(result3.score).toBe(67)
+		})
+		it('Counts the card chosen with the Mind Stone as part of the hand', () => {
+			const hand: Card[] = [
+				// Baron Zemo
+				cardList[72],
+				// Forge
+				cardList[1],
+				// Mind Stone
+				cardList[104]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+			expect(result.score).toBe(18)
+			expect(result.finalHand).toHaveLength(3)
+
+			// Thor Odinson: power 4, and a hero for Baron Zemo to subtract
+			let getter = createManualInputGetter({ 104: { value: 30, secondaryValue: 0 } })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(19)
+			expect(result2.finalHand).toHaveLength(4)
+
+			// God of Thunder: power 12, using the opponent's transform state even without Mjolnir or allies
+			getter = createManualInputGetter({ 104: { value: 30, secondaryValue: 1 } })
+			const result3 = scoreHand(hand, getter)
+			expect(result3.score).toBe(27)
+			const thor = result3.finalHand.find(card => card.id === 30)
+			expect(thor?.isTransformed).toBe(true)
+			expect(thor?.modifiedTags).toEqual(cardList[30].transformedTags)
+
+			// Hulk: power 13, without needing another GAMMA card
+			getter = createManualInputGetter({ 104: { value: 29, secondaryValue: 1 } })
+			const result4 = scoreHand(hand, getter)
+			expect(result4.score).toBe(28)
+		})
+		it('Does not count the Mind Stone card when the Mind Stone is blanked', () => {
+			const hand: Card[] = [
+				// Magneto
+				cardList[74],
+				// Forge
+				cardList[1],
+				// Mind Stone
+				cardList[104]
+			]
+			const result = scoreHand(hand, emptyManualInput)
+
+			// Thor Odinson
+			const getter = createManualInputGetter({ 104: { value: 30, secondaryValue: 1 } })
+			const result2 = scoreHand(hand, getter)
+			expect(result2.score).toBe(result.score)
+			expect(result2.finalHand.find(card => card.id === 30)?.isBlanked).toBe(true)
+		})
+		it('Applies blanking rules on the Mind Stone card', () => {
+			const hand: Card[] = [
+				// Baron Zemo
+				cardList[72],
+				// Forge
+				cardList[1],
+				// Mind Stone
+				cardList[104]
+			]
+			// Nova Corps, with no other SPACE card in the hand
+			const getter = createManualInputGetter({ 104: 87 })
+			const result = scoreHand(hand, getter)
+			expect(result.score).toBe(18)
+			expect(result.finalHand.find(card => card.id === 87)?.isBlanked).toBe(true)
+		})
+	})
+	it('works with Magic tags', () => {
+		const result = scoreHand(
+			[
+				// Ms. Marvel
+				cardList[111],
+				// Doctor Strange
+				cardList[109],
+				// Power Stone
+				cardList[101],
+				// Reality Stone
+				cardList[102],
+				// Gorr
+				cardList[154]
+			],
+			emptyManualInput
+		)
+		expect(result.score).toBe(24)
 	})
 	describe('returns the correct scores', () => {
 		//#region example hands
@@ -440,13 +853,107 @@ describe('scoreHand', () => {
 					cardList[18]
 				],
 				score: 84
+			},
+			{
+				id: 19,
+				hand: [
+					// Infinity Gauntlet
+					cardList[95],
+					// Power Stone
+					cardList[101],
+					// Soul Stone
+					cardList[105]
+				],
+				score: 26
+			},
+			{
+				id: 20,
+				hand: [
+					// The Matriarch
+					cardList[163],
+					// Carol Danvers
+					cardList[107],
+					// Reality Stone
+					cardList[102]
+				],
+				score: 14
+			},
+			{
+				id: 21,
+				hand: [
+					// Ego
+					cardList[137],
+					// Annihilus
+					cardList[160],
+					// Carnage
+					cardList[161],
+					// Thanos
+					cardList[152],
+					// Ms. Marvel
+					cardList[111]
+				],
+				score: 35
+			},
+			{
+				id: 22,
+				hand: [
+					// Magus
+					cardList[148],
+					// Citadel at the End of Time
+					cardList[134],
+					// Nebula
+					cardList[150],
+					// Nick Fury, Jr.
+					cardList[82],
+					// Eddie Brock
+					cardList[83]
+				],
+				score: 46
+			},
+			{
+				id: 23,
+				hand: [
+					// Venom
+					cardList[149],
+					// Eddie Brock
+					cardList[83],
+					// Supreme Intelligence
+					cardList[155]
+				],
+				score: 35
+			},
+			{
+				id: 24,
+				hand: [
+					// Toxin
+					cardList[165],
+					// Knull
+					cardList[159],
+					// Venom
+					cardList[149],
+					// Ms. Marvel
+					cardList[111]
+				],
+				score: 52
+			},
+			{
+				id: 25,
+				hand: [
+					// Venom
+					cardList[149],
+					// Nova Corps
+					cardList[87],
+					// Ms. Marvel
+					cardList[111]
+				],
+				score: 25
 			}
 		]
 		//#endregion example hands
 
 		for (const { id, hand, score } of exampleHands) {
 			it(`scores hand ${id}`, () => {
-				const result = scoreHand(hand)
+				const result = scoreHand(hand, emptyManualInput)
 				expect(result.score).toBe(score)
 			})
 		}

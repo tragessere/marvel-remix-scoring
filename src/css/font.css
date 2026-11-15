@@ -83,3 +83,48 @@ i.mr-boss:after {
 	content: '\E00D';
 	color: #ed1d24;
 }
+
+i.mr-time:after {
+	content: '\E00E';
+	color: #24563a;
+}
+
+i.mr-space:after {
+	content: '\E00F';
+	color: #1f6fb5;
+}
+
+i.mr-cosmic:after {
+	content: '\E010';
+	color: #3a3590;
+}
+
+i.mr-fantastic_four:after {
+	content: '\E011';
+	color: #2a72c4;
+}
+
+i.mr-guardian:after {
+	content: '\E012';
+	color: #8f9719;
+}
+
+i.mr-kree:after {
+	content: '\E013';
+	color: #5f9e24;
+}
+
+i.mr-symbiote:after {
+	content: '\E014';
+	color: #222;
+}
+
+i.mr-magic:after {
+	content: '\E015';
+	color: #222;
+}
+
+i.mr-infinity_stone:after {
+	content: '\E016';
+	color: #222;
+}

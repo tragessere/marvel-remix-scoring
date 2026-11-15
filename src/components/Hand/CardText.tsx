@@ -36,7 +36,16 @@ export const CardText: FunctionComponent<CardTextProps> = ({ i18nKey }) => {
 					gamma: <TagIcon tag={TAG.GAMMA} />,
 					worthy: <TagIcon tag={TAG.WORTHY} />,
 					urban: <TagIcon tag={TAG.URBAN} />,
-					boss: <TagIcon tag={TAG.BOSS} />
+					boss: <TagIcon tag={TAG.BOSS} />,
+					time: <TagIcon tag={TAG.TIME} />,
+					space: <TagIcon tag={TAG.SPACE} />,
+					cosmic: <TagIcon tag={TAG.COSMIC} />,
+					fantastic_four: <TagIcon tag={TAG.FANTASTIC_FOUR} />,
+					guardian: <TagIcon tag={TAG.GUARDIAN} />,
+					kree: <TagIcon tag={TAG.KREE} />,
+					symbiote: <TagIcon tag={TAG.SYMBIOTE} />,
+					magic: <TagIcon tag={TAG.MAGIC} />,
+					infinity_stone: <TagIcon tag={TAG.INFINITY_STONE} />
 				}}
 			/>
 		</div>

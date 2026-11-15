@@ -12,7 +12,7 @@ interface SelectCardCategoryProps {
 
 export const SelectCardCategory: FunctionComponent<SelectCardCategoryProps> = ({ cards, isExpanded, onClick }) => {
 	const { t, i18n } = useTranslation('card-info')
-	const sortName = (card: Card) => t([`${card.id}.sortName`, `${card.id}.name`])
+	const sortName = (card: Card) => t([`${card.id}.sort-name`, `${card.id}.name`])
 	const collator = new Intl.Collator(i18n.language)
 	const sortedCards = cards.toSorted((a, b) => collator.compare(sortName(a), sortName(b)))
 	const category = cards[0].type

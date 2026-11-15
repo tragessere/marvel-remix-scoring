@@ -36,3 +36,7 @@ dist-ssr
 tsconfig.app.tsbuildinfo
 tsconfig.tsbuildinfo
 coverage
+
+# graft's local cache
+.claude
+graft
