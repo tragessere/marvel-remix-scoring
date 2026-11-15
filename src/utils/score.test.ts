@@ -837,6 +837,26 @@ describe('scoreHand', () => {
 			{
 				id: 18,
 				hand: [
+					// Sentinels
+					cardList[67],
+					// Xavier Mansion
+					cardList[54],
+					// Madripoor
+					cardList[50],
+					// Cyclops
+					cardList[20],
+					// Professor X
+					cardList[25],
+					// Shadowcat
+					cardList[21],
+					// Cerebro
+					cardList[18]
+				],
+				score: 84
+			},
+			{
+				id: 19,
+				hand: [
 					// Infinity Gauntlet
 					cardList[95],
 					// Power Stone
@@ -847,7 +867,7 @@ describe('scoreHand', () => {
 				score: 26
 			},
 			{
-				id: 19,
+				id: 20,
 				hand: [
 					// The Matriarch
 					cardList[163],
@@ -859,7 +879,7 @@ describe('scoreHand', () => {
 				score: 14
 			},
 			{
-				id: 20,
+				id: 21,
 				hand: [
 					// Ego
 					cardList[137],
@@ -875,7 +895,7 @@ describe('scoreHand', () => {
 				score: 35
 			},
 			{
-				id: 21,
+				id: 22,
 				hand: [
 					// Magus
 					cardList[148],
@@ -891,7 +911,7 @@ describe('scoreHand', () => {
 				score: 46
 			},
 			{
-				id: 22,
+				id: 23,
 				hand: [
 					// Venom
 					cardList[149],
@@ -903,7 +923,7 @@ describe('scoreHand', () => {
 				score: 35
 			},
 			{
-				id: 23,
+				id: 24,
 				hand: [
 					// Toxin
 					cardList[165],
@@ -917,7 +937,7 @@ describe('scoreHand', () => {
 				score: 52
 			},
 			{
-				id: 24,
+				id: 25,
 				hand: [
 					// Venom
 					cardList[149],
